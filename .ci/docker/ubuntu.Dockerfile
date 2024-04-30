@@ -8,7 +8,8 @@ RUN apt-get install -y \
         clang-tidy \
         g++ \
         ninja-build \
-        cmake
+        cmake \
+        python3.11-venv
 RUN apt-get clean
 
 WORKDIR /workarea

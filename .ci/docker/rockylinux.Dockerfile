@@ -11,7 +11,8 @@ RUN dnf install -y \
         clang \
         g++ \
         ninja-build \
-        cmake
+        cmake \
+        python3.11-venv
 RUN dnf clean all
 
 # Copy code

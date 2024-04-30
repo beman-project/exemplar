@@ -1,0 +1,21 @@
+import site, os
+site.addsitedir(os.path.join('@CMAKE_SOURCE_DIR@', 'test', 'support'))
+import testformat
+
+config.name = 'Beman project test suite'
+config.test_format = testformat.CxxStandardLibraryTest()
+config.test_exec_root = '@CMAKE_CURRENT_BINARY_DIR@'
+config.test_source_root = '@CMAKE_CURRENT_SOURCE_DIR@'
+flags = [
+    '-std=c++20',
+    '-isysroot @CMAKE_OSX_SYSROOT@' if '@CMAKE_OSX_SYSROOT@' else '',
+    '-isystem {}'.format(os.path.join('@CMAKE_SOURCE_DIR@', 'src', 'example')),
+    '@CMAKE_CXX_FLAGS@'
+]
+config.substitutions = [
+    ('%{cxx}', '@CMAKE_CXX_COMPILER@'),
+    ('%{flags}', ' '.join(filter(None, flags)))
+]
+config.available_features = []
+if '@CMAKE_CXX_COMPILER_ID@' in ('Clang', 'AppleClang'):
+    config.available_features.append('verify-support')
