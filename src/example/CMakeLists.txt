@@ -36,11 +36,3 @@ install(EXPORT example
   COMPONENT libexample-dev
   NAMESPACE example::
 )
-# Note: example.pc is very hardcoded to debian-style packaging right now.
-# It is highly likely that other packaging systems will need to patch it.
-# Something more sophisticated is possible, but keeping this repo simple
-# is more important than being that configurable out of the box.
-install(FILES example.pc
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
-  COMPONENT libexample-dev
-)
