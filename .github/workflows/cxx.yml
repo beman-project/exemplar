@@ -17,94 +17,74 @@ jobs:
         include:
           - os: windows-latest
             build_type: Release
-            c_compiler: cl
-            cpp_compiler: cl
             cmake_args: ""
+            preset: msvc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=thread'" 
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
             cmake_args: "-DBUILD_SHARED_LIBS=on" 
+            preset: gcc-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=thread'" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            preset: clang-debug
           - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "-DBUILD_SHARED_LIBS=on" 
+            preset: clang-debug
           - os: macos-latest
-            c_compiler: clang
-            cpp_compiler: clang++
             cmake_args: "" 
+            preset: clang-debug
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Configure CMake
-      run: cmake -DBUILD_TESTING=on -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} ${{ matrix.cmake_args }}
+      run: cmake .. --preset ${{ matrix.preset }} -DBUILD_TESTING=on ${{ matrix.cmake_args }}
 
     - name: Build
-      run: cmake --build .
+      run: cmake --build --preset ${{ matrix.preset }}
 
     - name: Test
-      run: ctest -C .
+      run: ctest --preset ${{ matrix.preset }}
