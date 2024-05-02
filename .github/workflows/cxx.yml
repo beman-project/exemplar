@@ -3,16 +3,8 @@ name: Test Multi-Platform
 on:
   push:
     branches: [ main ]
-    paths:
-      - "src/**"
-      - "test/**"
-      - "CMakeLists.txt"
   pull_request:
     branches: [ main ]
-    paths:
-      - "src/**"
-      - "test/**"
-      - "CMakeLists.txt"
 
 jobs:
   build:
