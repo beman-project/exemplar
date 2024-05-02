@@ -107,4 +107,4 @@ jobs:
       run: cmake --build .
 
     - name: Test
-      run: ctest -C
+      run: ctest -C .
