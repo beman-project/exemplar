@@ -104,7 +104,7 @@ jobs:
       run: cmake -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} ${{ matrix.cmake_args }}
 
     - name: Build
-      run: cmake --build
+      run: cmake --build .
 
     - name: Test
       run: ctest -C --output-on-failure
