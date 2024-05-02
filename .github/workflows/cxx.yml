@@ -23,26 +23,87 @@ jobs:
 
       matrix:
         include:
-          - { os: windows-latest, build_type: Release, c_compiler: cl, cpp_compiler: cl, cmake_args: "" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_FLAGS='-fsanitize=thread'" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DBUILD_SHARED_LIBS=on" }
-           - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_FLAGS='-fsanitize=thread'" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
-          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DBUILD_SHARED_LIBS=on" }
-          - { os: macos-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "" }
+          - os: windows-latest
+            build_type: Release
+            c_compiler: cl
+            cpp_compiler: cl
+            cmake_args: ""
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_FLAGS='-fsanitize=thread'" 
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: gcc
+            cpp_compiler: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DBUILD_SHARED_LIBS=on" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_FLAGS='-fsanitize=thread'" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+          - os: ubuntu-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-DBUILD_SHARED_LIBS=on" 
+          - os: macos-latest
+            c_compiler: clang
+            cpp_compiler: clang++
+            cmake_args: "" 
 
     steps:
     - uses: actions/checkout@v3
