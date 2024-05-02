@@ -78,12 +78,10 @@ jobs:
             preset: clang-debug
 
     steps:
-    - name: Setup Ninja
-      uses: ashutoshvarma/setup-ninja@master
-      with:
-        version: 1.12.0
-
     - uses: actions/checkout@v3
+
+    - name: Setup Ninja
+      uses: seanmiddleditch/gha-setup-ninja@master
 
     - name: Configure CMake
       run: cmake --preset ${{ matrix.preset }} -DBUILD_TESTING=on ${{ matrix.cmake_args }}
