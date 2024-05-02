@@ -79,9 +79,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: seanmiddleditch/gha-setup-ninja@master
 
-    - name: Setup Ninja
-      uses: seanmiddleditch/gha-setup-ninja@master
+    - name: Setup MSVC
+      if: startsWith(matrix.os, 'windows')
+      uses: TheMrMilchmann/setup-msvc-dev@v3
+      with:
+        arch: x64
 
     - name: Configure CMake
       run: cmake --preset ${{ matrix.preset }} -DBUILD_TESTING=on ${{ matrix.cmake_args }}
