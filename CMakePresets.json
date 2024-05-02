@@ -4,7 +4,7 @@
         {
             "name": "gcc-base",
             "hidden": true,
-            "generator": "Unix Makefiles",
+            "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
               "CMAKE_BUILD_TYPE": "Debug",
@@ -16,7 +16,7 @@
         {
             "name": "clang-base",
             "hidden": true,
-            "generator": "Unix Makefiles",
+            "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
               "CMAKE_BUILD_TYPE": "Debug",
@@ -28,7 +28,7 @@
         {
             "name": "msvc-base",
             "hidden": true,
-            "generator": "Unix Makefiles",
+            "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
               "CMAKE_BUILD_TYPE": "Debug",
