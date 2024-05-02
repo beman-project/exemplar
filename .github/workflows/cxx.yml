@@ -101,7 +101,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Configure CMake
-      run: cmake -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} ${{ matrix.cmake_args }}
+      run: cmake -DBUILD_TESTING -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} ${{ matrix.cmake_args }}
 
     - name: Build
       run: cmake --build .
