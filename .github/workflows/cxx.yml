@@ -1,7 +1,4 @@
-# Copyright © 2024 Bret Brown
-# SPDX-License-Identifier: MIT
-
-name: Test
+name: Test Multi-Platform
 
 on:
   push:
@@ -17,67 +14,44 @@ on:
       - "test/**"
       - "CMakeLists.txt"
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
+
     strategy:
+      fail-fast: false
+
       matrix:
-        cfg:
-          - { id: ubuntu-gcc-werror, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"}
-          - { id: ubuntu-gcc-aubsan, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"}
-          - { id: ubuntu-gcc-tsan, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"}
-          - { id: ubuntu-gcc-static, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: ""}
-          - { id: ubuntu-gcc-static-cxx98, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx11, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx14, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx17, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx20, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-dynamic, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DBUILD_SHARED_LIBS=on"}
-          - { id: ubuntu-clang-static, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: ""}
-          - { id: ubuntu-clang-dynamic, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DBUILD_SHARED_LIBS=on"}
-          # Disabling Rocky until it catches up on CMake versions or a way to sideload newer version of CMake
-          # is identified.
-          # - { id: rockylinux-gcc-static, platform: rockylinux, cc: gcc, cpp: g++, cmake_args: ""}
-          # - { id: rockylinux-clang-static, platform: rockylinux, cc: clang, cpp: clang++, cmake_args: ""}
+        include:
+          - { os: windows-latest, build_type: Release, c_compiler: cl, cpp_compiler: cl, cmake_args: "" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_FLAGS='-fsanitize=thread'" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: gcc, cpp_compiler: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-DBUILD_SHARED_LIBS=on" }
+           - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_FLAGS='-fsanitize=thread'" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" }
+          - { os: ubuntu-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "-DCMAKE_CXX_FLAGS='-DBUILD_SHARED_LIBS=on" }
+          - { os: macos-latest, c_compiler: clang, cpp_compiler: clang++, cmake_args: "" }
 
     steps:
-      - uses: actions/checkout@v2
-      # GitHub runners have updated the Ubuntu Linux Kernel to use strong ASLR,
-      # but LLVM is not configured for this change, and thus the address
-      # sanitizer breaks.
-      #
-      # The next image is supposed to fix this, so if the Ubuntu image has been
-      # updated, this work around is no longer required.
-      - name: get runner image version
-        id: runner-image-version
-        run: |
-          echo "image-version=$(echo $ImageVersion)" >> "$GITHUB_OUTPUT"
-        working-directory: .
-      - name: modify number of bits to use for ASLR entropy
-        if: ${{ steps.runner-image-version.outputs.ImageVersion }} == '20240310.1.0'
-        run: |
-          sudo sysctl -a | grep vm.mmap.rnd
-          sudo sysctl -w vm.mmap_rnd_bits=28
-        working-directory: .
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: false
-          load: true
-          tags: ${{ matrix.cfg.id }}
-          file: .ci/docker/${{ matrix.cfg.platform }}.Dockerfile
-          build-args: |
-            cc=${{ matrix.cfg.cc }}
-            cxx=${{ matrix.cfg.cpp }}
-            cmake_args=${{ matrix.cfg.cmake_args }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-      - name: Run tests
-        run: |
-          docker run ${{ matrix.cfg.id }} ctest --test-dir build
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} ${{ matrix.cmake_args }}
+
+    - name: Build
+      run: cmake --build
+
+    - name: Test
+      run: ctest -C --output-on-failure
