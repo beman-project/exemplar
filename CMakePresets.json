@@ -28,7 +28,7 @@
         {
             "name": "msvc-base",
             "hidden": true,
-            "generator": "Visual Studio 17 2022",
+            "generator": "Unix Makefiles",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
               "CMAKE_BUILD_TYPE": "Debug",
