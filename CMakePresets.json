@@ -1,0 +1,52 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 29,
+        "patch": 2
+    },
+    "configurePresets": [{
+            "name": "gcc-werror",
+            "displayName": "GCC",
+            "description": "GCC build using Ninja generator",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/.build/gcc-werror",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CXX_STANDARD": "26",
+                "CMAKE_CXX_FLAGS": "-Werror=all -Werror=extra"
+            }
+        }
+                        ],
+    "buildPresets": [{
+        "name": "gcc-werror",
+        "configurePreset": "gcc-werror"
+    }],
+    "testPresets": [{
+        "name": "gcc-werror",
+        "configurePreset": "gcc-werror",
+        "output": {
+            "outputOnFailure": true
+        },
+        "execution": {
+            "noTestsAction": "error",
+            "stopOnFailure": true
+        }
+    }],
+    "workflowPresets": [{
+        "name": "gcc-werror",
+        "steps": [{
+                "type": "configure",
+                "name": "gcc-werror"
+            },
+            {
+                "type": "build",
+                "name": "gcc-werror"
+            },
+            {
+                "type": "test",
+                "name": "gcc-werror"
+            }
+        ]
+    }]
+}

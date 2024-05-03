@@ -33,11 +33,8 @@ It does require two tools as build-time dependencies:
 This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `example` library, ready to package:
 
 ```shell
-cmake -B /some/build/dir -S .
-cmake --build /some/build/dir
-ctest --test-dir /some/build/dir \
-  --output-junit build/xunit/results.xml
-DESTDIR=/some/staging/dir cmake --install /some/build/dir --component libexample-dev --prefix /opt/example
+cmake --workflow --preset gcc-werror
+DESTDIR=/some/staging/dir cmake --install .build/gcc-werror --component libexample-dev --prefix /opt/example
 ```
 
 If all of those steps complete successfully, you should see the library installed in your staging directory.
