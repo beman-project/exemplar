@@ -9,12 +9,12 @@ add_library(example::example ALIAS example)
 set_property(TARGET example PROPERTY SOVERSION "${PROJECT_VERSION}")
 
 target_sources(example PRIVATE
-  example.cxx
+  example.cpp
 )
 target_sources(example PUBLIC
   FILE_SET HEADERS
   BASE_DIRS .
-  FILES example.hxx
+  FILES example.hpp
 )
 
 # GNUInstallDirs provides default definitions for CMAKE_INSTALL_LIBDIR
