@@ -2,9 +2,9 @@ name: Test Multi-Platform
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main improve-ci]
   pull_request:
-    branches: [ main ]
+    branches: [ main improve-ci]
 
 jobs:
   build:
@@ -26,13 +26,13 @@ jobs:
             cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
             preset: gcc-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=thread'" 
+            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=thread'"
             preset: gcc-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: gcc-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: gcc-debug
           - os: ubuntu-latest
             cmake_args: "-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on"
@@ -41,40 +41,40 @@ jobs:
             cmake_args: "-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: gcc-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: gcc-debug
           - os: ubuntu-latest
-            cmake_args: "-DBUILD_SHARED_LIBS=on" 
+            cmake_args: "-DBUILD_SHARED_LIBS=on"
             preset: gcc-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'" 
+            cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'" 
+            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=thread'" 
+            cmake_args: "-DCMAKE_CXX_FLAGS='-fsanitize=thread'"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on" 
+            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
             preset: clang-debug
           - os: ubuntu-latest
-            cmake_args: "-DBUILD_SHARED_LIBS=on" 
+            cmake_args: "-DBUILD_SHARED_LIBS=on"
             preset: clang-debug
           - os: macos-latest
-            cmake_args: "" 
+            cmake_args: ""
             preset: clang-debug
 
     steps:
