@@ -3,7 +3,7 @@ Copyright © 2024 Bret Brown
 SPDX-License-Identifier: CC0-1.0
 -->
 
-# example
+# Beman.Example
 
 ## About
 
