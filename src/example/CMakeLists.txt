@@ -32,6 +32,7 @@ install(TARGETS example
     NAMELINK_COMPONENT libexample-dev
 )
 install(EXPORT example
+  FILE example-config.cmake
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/example"
   COMPONENT libexample-dev
   NAMESPACE example::
