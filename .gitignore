@@ -1,0 +1,8 @@
+cmake.bld
+compile_commands.json
+/.build/
+/build/
+/.cache/
+*.pyg
+.update-submodules
+.vscode/
