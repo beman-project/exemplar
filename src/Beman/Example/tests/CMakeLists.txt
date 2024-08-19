@@ -1,4 +1,3 @@
-# src/Beman/Example/tests/CMakeLists.txt -*-makefile-*-
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 # Include the GoogleTest CMake module.

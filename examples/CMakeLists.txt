@@ -1,4 +1,3 @@
-# examples/CMakeLists.txt -*-makefile-*-
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 # List of all buildable examples.

@@ -1,4 +1,3 @@
-# src/Beman/Example/CMakeLists.txt -*-makefile-*-
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 # Add the library.
