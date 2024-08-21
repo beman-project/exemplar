@@ -4,23 +4,16 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 # Beman.Example: A Beman Library Example
 
-![CI Tests](https://github.com/beman-project/Example/actions/workflows/ci_tests.yml/badge.svg)
+![Continuous Integration Tests](https://github.com/beman-project/Example/actions/workflows/ci_tests.yml/badge.svg)
 
-`Beman.Example` is an example Beman library. `Beman.Example` is useful for nothing, though it might contain value as an experiment in modern and minimal C++ project structure. Please check [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/beman-standard.md).
+`Beman.Example` is a minimal C++ library conforming to [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/beman-standard.md). This can be used as a template for those intending to write Beman libraries. It may also find use as a minimal and modern  C++ project structure.
 
-Implements: N/A for `Beman.Example`.
-
-## License
-
-Source and docs are licenced with Apache License v2.0 with LLVM Exceptions. Copy the contents and incorporate in your own work as you see fit.
-
-// SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](https://wg21.link/P0898R3).
 
 ## Building
 
 ### Dependencies
-
-This project is mainly tested on Ubuntu `22.04` and `24.04`, but it should be as portable as CMake is.
+<!-- TODO Darius: rewrite section!-->
 
 This project has no C or C++ dependencies.
 
@@ -30,7 +23,14 @@ Build-time dependencies:
 - `ninja`, `make`, or another CMake-supported build system
   - CMake defaults to "Unix Makefiles" on POSIX systems
 
-Example of installation on `Ubuntu 24.04`:
+#### How to install dependencies
+
+<!-- TODO Darius: rewrite section!-->
+
+<details>
+<summary>Dependencies install example on Ubuntu 24.04  </summary>
+
+<!-- TODO Darius: rewrite section!-->
 
 ```shell
 # Install tools:
@@ -42,27 +42,45 @@ apt-get install                           \
   clang-18 clang++-18 clang-17 clang++-17
 ```
 
-### Instructions
+</details>
 
-Full set of supported toolchains can be found in [.github/workflows/ci_test.yml](.github/workflows/ci_test.yml).
+<details>
+<summary>Dependencies install example on MAC OS $VERSION </summary>
 
-#### Basic Build
+<!-- TODO Darius: rewrite section!-->
+```shell
+# TODO
+```
 
-This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `example` library, ready to package:
+</details>
+
+<details>
+<summary>Dependencies install example on Windows $VERSION  </summary>
+<!-- TODO Darius: rewrite section!-->
 
 ```shell
-$ cmake -B ./build -S .
-$ cmake --build ./build
-$ ctest --test-dir ./build
-$ DESTDIR=./build cmake --install ./build --component libbeman_example-dev --prefix /opt/example
+# TODO
+```
+
+</details>
+
+### How to build Beman.Example
+
+This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `libBeman.Example.a` library, ready to package with its headers:
+
+```shell
+cmake -B build -S .
+cmake --build build
+ctest --test-dir build
+cmake --install build --prefix /opt/Beman.Example
 ```
 
 <details>
-<summary> Build example (with logs) </summary>
+<summary> Build example (verbose logs) </summary>
 
 ```shell
 # Configure example.
-$ cmake -B ./build -S .
+$ cmake -B build -S .
 -- The CXX compiler identification is GNU 13.2.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
@@ -74,146 +92,139 @@ $ cmake -B ./build -S .
 -- Build files have been written to: /path/to/repo/build
 
 # Build example.
-$ cmake --build ./build
-...
-[ 42%] Linking CXX static library ../../../lib/libgmock_main.a
-...
-[ 57%] Linking CXX static library ../../../lib/libgtest_main.a
-...
-[ 64%] Building CXX object src/Beman/Example/CMakeFiles/beman_example.dir/example.cpp.o
-[ 71%] Linking CXX static library libbeman_example.a
-[ 71%] Built target beman_example
-[ 78%] Building CXX object src/Beman/Example/tests/CMakeFiles/beman_example_test.dir/example.t.cpp.o
-[ 85%] Linking CXX executable beman_example_test
-[ 85%] Built target beman_example_test
-[ 92%] Building CXX object examples/CMakeFiles/sample_usage.dir/sample_usage.cpp.o
-[100%] Linking CXX executable sample_usage
-[100%] Built target sample_usage
+$ cmake --build build
+[ 10%] Building CXX object src/Beman/Example/CMakeFiles/Beman.Example.dir/identity.cpp.o
+[ 20%] Linking CXX static library libBeman.Example.a
+[ 20%] Built target Beman.Example
+[ 30%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
+[ 40%] Linking CXX static library ../../../lib/libgtest.a
+[ 40%] Built target gtest
+[ 50%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
+[ 60%] Linking CXX static library ../../../lib/libgtest_main.a
+[ 60%] Built target gtest_main
+[ 70%] Building CXX object src/Beman/Example/tests/CMakeFiles/Beman.Example.Test.dir/identity.t.cpp.o
+[ 80%] Linking CXX executable Beman.Example.Test
+[ 80%] Built target Beman.Example.Test
+[ 90%] Building CXX object examples/CMakeFiles/identity_usage.dir/identity_usage.cpp.o
+[100%] Linking CXX executable identity_usage
+[100%] Built target identity_usage
 
 # Run tests example.
-ctest --test-dir ./build
-Internal ctest changing into directory: /path/to/repo/build
-Test project /path/to/repo/build
-    Start 1: ExampleTest.call_identity
-1/3 Test #1: ExampleTest.call_identity ...................   Passed    0.00 sec
-    Start 2: ExampleTest.compare_identity_std_vs_beman
-2/3 Test #2: ExampleTest.compare_identity_std_vs_beman ...   Passed    0.00 sec
-    Start 3: ExampleTest.is_transparent
-3/3 Test #3: ExampleTest.is_transparent ..................   Passed    0.00 sec
+$ ctest --test-dir build
+Internal ctest changing into directory: /home/dariusn/git/Beman/Beman.Example/build
+Test project /home/dariusn/git/Beman/Beman.Example/build
+    Start 1: IdentityTest.call_identity_with_int
+1/4 Test #1: IdentityTest.call_identity_with_int ...........   Passed    0.00 sec
+    Start 2: IdentityTest.call_identity_with_custom_type
+2/4 Test #2: IdentityTest.call_identity_with_custom_type ...   Passed    0.00 sec
+    Start 3: IdentityTest.compare_std_vs_beman
+3/4 Test #3: IdentityTest.compare_std_vs_beman .............   Passed    0.00 sec
+    Start 4: IdentityTest.check_is_transparent
+4/4 Test #4: IdentityTest.check_is_transparent .............   Passed    0.00 sec
 
-100% tests passed, 0 tests failed out of 3
+100% tests passed, 0 tests failed out of 4
 
 Total Test time (real) =   0.01 sec
 
+
 # Run examples.
-$ ./build/examples/sample_usage
+$ build/examples/identity_usage
 2024
+
 ```
+
 </details>
 
-If all of those steps complete successfully, you should see the library installed in your staging directory.
-
-An example command:
-```shell
-find /some/staging/dir -type f
-```
-
-You will see files like so:
-
-```
-/some/staging/dir
-└── opt
-    └── example
-        ├── include
-        │   └── example.hxx
-        └── lib
-            ├── cmake
-            │   └── example
-            │       ├── example-noconfig.cmake
-            │       └── example.cmake
-            └── libexample.a
-```
-
-#### Disable Tests Build
-
-To build this project with skiped tests and its dependencies, simply use `BUILD_TESTING=OFF` [as documented in upstream CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html:
+<details>
+<summary> Install example (verbose logs) </summary>
 
 ```shell
-cmake -B /some/build/dir -S . -DBUILD_TESTING=OFF
+# Install build artifacts from `build` directory into `opt/Beman.Example` path.
+$ cmake --install build --prefix /opt/Beman.Example
+-- Install configuration: ""
+-- Up-to-date: /opt/Beman.Example/lib/libBeman.Example.a
+-- Up-to-date: /opt/Beman.Example/include
+-- Up-to-date: /opt/Beman.Example/include/Beman
+-- Up-to-date: /opt/Beman.Example/include/Beman/Example
+-- Up-to-date: /opt/Beman.Example/include/Beman/Example/identity.hpp
+
+# Check tree.
+$ tree /opt/Beman.Example
+/opt/Beman.Example
+├── include
+│   └── Beman
+│       └── Example
+│           └── identity.hpp
+└── lib
+    └── libBeman.Example.a
+
+5 directories, 2 files
 ```
 
-#### Manipulating Warnings
+</details>
 
-To build this project with warnings enabled, simply use `CMAKE_CXX_FLAGS` [as documented in upstream CMake documentation](https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_FLAGS.html):
+<details>
+<summary> Disable tests build </summary>
+
+To build this project with tests disabled (and their dependencies), simply use `BUILD_TESTING=OFF` as documented in upstream [CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html):
 
 ```shell
-cmake -B /some/build/dir -S . -DCMAKE_CXX_FLAGS='-Werror=all -Wno-error=deprecated-declarations'
+cmake -B build -S . -DBUILD_TESTING=OFF
 ```
 
-Otherwise follow the Basic Build workflow as described above.
+</details>
 
+## Integrate Beman.Example into your project
 
-#### Sanitizers and Coverage Analysis
+<details>
+<summary> Use Beman.Example directly from C++ </summary>
+<!-- TODO Darius: rewrite section!-->
 
-To build this project with sanitizers enabled, simply use `CMAKE_CXX_FLAGS` [as documented in upstream CMake documentation](https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_FLAGS.html). For instance, to enable an address sanitizer build:
+If you want to use `Beman.Example` from your project, you can include `Beman/Example/*.hpp`  files from your C++ source files
+
+```cpp
+#include <Beman/Example/identity.hpp>
+```
+
+and directly link with `libBeman.Example.a`
 
 ```shell
-cmake -B /some/build/dir -S . -DCMAKE_CXX_FLAGS='-sanitize=address'
+# Assume /opt/Beman.Example staging directory.
+$ c++ -o identity_usage examples/identity_usage.cpp \
+    -I /opt/Beman.Example/include/ \
+    -lBeman.Example -L /opt/Beman.Example/lib/ 
 ```
 
-Similarly, but enabling coverage analysis:
+</details>
 
-```shell
-cmake -B /some/build/dir -S . -DCMAKE_CXX_FLAGS='--coverage'
-```
+<details>
+<summary> Use Beman.Example directly from CMake </summary>
 
-Otherwise follow the Basic Build workflow as described above.
+<!-- TODO Darius: rewrite section! Add examples. -->
 
-
-#### `clang-tidy`
-
-To enable `clang-tidy` on this project, simply use `CMAKE_CXX_CLANG_TIDY` [as documented in upstream CMake documentation](https://cmake.org/cmake/help/latest/variable/CMAKE_LANG_CLANG_TIDY.html). For instance, to enable only the `cppcoreguidelines` checks:
-
-```shell
-cmake -B /some/build/dir -S . -DCMAKE_CXX_CLANG_TIDY="clang-tidy;-checks=-*,cppcoreguidelines-*"
-```
-
-Otherwise follow the Basic Build workflow as described above.
-
-
-## Usage
-
-### From C++
-
-If you *really* want to use `Beman.Example` from your project (why???), you can include `Beman/Example/example.hpp` from your C++ source files
-
-```cxx
-#include <Beman/Example/example.hpp>
-```
-
-`Beman.Example` supports C++11 to C++26. It has no known issues with C++29, though there are no compilation toolchains available to test against in those build modes.
-
-
-### From CMake
-
-For consumers using CMake, you will need to use the `beman_example` CMake module to define the `beman_example` CMake target:
+For CMake based projects, you will need to use the `Beman.Example` CMake module to define the `Beman.Example` CMake target:
 
 ```cmake
-find_package(beman_example REQUIRED)
+find_package(Beman.Example REQUIRED)
 ```
 
-You will also need to add `beman::example` to the link libraries of any libraries or executables that include `example.hpp` in their source or header file.
+You will also need to add `Beman::Example` to the link libraries of any libraries or executables that include `Beman/Example/*.hpp` in their source or header file.
 
 ```cmake
-target_link_libraries(yourlib PUBLIC beman::example)
+target_link_libraries(yourlib PUBLIC Beman::Example)
 ```
 
-### From Other Build Systems
+</details>
 
-Build systems that support `pkg-config` by providing a `beman_example.pc` file. Build systems that support interoperation via `pkg-config` should be able to detect `beman_example` for you automatically.
+<details>
+<summary> Use Beman.Example from other build systems </summary>
+
+<!-- TODO Darius: rewrite section! Add examples. -->
+
+Build systems that support `pkg-config` by providing a `Beman.Example.pc` file. Build systems that support interoperation via `pkg-config` should be able to detect `Beman.Example` for you automatically.
+
+</details>
 
 ## Contributing
 
 Please do! Issues and pull requests are appreciated.
-
-Note that adding more C++ code will be out of scope for this project. Changes that further improve or simplify this project given that goal are appreciated. Enhancements to better support packaging ecosystems would also make sense.
