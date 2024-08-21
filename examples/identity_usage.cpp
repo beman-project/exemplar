@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#include <Beman/Example/example.hpp>
+#include <Beman/Example/identity.hpp>
+
 #include <iostream>
 
 int main() {
-    std::cout << beman::example::identity()(2024) << std::endl;
+    std::cout << Beman::Example::identity()(2024) << '\n';
     return 0;
 }

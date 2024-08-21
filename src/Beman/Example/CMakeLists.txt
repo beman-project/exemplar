@@ -7,7 +7,7 @@ set(TARGET_LIBRARY_BINARY "lib${TARGET_LIBRARY}")
 add_library(${TARGET_LIBRARY} STATIC)
 add_library(${TARGET_LIBRARY_ALIAS} ALIAS ${TARGET_LIBRARY})
 
-target_sources(${TARGET_LIBRARY} PRIVATE example.cpp)
+target_sources(${TARGET_LIBRARY} PRIVATE identity.cpp)
 
 target_include_directories(
   ${TARGET_LIBRARY}
