@@ -51,10 +51,10 @@ Full set of supported toolchains can be found in [.github/workflows/ci_test.yml]
 This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `example` library, ready to package:
 
 ```shell
-cmake -B ./build -S .
-cmake --build ./build
-ctest --test-dir ./build
-DESTDIR=./build cmake --install ./build --component libbeman_example-dev --prefix /opt/example
+$ cmake -B ./build -S .
+$ cmake --build ./build
+$ ctest --test-dir ./build
+$ DESTDIR=./build cmake --install ./build --component libbeman_example-dev --prefix /opt/example
 ```
 
 <details>
@@ -75,24 +75,35 @@ $ cmake -B ./build -S .
 
 # Build example.
 $ cmake --build ./build
-[ 14%] Built target gtest
-[ 28%] Built target gmock
-[ 42%] Built target gmock_main
-[ 57%] Built target gtest_main
+...
+[ 42%] Linking CXX static library ../../../lib/libgmock_main.a
+...
+[ 57%] Linking CXX static library ../../../lib/libgtest_main.a
+...
+[ 64%] Building CXX object src/Beman/Example/CMakeFiles/beman_example.dir/example.cpp.o
+[ 71%] Linking CXX static library libbeman_example.a
 [ 71%] Built target beman_example
-[ 78%] Building CXX object src/Beman/Example/tests/CMakeFiles/example_gtest.dir/example.t.cpp.o
-[ 85%] Linking CXX executable example_gtest
-[ 85%] Built target example_gtest
+[ 78%] Building CXX object src/Beman/Example/tests/CMakeFiles/beman_example_test.dir/example.t.cpp.o
+[ 85%] Linking CXX executable beman_example_test
+[ 85%] Built target beman_example_test
+[ 92%] Building CXX object examples/CMakeFiles/sample_usage.dir/sample_usage.cpp.o
+[100%] Linking CXX executable sample_usage
 [100%] Built target sample_usage
 
 # Run tests example.
-$ ctest --test-dir ./build
+ctest --test-dir ./build
 Internal ctest changing into directory: /path/to/repo/build
 Test project /path/to/repo/build
     Start 1: ExampleTest.call_identity
-1/1 Test #1: ExampleTest.call_identity ........   Passed    0.00 sec
+1/3 Test #1: ExampleTest.call_identity ...................   Passed    0.00 sec
+    Start 2: ExampleTest.compare_identity_std_vs_beman
+2/3 Test #2: ExampleTest.compare_identity_std_vs_beman ...   Passed    0.00 sec
+    Start 3: ExampleTest.is_transparent
+3/3 Test #3: ExampleTest.is_transparent ..................   Passed    0.00 sec
 
-100% tests passed, 0 tests failed out of 1
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.01 sec
 
 # Run examples.
 $ ./build/examples/sample_usage

@@ -1,18 +1,14 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-# Include the GoogleTest CMake module.
 include(GoogleTest)
 
-# Add the test executable.
-add_executable(beman_example_test)
+set(TARGET_LIBRARY_TESTS "${TARGET_LIBRARY}.Test")
 
-# Set the C++ sources.
-target_sources(beman_example_test PRIVATE
-  example.t.cpp
-)
+add_executable(${TARGET_LIBRARY_TESTS})
 
-# Link the library.
-target_link_libraries(beman_example_test PRIVATE beman::example GTest::gtest GTest::gtest_main)
+target_sources(${TARGET_LIBRARY_TESTS} PRIVATE example.t.cpp)
 
-# Add the tests.
-gtest_add_tests(beman_example_test "" AUTO)
+target_link_libraries(${TARGET_LIBRARY_TESTS}
+                      PRIVATE Beman::Example GTest::gtest GTest::gtest_main)
+
+gtest_add_tests(${TARGET_LIBRARY_TESTS} "" AUTO)

@@ -2,31 +2,27 @@
 
 cmake_minimum_required(VERSION 3.23)
 
-project(beman_example
-  VERSION 1.0.0
-  DESCRIPTION "An example Beman library"
-  LANGUAGES CXX
-)
+project(
+  Beman.Example # CMake Project Name, which is also the name of the top-level
+                # targets (e.g., library, executable, etc.).
+  DESCRIPTION "A Beman Library Example"
+  LANGUAGES CXX)
 
-# Include the CTest module.
 include(CTest)
+include(FetchContent)
 
-# Build the tests only if enabled via the CLI flag: BUILD_TESTING.
-if (BUILD_TESTING)
+if(BUILD_TESTING)
   enable_testing()
 
   # Fetch GoogleTest
-  include(FetchContent)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG        f8d7d77c06936315286eb55f8de22cd23c188571 # release-1.14.0
-  )
+    GIT_TAG f8d7d77c06936315286eb55f8de22cd23c188571 # release-1.14.0
+    EXCLUDE_FROM_ALL CMAKE_ARGS -DBUILD_TESTING=OFF)
   FetchContent_MakeAvailable(googletest)
-endif ()
+endif()
 
-# Build the library.
 add_subdirectory(src/Beman/Example)
 
-# Build the examples.
 add_subdirectory(examples)
