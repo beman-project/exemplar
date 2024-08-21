@@ -29,5 +29,5 @@ RUN sysctl vm.mmap_rnd_bits=28
 ENV CC="$cc" CXX="$cxx" CMAKE_GENERATOR="Ninja" CMAKE_EXPORT_COMPILE_COMMANDS=on
 RUN cmake -B build -S . "$cmake_args"
 RUN cmake --build build --verbose
-RUN DESTDIR=build/staging cmake --install build --prefix /opt/beman/example --component libbeman_example-dev
-RUN find build/staging -type f
+RUN cmake --install build --prefix /opt/Beman.Example
+RUN find /opt/Beman.Example -type f
