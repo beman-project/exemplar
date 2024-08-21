@@ -1,5 +1,2 @@
-cmake.bld
-compile_commands.json
-/.build/
-/build/
-/.cache/
+/compile_commands.json
+/build
