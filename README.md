@@ -51,19 +51,18 @@ Full set of supported toolchains can be found in [.github/workflows/ci_test.yml]
 This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `example` library, ready to package:
 
 ```shell
-cmake -B /some/build/dir -S .
-cmake --build /some/build/dir
-ctest --test-dir /some/build/dir \
-  --output-junit build/xunit/results.xml
-DESTDIR=/some/staging/dir cmake --install /some/build/dir --component libbeman_example-dev --prefix /opt/example
+cmake -B ./build -S .
+cmake --build ./build
+ctest --test-dir ./build
+DESTDIR=./build cmake --install ./build --component libbeman_example-dev --prefix /opt/example
 ```
 
 <details>
-<summary> Build example </summary>
+<summary> Build example (with logs) </summary>
 
 ```shell
 # Configure example.
-$ cmake -B .build -S .
+$ cmake -B ./build -S .
 -- The CXX compiler identification is GNU 13.2.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
@@ -72,10 +71,10 @@ $ cmake -B .build -S .
 -- Detecting CXX compile features - done
 -- Configuring done (0.1s)
 -- Generating done (0.0s)
--- Build files have been written to: /path/to/repo/.build
+-- Build files have been written to: /path/to/repo/build
 
 # Build example.
-$ cmake --build .build/
+$ cmake --build ./build
 [ 14%] Built target gtest
 [ 28%] Built target gmock
 [ 42%] Built target gmock_main
@@ -87,16 +86,16 @@ $ cmake --build .build/
 [100%] Built target sample_usage
 
 # Run tests example.
-$ ctest --test-dir .build
-Internal ctest changing into directory: /path/to/repo/.build
-Test project /path/to/repo/.build
+$ ctest --test-dir ./build
+Internal ctest changing into directory: /path/to/repo/build
+Test project /path/to/repo/build
     Start 1: ExampleTest.call_identity
 1/1 Test #1: ExampleTest.call_identity ........   Passed    0.00 sec
 
 100% tests passed, 0 tests failed out of 1
 
 # Run examples.
-$ .build/examples/sample_usage 
+$ ./build/examples/sample_usage
 2024
 ```
 </details>
