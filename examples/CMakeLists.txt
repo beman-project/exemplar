@@ -5,7 +5,7 @@ set(ALL_EXAMPLES
 identity_direct_usage)
 
 foreach(example ${ALL_EXAMPLES})
-  add_executable(${example})
-  target_sources(${example} PRIVATE ${example}.cpp)
-  target_link_libraries(${example} beman::example)
+  add_executable(beman.example.examples.${example})
+  target_sources(beman.example.examples.${example} PRIVATE ${example}.cpp)
+  target_link_libraries(beman.example.examples.${example} beman::example)
 endforeach()

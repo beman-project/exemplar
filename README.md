@@ -191,7 +191,7 @@ Total Test time (real) =   0.01 sec
 
 
 # Run examples.
-$ build/examples/identity_usage
+$ build/examples/beman.example.examples.identity_direct_usage
 2024
 
 ```

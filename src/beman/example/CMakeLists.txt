@@ -1,21 +1,17 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-set(TARGET_LIBRARY ${CMAKE_PROJECT_NAME})
-set(TARGET_LIBRARY_ALIAS "beman::example")
-set(TARGET_LIBRARY_BINARY "lib${TARGET_LIBRARY}")
+add_library(beman.example STATIC)
+add_library(beman::example ALIAS beman.example)
 
-add_library(${TARGET_LIBRARY} STATIC)
-add_library(${TARGET_LIBRARY_ALIAS} ALIAS ${TARGET_LIBRARY})
-
-target_sources(${TARGET_LIBRARY} PRIVATE identity.cpp)
+target_sources(beman.example PRIVATE identity.cpp)
 
 target_include_directories(
-  ${TARGET_LIBRARY}
+  beman.example
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../include>)
 
 install(
-  TARGETS ${TARGET_LIBRARY}
-  EXPORT ${TARGET_LIBRARY}
+  TARGETS beman.example
+  EXPORT beman.example
   DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 install(
@@ -25,5 +21,12 @@ install(
   PATTERN "*.hpp")
 
 if(BUILD_TESTING)
-  add_subdirectory(tests)
+  include(GoogleTest)
+
+  add_executable(beman.example.tests)
+  target_sources(beman.example.tests PRIVATE identity.t.cpp)
+  target_link_libraries(beman.example.tests
+                        PRIVATE beman::example GTest::gtest GTest::gtest_main)
+
+  gtest_add_tests(beman.example.tests "" AUTO)
 endif()
