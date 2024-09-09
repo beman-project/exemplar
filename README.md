@@ -133,7 +133,7 @@ apt-get install                           \
 This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `libBeman.Example.a` library, ready to package with its headers:
 
 ```shell
-cmake -B build -S .
+cmake -B build -S . -DCMAKE_CXX_STANDARD=20
 cmake --build build
 ctest --test-dir build
 cmake --install build --prefix /opt/Beman.Example
@@ -144,7 +144,7 @@ cmake --install build --prefix /opt/Beman.Example
 
 ```shell
 # Configure example.
-$ cmake -B build -S .
+$ cmake -B build -S . -DCMAKE_CXX_STANDARD=20
 -- The CXX compiler identification is GNU 13.2.0
 -- Detecting CXX compiler ABI info
 -- Detecting CXX compiler ABI info - done
