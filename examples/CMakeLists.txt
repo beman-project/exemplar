@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-set(ALL_EXAMPLES identity_usage)
+set(ALL_EXAMPLES identity_as_default_projection identity_direct_usage)
 
 foreach(example ${ALL_EXAMPLES})
   add_executable(${example} "")

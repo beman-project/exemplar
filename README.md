@@ -10,7 +10,71 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](https://wg21.link/P0898R3).
 
-## Building
+
+## Usage
+
+`std::identity` is a function object type whose `operator()` returns its argument unchanged. `std::identity` serves as the default projection in constrained algorithms. Its direct usage is usually not needed.
+
+### Example: default projection in constrained algorithms
+
+ The following code snippet illustrates how we can achieve a default projection using `Beman::Example::identity`:
+
+
+```cpp
+#include <Beman/Example/identity.hpp> 
+
+// Class with a pair of values.
+struct Pair
+{
+    int n;
+    std::string s;
+
+    // Output the pair in the form {n, s}.
+    // Used by the range-printer if no custom projection is provided (default: identity projection).
+    friend std::ostream &operator<<(std::ostream &os, const Pair &p)
+    {
+        return os << "Pair" << '{' << p.n << ", " << p.s << '}';
+    }
+};
+
+// A range-printer that can print projected (modified) elements of a range.
+// All the elements of the range are printed in the form {element1, element2, ...}.
+// e.g., pairs with identity: Pair{1, one}, Pair{2, two}, Pair{3, three}
+// e.g., pairs with custom projection: {1:one, 2:two, 3:three}
+template <std::ranges::input_range R,
+          typename Projection>
+void print(const std::string_view rem, R &&range, Projection projection = Beman::Example::identity>)
+{
+    std::cout << rem << '{';
+    std::ranges::for_each(
+        range,
+        [O = 0](const auto &o) mutable
+        { std::cout << (O++ ? ", " : "") << o; },
+        projection);
+    std::cout << "}\n";
+};
+
+int main()
+{
+    // A vector of pairs to print.
+    const std::vector<Pair> pairs = {
+        {1, "one"},
+        {2, "two"},
+        {3, "three"},
+    };
+
+    // Print the pairs using the default projection.
+    std::cout << "Default projection:\n";
+    print("\tpairs with Beman: ", pairs);
+
+    return 0;
+}
+
+```
+
+Full runable examples can be found in `examples/` (e.g., [./examples/Beman/Beman.Example/examples/identity_as_default_projection.cpp.cpp](./examples/Beman/Beman.Example/examples/identity_as_default_projection.cpp.cpp)).
+
+## Building Beman.Example
 
 ### Dependencies
 <!-- TODO Darius: rewrite section!-->
