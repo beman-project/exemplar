@@ -4,7 +4,7 @@
 #define BEMAN_EXAMPLE_IDENTITY_HPP
 
 // C++ Standard Library: std::identity equivalent.
-// Check https://eel.is/c++draft/func.identity:
+// See https://eel.is/c++draft/func.identity:
 //
 // 22.10.12 Class identity  [func.identity]
 //
@@ -22,7 +22,7 @@
 
 #include <utility> // std::forward
 
-namespace Beman::Example {
+namespace beman::example {
 
 struct __is_transparent; // not defined
 
@@ -43,6 +43,6 @@ struct identity
     using is_transparent = __is_transparent;
 };
 
-} // namespace Beman::Example
+} // namespace beman::example
 
 #endif // BEMAN_EXAMPLE_IDENTITY_HPP

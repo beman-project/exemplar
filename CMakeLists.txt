@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.23)
 
 project(
-  Beman.Example # CMake Project Name, which is also the name of the top-level
+  beman.example # CMake Project Name, which is also the name of the top-level
                 # targets (e.g., library, executable, etc.).
   DESCRIPTION "A Beman Library Example"
   LANGUAGES CXX)
@@ -24,6 +24,6 @@ if(BUILD_TESTING)
   FetchContent_MakeAvailable(googletest)
 endif()
 
-add_subdirectory(src/Beman/Example)
+add_subdirectory(src/beman/example)
 
 add_subdirectory(examples)

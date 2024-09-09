@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-// This example demonstrates the usage of Beman::Example::identity as a default projection in a range-printer.
+// This example demonstrates the usage of beman::example::identity as a default projection in a range-printer.
 // Requires: range support (C++20) and std::identity support (C++20).
 // TODO Darius: Do we need to selectively compile this example?
 // Or should we assume that this project is compiled with C++20 support only?
 
-#include <Beman/Example/identity.hpp> // Beman::Example::identity
+#include <beman/example/identity.hpp> // beman::example::identity
 
 #include <algorithm>
 #include <functional> // std::identity
@@ -44,9 +44,9 @@ void print_helper(const std::string_view rem, R &&range, Projection projection)
     std::cout << "}\n";
 };
 
-// Print wrapper with Beman::Example::identity.
+// Print wrapper with beman::example::identity.
 template <std::ranges::input_range R,
-          typename Projection = Beman::Example::identity> // <- Notice the default projection.
+          typename Projection = beman::example::identity> // <- Notice the default projection.
 void print_beman(const std::string_view rem, R &&range, Projection projection = {})
 {
     print_helper(rem, range, projection);
@@ -71,12 +71,12 @@ int main()
 
     // Print the pairs using the default projection.
     std::cout << "Default projection:\n";
-    print_beman("\tpairs with Beman: ", pairs);
+    print_beman("\tpairs with beman: ", pairs);
     print_std("\tpairs with   std: ", pairs);
 
     // Print the pairs using a custom projection.
     std::cout << "Custom projection:\n";
-    print_beman("\tpairs with Beman: ", pairs,
+    print_beman("\tpairs with beman: ", pairs,
                 [](const auto &p)
                 { return std::to_string(p.n) + ':' + p.s; });
     print_std("\tpairs with   std: ", pairs,

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 set(TARGET_LIBRARY ${CMAKE_PROJECT_NAME})
-set(TARGET_LIBRARY_ALIAS "Beman::Example")
+set(TARGET_LIBRARY_ALIAS "beman::example")
 set(TARGET_LIBRARY_BINARY "lib${TARGET_LIBRARY}")
 
 add_library(${TARGET_LIBRARY} STATIC)

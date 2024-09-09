@@ -2,11 +2,11 @@
 SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 -->
 
-# Beman.Example: A Beman Library Example
+# beman.example: A Beman Library Example
 
 ![Continuous Integration Tests](https://github.com/beman-project/Example/actions/workflows/ci_tests.yml/badge.svg)
 
-`Beman.Example` is a minimal C++ library conforming to [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/beman-standard.md). This can be used as a template for those intending to write Beman libraries. It may also find use as a minimal and modern  C++ project structure.
+`beman.example` is a minimal C++ library conforming to [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/beman-standard.md). This can be used as a template for those intending to write Beman libraries. It may also find use as a minimal and modern  C++ project structure.
 
 Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](https://wg21.link/P0898R3).
 
@@ -15,13 +15,13 @@ Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](ht
 
 `std::identity` is a function object type whose `operator()` returns its argument unchanged. `std::identity` serves as the default projection in constrained algorithms. Its direct usage is usually not needed.
 
-### Example: default projection in constrained algorithms
+### Usage: default projection in constrained algorithms
 
- The following code snippet illustrates how we can achieve a default projection using `Beman::Example::identity`:
+ The following code snippet illustrates how we can achieve a default projection using `beman::example::identity`:
 
 
 ```cpp
-#include <Beman/Example/identity.hpp> 
+#include <beman/example/identity.hpp> 
 
 // Class with a pair of values.
 struct Pair
@@ -43,7 +43,7 @@ struct Pair
 // e.g., pairs with custom projection: {1:one, 2:two, 3:three}
 template <std::ranges::input_range R,
           typename Projection>
-void print(const std::string_view rem, R &&range, Projection projection = Beman::Example::identity>)
+void print(const std::string_view rem, R &&range, Projection projection = beman::example::identity>)
 {
     std::cout << rem << '{';
     std::ranges::for_each(
@@ -64,17 +64,16 @@ int main()
     };
 
     // Print the pairs using the default projection.
-    std::cout << "Default projection:\n";
-    print("\tpairs with Beman: ", pairs);
+    print("\tpairs with beman: ", pairs);
 
     return 0;
 }
 
 ```
 
-Full runable examples can be found in `examples/` (e.g., [./examples/Beman/Beman.Example/examples/identity_as_default_projection.cpp.cpp](./examples/Beman/Beman.Example/examples/identity_as_default_projection.cpp.cpp)).
+Full runable examples can be found in `examples/` (e.g., [./examples/identity_as_default_projection.cpp.cpp](./examples/identity_as_default_projection.cpp.cpp)).
 
-## Building Beman.Example
+## Building beman.example
 
 ### Dependencies
 <!-- TODO Darius: rewrite section!-->
@@ -100,7 +99,7 @@ Build-time dependencies:
 # Install tools:
 apt-get install -y cmake make ninja-build
 
-# Example of toolchains:
+# Toolchains:
 apt-get install                           \
   g++-14 gcc-14 gcc-13 g++-14             \
   clang-18 clang++-18 clang-17 clang++-17
@@ -128,15 +127,15 @@ apt-get install                           \
 
 </details>
 
-### How to build Beman.Example
+### How to build beman.example
 
-This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `libBeman.Example.a` library, ready to package with its headers:
+This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `libbeman.example.a` library, ready to package with its headers:
 
 ```shell
 cmake -B build -S . -DCMAKE_CXX_STANDARD=20
 cmake --build build
 ctest --test-dir build
-cmake --install build --prefix /opt/Beman.Example
+cmake --install build --prefix /opt/beman.example
 ```
 
 <details>
@@ -157,26 +156,26 @@ $ cmake -B build -S . -DCMAKE_CXX_STANDARD=20
 
 # Build example.
 $ cmake --build build
-[ 10%] Building CXX object src/Beman/Example/CMakeFiles/Beman.Example.dir/identity.cpp.o
-[ 20%] Linking CXX static library libBeman.Example.a
-[ 20%] Built target Beman.Example
+[ 10%] Building CXX object src/beman/example/CMakeFiles/beman.example.dir/identity.cpp.o
+[ 20%] Linking CXX static library libbeman.example.a
+[ 20%] Built target beman.example
 [ 30%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o
 [ 40%] Linking CXX static library ../../../lib/libgtest.a
 [ 40%] Built target gtest
 [ 50%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
 [ 60%] Linking CXX static library ../../../lib/libgtest_main.a
 [ 60%] Built target gtest_main
-[ 70%] Building CXX object src/Beman/Example/tests/CMakeFiles/Beman.Example.Test.dir/identity.t.cpp.o
-[ 80%] Linking CXX executable Beman.Example.Test
-[ 80%] Built target Beman.Example.Test
+[ 70%] Building CXX object src/beman/example/tests/CMakeFiles/beman.example.Test.dir/identity.t.cpp.o
+[ 80%] Linking CXX executable beman.example.Test
+[ 80%] Built target beman.example.Test
 [ 90%] Building CXX object examples/CMakeFiles/identity_usage.dir/identity_usage.cpp.o
 [100%] Linking CXX executable identity_usage
 [100%] Built target identity_usage
 
 # Run tests example.
 $ ctest --test-dir build
-Internal ctest changing into directory: /home/dariusn/git/Beman/Beman.Example/build
-Test project /home/dariusn/git/Beman/Beman.Example/build
+Internal ctest changing into directory: /path/to/your/repo/build
+Test project /path/to/your/repo/build
     Start 1: IdentityTest.call_identity_with_int
 1/4 Test #1: IdentityTest.call_identity_with_int ...........   Passed    0.00 sec
     Start 2: IdentityTest.call_identity_with_custom_type
@@ -203,24 +202,24 @@ $ build/examples/identity_usage
 <summary> Install example (verbose logs) </summary>
 
 ```shell
-# Install build artifacts from `build` directory into `opt/Beman.Example` path.
-$ cmake --install build --prefix /opt/Beman.Example
+# Install build artifacts from `build` directory into `opt/beman.example` path.
+$ cmake --install build --prefix /opt/beman.example
 -- Install configuration: ""
--- Up-to-date: /opt/Beman.Example/lib/libBeman.Example.a
--- Up-to-date: /opt/Beman.Example/include
--- Up-to-date: /opt/Beman.Example/include/Beman
--- Up-to-date: /opt/Beman.Example/include/Beman/Example
--- Up-to-date: /opt/Beman.Example/include/Beman/Example/identity.hpp
+-- Up-to-date: /opt/beman.example/lib/libbeman.example.a
+-- Up-to-date: /opt/beman.example/include
+-- Up-to-date: /opt/beman.example/include/beman
+-- Up-to-date: /opt/beman.example/include/beman/example
+-- Up-to-date: /opt/beman.example/include/beman/example/identity.hpp
 
 # Check tree.
-$ tree /opt/Beman.Example
-/opt/Beman.Example
+$ tree /opt/beman.example
+/opt/beman.example
 ├── include
-│   └── Beman
-│       └── Example
+│   └── beman
+│       └── example
 │           └── identity.hpp
 └── lib
-    └── libBeman.Example.a
+    └── libbeman.example.a
 
 5 directories, 2 files
 ```
@@ -238,54 +237,54 @@ cmake -B build -S . -DBUILD_TESTING=OFF
 
 </details>
 
-## Integrate Beman.Example into your project
+## Integrate beman.example into your project
 
 <details>
-<summary> Use Beman.Example directly from C++ </summary>
+<summary> Use beman.example directly from C++ </summary>
 <!-- TODO Darius: rewrite section!-->
 
-If you want to use `Beman.Example` from your project, you can include `Beman/Example/*.hpp`  files from your C++ source files
+If you want to use `beman.example` from your project, you can include `beman/example/*.hpp`  files from your C++ source files
 
 ```cpp
-#include <Beman/Example/identity.hpp>
+#include <beman/example/identity.hpp>
 ```
 
-and directly link with `libBeman.Example.a`
+and directly link with `libbeman.example.a`
 
 ```shell
-# Assume /opt/Beman.Example staging directory.
+# Assume /opt/beman.example staging directory.
 $ c++ -o identity_usage examples/identity_usage.cpp \
-    -I /opt/Beman.Example/include/ \
-    -lBeman.Example -L /opt/Beman.Example/lib/ 
+    -I /opt/beman.example/include/ \
+    -L/opt/beman.example/lib/ -lbeman.example
 ```
 
 </details>
 
 <details>
-<summary> Use Beman.Example directly from CMake </summary>
+<summary> Use beman.example directly from CMake </summary>
 
 <!-- TODO Darius: rewrite section! Add examples. -->
 
-For CMake based projects, you will need to use the `Beman.Example` CMake module to define the `Beman.Example` CMake target:
+For CMake based projects, you will need to use the `beman.example` CMake module to define the `beman::example` CMake target:
 
 ```cmake
-find_package(Beman.Example REQUIRED)
+find_package(beman.example REQUIRED)
 ```
 
-You will also need to add `Beman::Example` to the link libraries of any libraries or executables that include `Beman/Example/*.hpp` in their source or header file.
+You will also need to add `beman::example` to the link libraries of any libraries or executables that include `beman/example/*.hpp` in their source or header file.
 
 ```cmake
-target_link_libraries(yourlib PUBLIC Beman::Example)
+target_link_libraries(yourlib PUBLIC beman::example)
 ```
 
 </details>
 
 <details>
-<summary> Use Beman.Example from other build systems </summary>
+<summary> Use beman.example from other build systems </summary>
 
 <!-- TODO Darius: rewrite section! Add examples. -->
 
-Build systems that support `pkg-config` by providing a `Beman.Example.pc` file. Build systems that support interoperation via `pkg-config` should be able to detect `Beman.Example` for you automatically.
+Build systems that support `pkg-config` by providing a `beman.example.pc` file. Build systems that support interoperation via `pkg-config` should be able to detect `beman.example` for you automatically.
 
 </details>
 
