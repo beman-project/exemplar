@@ -1,7 +1,6 @@
-# Copyright © 2024 Bret Brown
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-name: Test
+name: Continuous Integration Tests
 
 on:
   push:
@@ -30,14 +29,15 @@ jobs:
           - { id: ubuntu-gcc-aubsan, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"}
           - { id: ubuntu-gcc-tsan, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"}
           - { id: ubuntu-gcc-static, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: ""}
-          - { id: ubuntu-gcc-static-cxx98, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=98 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx11, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=11 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx14, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=14 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx17, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=17 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx20, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
           - { id: ubuntu-gcc-dynamic, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DBUILD_SHARED_LIBS=on"}
           - { id: ubuntu-clang-static, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: ""}
           - { id: ubuntu-clang-dynamic, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DBUILD_SHARED_LIBS=on"}
+          - { id: ubuntu-gcc-static-cxx20, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
+          - { id: ubuntu-gcc-static-cxx23, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
+          - { id: ubuntu-gcc-static-cxx26, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
+          - { id: ubuntu-clang-static-cxx20, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
+          - { id: ubuntu-clang-static-cxx23, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
+          - { id: ubuntu-clang-static-cxx26, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
           # Disabling Rocky until it catches up on CMake versions or a way to sideload newer version of CMake
           # is identified.
           # - { id: rockylinux-gcc-static, platform: rockylinux, cc: gcc, cpp: g++, cmake_args: ""}

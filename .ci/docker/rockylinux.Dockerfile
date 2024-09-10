@@ -1,29 +1,35 @@
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
 FROM rockylinux:9
 
-# Enable EPEL
+# Enable EPEL.
 RUN dnf update -y
 RUN dnf install -y 'dnf-command(config-manager)'
 RUN dnf config-manager --set-enabled crb -y
 RUN dnf install epel-release -y
 
-# Install dependencies
+# Install dependencies.
 RUN dnf install -y \
         clang \
         g++ \
         ninja-build \
-        cmake
+        cmake \
+        git
 RUN dnf clean all
 
-# Copy code
+# Copy code.
 WORKDIR /workarea
 COPY ./ ./
 
+# Set build arguments.
 ARG cc=gcc
 ARG cxx=g++
 ARG cmake_args=
 
+# Build.
 ENV CC="$cc" CXX="$cxx" CMAKE_GENERATOR="Ninja" CMAKE_EXPORT_COMPILE_COMMANDS=on
-RUN cmake -B build -S . "$cmake_args" && \
-  cmake --build build --verbose && \
-  DESTDIR=build/staging cmake --install build --prefix /opt/example --component libexample-dev && \
-  find build/staging -type f
+RUN cmake -B build -S . "$cmake_args"
+RUN cmake --build build --verbose
+RUN cmake --install build --prefix /opt/beman.example
+RUN find /opt/beman.example -type f
+
