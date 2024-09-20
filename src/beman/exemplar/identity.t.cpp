@@ -7,11 +7,13 @@
 #include <algorithm>
 #include <functional>
 
+namespace exe = beman::exemplar;
+
 TEST(IdentityTest, call_identity_with_int)
 {
     for (int i = -100; i < 100; ++i)
     {
-        EXPECT_EQ(i, beman::exemplar::identity()(i));
+        EXPECT_EQ(i, exe::identity()(i));
     }
 }
 
@@ -25,7 +27,7 @@ TEST(IdentityTest, call_identity_with_custom_type)
     for (int i = -100; i < 100; ++i)
     {
         const S s{i};
-        const S s_id = beman::exemplar::identity()(s);
+        const S s_id = exe::identity()(s);
         EXPECT_EQ(s.i, s_id.i);
     }
 }
@@ -35,7 +37,7 @@ TEST(IdentityTest, compare_std_vs_beman)
 // Requires: std::identity support.
 #if defined(__cpp_lib_identity)
     std::identity std_id;
-    beman::exemplar::identity beman_id;
+    exe::identity beman_id;
     for (int i = -100; i < 100; ++i)
     {
         EXPECT_EQ(std_id(i), beman_id(i));
@@ -48,7 +50,7 @@ TEST(IdentityTest, check_is_transparent)
 // Requires: transparent operators support.
 #if defined(__cpp_lib_transparent_operators)
 
-    beman::exemplar::identity id;
+    exe::identity id;
 
     const auto container = {1, 2, 3, 4, 5};
     auto it = std::find(std::begin(container), std::end(container), 3);

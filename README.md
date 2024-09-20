@@ -23,6 +23,8 @@ Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](ht
 ```cpp
 #include <beman/exemplar/identity.hpp> 
 
+namespace exe = beman::exemplar;
+
 // Class with a pair of values.
 struct Pair
 {
@@ -43,7 +45,7 @@ struct Pair
 // e.g., pairs with custom projection: {1:one, 2:two, 3:three}
 template <std::ranges::input_range R,
           typename Projection>
-void print(const std::string_view rem, R &&range, Projection projection = beman::exemplar::identity>)
+void print(const std::string_view rem, R &&range, Projection projection = exe::identity>)
 {
     std::cout << rem << '{';
     std::ranges::for_each(

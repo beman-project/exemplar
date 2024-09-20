@@ -5,13 +5,15 @@
 // TODO Darius: Do we need to selectively compile this example?
 // Or should we assume that this project is compiled with C++20 support only?
 
-#include <beman/exemplar/identity.hpp> // beman::exemplar::identity
+#include <beman/exemplar/identity.hpp>
 
 #include <algorithm>
 #include <functional> // std::identity
 #include <iostream>
 #include <ranges>
 #include <string>
+
+namespace exe = beman::exemplar;
 
 // Class with a pair of values.
 struct Pair
@@ -44,9 +46,9 @@ void print_helper(const std::string_view rem, R &&range, Projection projection)
     std::cout << "}\n";
 };
 
-// Print wrapper with beman::exemplar::identity.
+// Print wrapper with exe::identity.
 template <std::ranges::input_range R,
-          typename Projection = beman::exemplar::identity> // <- Notice the default projection.
+          typename Projection = exe::identity> // <- Notice the default projection.
 void print_beman(const std::string_view rem, R &&range, Projection projection = {})
 {
     print_helper(rem, range, projection);
