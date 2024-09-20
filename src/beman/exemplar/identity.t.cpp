@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#include <beman/example/identity.hpp>
+#include <beman/exemplar/identity.hpp>
 
 #include <gtest/gtest.h>
 
@@ -11,7 +11,7 @@ TEST(IdentityTest, call_identity_with_int)
 {
     for (int i = -100; i < 100; ++i)
     {
-        EXPECT_EQ(i, beman::example::identity()(i));
+        EXPECT_EQ(i, beman::exemplar::identity()(i));
     }
 }
 
@@ -25,7 +25,7 @@ TEST(IdentityTest, call_identity_with_custom_type)
     for (int i = -100; i < 100; ++i)
     {
         const S s{i};
-        const S s_id = beman::example::identity()(s);
+        const S s_id = beman::exemplar::identity()(s);
         EXPECT_EQ(s.i, s_id.i);
     }
 }
@@ -35,7 +35,7 @@ TEST(IdentityTest, compare_std_vs_beman)
 // Requires: std::identity support.
 #if defined(__cpp_lib_identity)
     std::identity std_id;
-    beman::example::identity beman_id;
+    beman::exemplar::identity beman_id;
     for (int i = -100; i < 100; ++i)
     {
         EXPECT_EQ(std_id(i), beman_id(i));
@@ -48,7 +48,7 @@ TEST(IdentityTest, check_is_transparent)
 // Requires: transparent operators support.
 #if defined(__cpp_lib_transparent_operators)
 
-    beman::example::identity id;
+    beman::exemplar::identity id;
 
     const auto container = {1, 2, 3, 4, 5};
     auto it = std::find(std::begin(container), std::end(container), 3);

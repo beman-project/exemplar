@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-// This example demonstrates the usage of beman::example::identity as a default projection in a range-printer.
+// This example demonstrates the usage of beman::exemplar::identity as a default projection in a range-printer.
 // Requires: range support (C++20) and std::identity support (C++20).
 // TODO Darius: Do we need to selectively compile this example?
 // Or should we assume that this project is compiled with C++20 support only?
 
-#include <beman/example/identity.hpp> // beman::example::identity
+#include <beman/exemplar/identity.hpp> // beman::exemplar::identity
 
 #include <algorithm>
 #include <functional> // std::identity
@@ -44,9 +44,9 @@ void print_helper(const std::string_view rem, R &&range, Projection projection)
     std::cout << "}\n";
 };
 
-// Print wrapper with beman::example::identity.
+// Print wrapper with beman::exemplar::identity.
 template <std::ranges::input_range R,
-          typename Projection = beman::example::identity> // <- Notice the default projection.
+          typename Projection = beman::exemplar::identity> // <- Notice the default projection.
 void print_beman(const std::string_view rem, R &&range, Projection projection = {})
 {
     print_helper(rem, range, projection);
