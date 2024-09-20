@@ -30,6 +30,6 @@ ARG cmake_args=
 ENV CC="$cc" CXX="$cxx" CMAKE_GENERATOR="Ninja" CMAKE_EXPORT_COMPILE_COMMANDS=on
 RUN cmake -B build -S . "$cmake_args"
 RUN cmake --build build --verbose
-RUN cmake --install build --prefix /opt/beman.example
-RUN find /opt/beman.example -type f
+RUN cmake --install build --prefix /opt/beman.exemplar
+RUN find /opt/beman.exemplar -type f
 
