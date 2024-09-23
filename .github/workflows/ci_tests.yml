@@ -44,7 +44,7 @@ jobs:
           - { id: ubuntu-clang-static-cxx26, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       # GitHub runners have updated the Ubuntu Linux Kernel to use strong ASLR,
       # but LLVM is not configured for this change, and thus the address
       # sanitizer breaks.
@@ -65,7 +65,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false
