@@ -9,10 +9,17 @@ target_include_directories(
   beman.exemplar
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../include>)
 
+target_sources(
+  beman.exemplar PUBLIC
+  FILE_SET HEADERS
+  BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../../../include
+  FILES identity.hpp)
+
 install(
   TARGETS beman.exemplar
   EXPORT beman.exemplar
-  DESTINATION ${CMAKE_INSTALL_LIBDIR})
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  FILE_SET HEADERS)
 
 install(
   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/
