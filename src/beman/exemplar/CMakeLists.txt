@@ -3,10 +3,6 @@
 add_library(beman.exemplar STATIC)
 add_library(beman::exemplar ALIAS beman.exemplar)
 
-# target_include_directories(
-#   beman.exemplar
-#   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../include>)
-
 target_sources(beman.exemplar PRIVATE identity.cpp)
 
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/)
@@ -24,12 +20,6 @@ install(
   EXPORT beman.exemplar
   DESTINATION ${CMAKE_INSTALL_LIBDIR}
   FILE_SET HEADERS)
-
-# install(
-#   DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/
-#   DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-#   FILES_MATCHING
-#   PATTERN "*.hpp")
 
 if(BUILD_TESTING)
   include(GoogleTest)
