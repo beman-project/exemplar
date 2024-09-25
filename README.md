@@ -17,7 +17,7 @@ Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](ht
 
 ### Usage: default projection in constrained algorithms
 
- The following code snippet illustrates how we can achieve a default projection using `beman::exemplar::identity`:
+The following code snippet illustrates how we can achieve a default projection using `beman::exemplar::identity`:
 
 
 ```cpp
