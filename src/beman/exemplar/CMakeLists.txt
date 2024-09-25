@@ -18,6 +18,7 @@ set_target_properties(beman.exemplar PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
 install(
   TARGETS beman.exemplar
   EXPORT beman.exemplar
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   FILE_SET HEADERS)
 
 if(BUILD_TESTING)
