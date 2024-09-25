@@ -4,18 +4,22 @@
 cmake_minimum_required(VERSION 3.23)
 
 project(
-  beman.exemplar # CMake Project Name, which is also the name of the top-level
-                 # targets (e.g., library, executable, etc.).
+  beman.exemplar
   DESCRIPTION "A Beman library exemplar"
+  VERSION 0.0.0
   LANGUAGES CXX)
 
+include(CMakePackageConfigHelpers)
 include(CTest)
 include(FetchContent)
+include(GNUInstallDirs)
+
+set(TARGETS_EXPORT_NAME ${CMAKE_PROJECT_NAME}Targets)
+set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake)
 
 if(BUILD_TESTING)
   enable_testing()
 
-  # Fetch GoogleTest
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
@@ -25,5 +29,19 @@ if(BUILD_TESTING)
 endif()
 
 add_subdirectory(src/beman/exemplar)
-
 add_subdirectory(examples)
+
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion)
+
+configure_package_config_file(
+  "cmake/Config.cmake.in"
+  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
+  INSTALL_DESTINATION ${INSTALL_CONFIGDIR})
+
+install(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake
+  DESTINATION ${INSTALL_CONFIGDIR})
