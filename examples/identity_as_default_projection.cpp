@@ -84,6 +84,4 @@ int main()
     print_std("\tpairs with   std: ", pairs,
               [](const auto &p)
               { return std::to_string(p.n) + ':' + p.s; });
-
-    return 0;
 }
