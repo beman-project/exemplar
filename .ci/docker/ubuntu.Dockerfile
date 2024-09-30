@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-# Using a non-LTS Ubuntu, just until CMake 3.25 is available on Ubuntu 24.04.
+# Using a non-LTS Ubuntu, just until CMake 3.25 is available on Ubuntu 24.04
 FROM ubuntu:23.10
 
 # Install dependencies,
@@ -30,5 +30,6 @@ ENV CC="$cc" CXX="$cxx" CMAKE_GENERATOR="Ninja" CMAKE_EXPORT_COMPILE_COMMANDS=on
 RUN ls -lR src
 RUN cmake -B build -S . "$cmake_args"
 RUN cmake --build build --verbose
+RUN cmake --build build --target all_verify_interface_header_sets
 RUN cmake --install build --prefix /opt/beman.exemplar
 RUN find /opt/beman.exemplar -type f

@@ -5,20 +5,21 @@ add_library(beman::exemplar ALIAS beman.exemplar)
 
 target_sources(beman.exemplar PRIVATE identity.cpp)
 
-target_include_directories(
-  beman.exemplar
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../include>)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/)
+
+target_sources(
+  beman.exemplar PUBLIC
+  FILE_SET HEADERS
+  BASE_DIRS ${INCLUDE_DIR}
+  FILES ${INCLUDE_DIR}/beman/exemplar/identity.hpp)
+
+set_target_properties(beman.exemplar PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
 
 install(
   TARGETS beman.exemplar
   EXPORT beman.exemplar
-  DESTINATION ${CMAKE_INSTALL_LIBDIR})
-
-install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-  FILES_MATCHING
-  PATTERN "*.hpp")
+  FILE_SET HEADERS
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 
 if(BUILD_TESTING)
   include(GoogleTest)
