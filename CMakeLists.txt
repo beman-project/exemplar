@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-# TODO Darius: Find CMake minimum required version.
 cmake_minimum_required(VERSION 3.25)
 
 project(
@@ -16,7 +15,9 @@ if(BUILD_TESTING)
   enable_testing()
 
   block()
+    # Disable installing google test dependency on cmake --install
     set(INSTALL_GTEST OFF)
+
     # Fetch GoogleTest
     FetchContent_Declare(
       googletest
