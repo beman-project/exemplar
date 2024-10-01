@@ -13,6 +13,8 @@ target_sources(
   BASE_DIRS ${INCLUDE_DIR}
   FILES ${INCLUDE_DIR}/beman/exemplar/identity.hpp)
 
+target_compile_features(beman.exemplar PUBLIC cxx_std_17)
+
 set_target_properties(beman.exemplar PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
 
 install(
