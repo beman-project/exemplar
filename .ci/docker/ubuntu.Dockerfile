@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-# Using a non-LTS Ubuntu, just until CMake 3.24 is available on Ubuntu 24.04.
+# Using a non-LTS Ubuntu, just until CMake 3.25 is available on Ubuntu 24.04
 FROM ubuntu:23.10
 
 # Install dependencies,
