@@ -28,4 +28,3 @@ repos:
       - id: clang-tidy
         stages: [manual]
         additional_dependencies: ['clang-tidy==18.1.8']
-
