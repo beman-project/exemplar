@@ -21,7 +21,7 @@ Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](ht
 
 
 ```cpp
-#include <beman/exemplar/identity.hpp> 
+#include <beman/exemplar/identity.hpp>
 
 namespace exe = beman::exemplar;
 
