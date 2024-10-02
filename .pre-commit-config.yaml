@@ -9,21 +9,29 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
 
+    # Clang-format and Clang-tidy for C++
+    # WARN: repo may not maintained anymore since 2021.
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
       - id: clang-format
-        args: [-i]
+        args: [-i] # in-place formatting
         additional_dependencies: ['clang-format==18.1.8']
       - id: clang-tidy
+        # Currently disabled, see:
+        # https://github.com/beman-project/exemplar/pull/34#discussion_r1784958937
         stages: [manual]
         additional_dependencies: ['clang-tidy==18.1.8']
 
+    # CMake linting and formatting
   - repo: https://github.com/BlankSpruce/gersemi
     rev: 0.15.1
     hooks:
     - id: gersemi
+      name: CMake linting
 
+    # Markdown linting
+    # Config file: .markdownlint.yaml
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.42.0
     hooks:
