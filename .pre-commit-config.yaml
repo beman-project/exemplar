@@ -9,17 +9,6 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
 
-  - repo: local
-    hooks:
-      - id: clang-format-fix
-        name: clang-format-fix
-        entry: clang-format-18
-        files: ^(src/|include/)
-        types_or: [c++, c]
-        language: system
-        args: ['-i']
-        stages: [manual]
-
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
