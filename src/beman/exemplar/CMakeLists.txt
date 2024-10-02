@@ -25,12 +25,14 @@ install(
 )
 
 if(BUILD_TESTING)
-  include(GoogleTest)
+    include(GoogleTest)
 
-  add_executable(beman.exemplar.tests)
-  target_sources(beman.exemplar.tests PRIVATE identity.t.cpp)
-  target_link_libraries(beman.exemplar.tests
-                        PRIVATE beman::exemplar GTest::gtest GTest::gtest_main)
+    add_executable(beman.exemplar.tests)
+    target_sources(beman.exemplar.tests PRIVATE identity.t.cpp)
+    target_link_libraries(
+        beman.exemplar.tests
+        PRIVATE beman::exemplar GTest::gtest GTest::gtest_main
+    )
 
-  gtest_add_tests(beman.exemplar.tests "" AUTO)
+    gtest_add_tests(beman.exemplar.tests "" AUTO)
 endif()

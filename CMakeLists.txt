@@ -3,16 +3,17 @@
 cmake_minimum_required(VERSION 3.25)
 
 project(
-  beman.exemplar # CMake Project Name, which is also the name of the top-level
-                 # targets (e.g., library, executable, etc.).
-  DESCRIPTION "A Beman library exemplar"
-  LANGUAGES CXX)
+    beman.exemplar # CMake Project Name, which is also the name of the top-level
+    # targets (e.g., library, executable, etc.).
+    DESCRIPTION "A Beman library exemplar"
+    LANGUAGES CXX
+)
 
 include(CTest)
 include(FetchContent)
 
 if(BUILD_TESTING)
-  enable_testing()
+    enable_testing()
 
   block()
     # Disable installing google test dependency on cmake --install
