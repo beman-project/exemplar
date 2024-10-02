@@ -28,3 +28,8 @@ repos:
       - id: clang-tidy
         stages: [manual]
         additional_dependencies: ['clang-tidy==18.1.8']
+
+  - repo: https://github.com/BlankSpruce/gersemi
+    rev: 0.15.1
+    hooks:
+    - id: gersemi
