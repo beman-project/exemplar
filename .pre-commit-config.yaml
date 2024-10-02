@@ -34,3 +34,8 @@ repos:
     rev: 0.15.1
     hooks:
     - id: gersemi
+
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.13.0
+    hooks:
+      - id: markdownlint
