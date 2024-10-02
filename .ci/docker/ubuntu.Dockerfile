@@ -26,10 +26,13 @@ ARG cmake_args=
 RUN sysctl vm.mmap_rnd_bits=28
 
 # Build.
-ENV CC="$cc" CXX="$cxx" CMAKE_GENERATOR="Ninja" CMAKE_EXPORT_COMPILE_COMMANDS=on
+ENV CC="$cc" CXX="$cxx" CMAKE_GENERATOR="Ninja Multi-Config" CMAKE_EXPORT_COMPILE_COMMANDS=on
 RUN ls -lR src
 RUN cmake -B build -S . "$cmake_args"
-RUN cmake --build build --verbose
-RUN cmake --build build --target all_verify_interface_header_sets
-RUN cmake --install build --prefix /opt/beman.exemplar
+RUN cmake --build build --config Release --verbose
+RUN cmake --build build --config Release --target all_verify_interface_header_sets
+RUN cmake --install build --config Release --prefix /opt/beman.exemplar
+RUN cmake --build build --config Debug --verbose
+RUN cmake --build build --config Debug --target all_verify_interface_header_sets
+RUN cmake --install build --config Debug --prefix /opt/beman.exemplar
 RUN find /opt/beman.exemplar -type f

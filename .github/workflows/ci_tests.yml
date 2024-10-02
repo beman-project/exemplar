@@ -67,4 +67,5 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Run tests
         run: |
-          docker run ${{ matrix.cfg.id }} ctest --test-dir build
+          docker run ${{ matrix.cfg.id }} ctest --test-dir build -C Release
+          docker run ${{ matrix.cfg.id }} ctest --test-dir build -C Debug
