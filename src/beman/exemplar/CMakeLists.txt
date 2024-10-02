@@ -8,20 +8,22 @@ target_sources(beman.exemplar PRIVATE identity.cpp)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/)
 
 target_sources(
-  beman.exemplar PUBLIC
-  FILE_SET HEADERS
-  BASE_DIRS ${INCLUDE_DIR}
-  FILES ${INCLUDE_DIR}/beman/exemplar/identity.hpp)
+    beman.exemplar
+    PUBLIC
+        FILE_SET HEADERS
+        BASE_DIRS ${INCLUDE_DIR}
+        FILES ${INCLUDE_DIR}/beman/exemplar/identity.hpp
+)
 
 set_target_properties(beman.exemplar PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
 
 install(
-  TARGETS beman.exemplar
-  EXPORT beman.exemplar
-  DESTINATION $<$<CONFIG:Debug>:debug/>${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION $<$<CONFIG:Debug>:debug/>${CMAKE_INSTALL_BINDIR}
-  FILE_SET HEADERS
-  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    TARGETS beman.exemplar
+    EXPORT beman.exemplar
+    DESTINATION
+    $<$<CONFIG:Debug>:debug/>${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION $<$<CONFIG:Debug>:debug/>${CMAKE_INSTALL_BINDIR}
+    FILE_SET HEADERS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 if(BUILD_TESTING)
