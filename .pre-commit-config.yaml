@@ -9,14 +9,20 @@ repos:
     -   id: check-yaml
     -   id: check-added-large-files
 
-    # Clang-format and Clang-tidy for C++
+    # Clang-format for C++
+    # This brings in a portable version of clang-format.
+    # See also: https://github.com/ssciwr/clang-format-wheel
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v18.1.8
+    hooks:
+    - id: clang-format
+      types_or: [c++, c]
+
+    # Clang-tidy for C++
     # WARN: repo may not maintained anymore since 2021.
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: v1.3.5
     hooks:
-      - id: clang-format
-        args: [-i] # in-place formatting
-        additional_dependencies: ['clang-format==18.1.8']
       - id: clang-tidy
         # Currently disabled, see:
         # https://github.com/beman-project/exemplar/pull/34#discussion_r1784958937
