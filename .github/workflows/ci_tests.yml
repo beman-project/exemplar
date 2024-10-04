@@ -11,6 +11,21 @@ on:
     - cron: '30 15 * * *'
 
 jobs:
+  preset-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        preset: ["gcc-debug", "gcc-release"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.25.x'
+      - uses: seanmiddleditch/gha-setup-ninja@v5
+      - name: Run preset
+        run: cmake --workflow --preset ${{ matrix.preset }}
+      
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -72,7 +87,7 @@ jobs:
 
   create-issue-when-fault:
     runs-on: ubuntu-latest
-    needs: [test]
+    needs: [test, preset-test]
     if: failure() && github.event_name == 'schedule'
     steps:
       # See https://github.com/cli/cli/issues/5075 
