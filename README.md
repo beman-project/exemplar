@@ -17,7 +17,7 @@ Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](ht
 
 ### Usage: default projection in constrained algorithms
 
- The following code snippet illustrates how we can achieve a default projection using `beman::exemplar::identity`:
+The following code snippet illustrates how we can achieve a default projection using `beman::exemplar::identity`:
 
 
 ```cpp
@@ -73,7 +73,7 @@ int main()
 
 ```
 
-Full runable examples can be found in `examples/` (e.g., [./examples/identity_as_default_projection.cpp.cpp](./examples/identity_as_default_projection.cpp.cpp)).
+Full runable examples can be found in `examples/` (e.g., [./examples/identity_as_default_projection.cpp](./examples/identity_as_default_projection.cpp)).
 
 ## Building beman.exemplar
 
@@ -152,7 +152,8 @@ $ cmake -B build -S . -DCMAKE_CXX_STANDARD=20
 -- Check for working CXX compiler: /usr/bin/c++ - skipped
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
--- Configuring done (0.1s)
+...
+-- Configuring done (2.9s)
 -- Generating done (0.0s)
 -- Build files have been written to: /path/to/repo/build
 
@@ -167,17 +168,17 @@ $ cmake --build build
 [ 50%] Building CXX object _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o
 [ 60%] Linking CXX static library ../../../lib/libgtest_main.a
 [ 60%] Built target gtest_main
-[ 70%] Building CXX object src/beman/exemplar/tests/CMakeFiles/beman.exemplar.Test.dir/identity.t.cpp.o
-[ 80%] Linking CXX executable beman.exemplar.Test
-[ 80%] Built target beman.exemplar.Test
-[ 90%] Building CXX object examples/CMakeFiles/identity_usage.dir/identity_usage.cpp.o
-[100%] Linking CXX executable identity_usage
-[100%] Built target identity_usage
+[ 70%] Building CXX object src/beman/exemplar/CMakeFiles/beman.exemplar.tests.dir/identity.t.cpp.o
+[ 80%] Linking CXX executable beman.exemplar.tests
+[ 80%] Built target beman.exemplar.tests
+[ 90%] Building CXX object examples/CMakeFiles/beman.exemplar.examples.identity_direct_usage.dir/identity_direct_usage.cpp.o
+[100%] Linking CXX executable beman.exemplar.examples.identity_direct_usage
+[100%] Built target beman.exemplar.examples.identity_direct_usage
 
 # Run beman.exemplar tests.
 $ ctest --test-dir build
-Internal ctest changing into directory: /path/to/your/repo/build
-Test project /path/to/your/repo/build
+Internal ctest changing into directory: /path/to/repo/build
+Test project /path/to/repo/build
     Start 1: IdentityTest.call_identity_with_int
 1/4 Test #1: IdentityTest.call_identity_with_int ...........   Passed    0.00 sec
     Start 2: IdentityTest.call_identity_with_custom_type
@@ -193,7 +194,7 @@ Total Test time (real) =   0.01 sec
 
 
 # Run examples.
-$ build/exemplar/beman.exemplar.examples.identity_direct_usage
+$ build/examples/beman.exemplar.examples.identity_direct_usage
 2024
 
 ```
@@ -207,11 +208,13 @@ $ build/exemplar/beman.exemplar.examples.identity_direct_usage
 # Install build artifacts from `build` directory into `opt/beman.exemplar` path.
 $ cmake --install build --prefix /opt/beman.exemplar
 -- Install configuration: ""
--- Up-to-date: /opt/beman.exemplar/lib/libbeman.exemplar.a
--- Up-to-date: /opt/beman.exemplar/include
--- Up-to-date: /opt/beman.exemplar/include/beman
--- Up-to-date: /opt/beman.exemplar/include/beman/exemplar
--- Up-to-date: /opt/beman.exemplar/include/beman/exemplar/identity.hpp
+-- Installing: /opt/beman.exemplar/lib/libbeman.exemplar.a
+-- Installing: /opt/beman.exemplar/include
+-- Installing: /opt/beman.exemplar/include/beman
+-- Installing: /opt/beman.exemplar/include/beman/exemplar
+-- Installing: /opt/beman.exemplar/include/beman/exemplar/identity.hpp
+-- Installing: /opt/beman.exemplar/lib/cmake/beman.exemplarConfig.cmake
+-- Installing: /opt/beman.exemplar/lib/cmake/beman.exemplarConfigVersion.cmake
 
 # Check tree.
 $ tree /opt/beman.exemplar
@@ -221,9 +224,12 @@ $ tree /opt/beman.exemplar
 │       └── exemplar
 │           └── identity.hpp
 └── lib
+    ├── cmake
+    │   ├── beman.exemplarConfig.cmake
+    │   └── beman.exemplarConfigVersion.cmake
     └── libbeman.exemplar.a
 
-5 directories, 2 files
+6 directories, 4 files
 ```
 
 </details>
