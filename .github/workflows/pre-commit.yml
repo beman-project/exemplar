@@ -7,11 +7,25 @@ on:
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
+    name: pre-commit
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: 3.13
+
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Get Changed Files
         id: changed-files
@@ -22,3 +36,11 @@ jobs:
       - uses: pre-commit/action@v3.0.1
         with:
           extra_args: --files ${{ steps.changed-files.outputs.all_changed_files }}
+        continue-on-error: true
+
+      - name: suggester / pre-commit
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: pre-commit
+          fail_on_error: true
+          level: warning
