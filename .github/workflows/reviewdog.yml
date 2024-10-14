@@ -1,0 +1,42 @@
+name: linter-checks
+on: [pull_request]
+jobs:
+  cpp:
+    permissions:
+      contents: read
+      checks: write
+      issues: write
+      pull-requests: write
+    name: pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
+
+      - name: Install dependencies
+        run: |
+          pip install pre-commit
+
+      - name: Run pre-commit hooks
+        run: |
+          pre-commit run --all-files
+        continue-on-error: true
+
+      - name: suggester / pre-commit
+        uses: reviewdog/action-suggester@v1
+        with:
+          tool_name: pre-commit
+          fail_on_error: true
+          level: warning
+
