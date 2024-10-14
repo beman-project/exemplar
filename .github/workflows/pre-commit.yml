@@ -10,4 +10,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - uses: pre-commit/action@v3.0.1
+        with:
+          python-version: '3.13'
+
+      - name: Get Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+
+        # See:
+        # https://github.com/tj-actions/changed-files?tab=readme-ov-file#using-local-git-directory-
+      - uses: pre-commit/action@v3
+        with:
+          extra_args: --files ${{ steps.changed-files.outputs.all_changed_files }}
