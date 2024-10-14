@@ -19,6 +19,6 @@ jobs:
 
         # See:
         # https://github.com/tj-actions/changed-files?tab=readme-ov-file#using-local-git-directory-
-      - uses: pre-commit/action@v3
+      - uses: pre-commit/action@v3.0.1
         with:
           extra_args: --files ${{ steps.changed-files.outputs.all_changed_files }}
