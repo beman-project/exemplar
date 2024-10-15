@@ -85,6 +85,7 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakInheritanceList: BeforeColon
 BreakStringLiterals: true
+# Please update .markdownlint.yaml if this line is to be updated
 ColumnLimit:     119
 CommentPragmas:  '^ IWYU pragma:'
 CompactNamespaces: false
