@@ -14,21 +14,74 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        cfg:
-          - { id: ubuntu-gcc-werror, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"}
-          - { id: ubuntu-gcc-aubsan, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"}
-          - { id: ubuntu-gcc-tsan, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"}
-          - { id: ubuntu-gcc-static, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: ""}
-          - { id: ubuntu-gcc-dynamic, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DBUILD_SHARED_LIBS=on"}
-          - { id: ubuntu-clang-static, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: ""}
-          - { id: ubuntu-clang-dynamic, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DBUILD_SHARED_LIBS=on"}
-          - { id: ubuntu-gcc-static-cxx20, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx23, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-gcc-static-cxx26, platform: ubuntu, cc: gcc, cpp: g++, cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-clang-static-cxx20, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-clang-static-cxx23, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
-          - { id: ubuntu-clang-static-cxx26, platform: ubuntu, cc: clang, cpp: clang++, cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"}
+        include:
+          - id: ubuntu-gcc-werror
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
+          - id: ubuntu-gcc-aubsan
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"
+          - id: ubuntu-gcc-tsan
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
+          - id: ubuntu-gcc-static
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: ""
+          - id: ubuntu-gcc-dynamic
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: "-DBUILD_SHARED_LIBS=on"
+          - id: ubuntu-clang-static
+            platform: ubuntu
+            cc: clang
+            cpp: clang++
+            cmake_args: ""
+          - id: ubuntu-clang-dynamic
+            platform: ubuntu
+            cc: clang
+            cpp: clang++
+            cmake_args: "-DBUILD_SHARED_LIBS=on"
+          - id: ubuntu-gcc-static-cxx20
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - id: ubuntu-gcc-static-cxx23
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - id: ubuntu-gcc-static-cxx26
+            platform: ubuntu
+            cc: gcc
+            cpp: g++
+            cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - id: ubuntu-clang-static-cxx20
+            platform: ubuntu
+            cc: clang
+            cpp: clang++
+            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - id: ubuntu-clang-static-cxx23
+            platform: ubuntu
+            cc: clang
+            cpp: clang++
+            cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - id: ubuntu-clang-static-cxx26
+            platform: ubuntu
+            cc: clang
+            cpp: clang++
+            cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"
 
     steps:
       - uses: actions/checkout@v4
@@ -48,27 +101,35 @@ jobs:
         run: |
           sudo sysctl -a | grep vm.mmap.rnd
           sudo sysctl -w vm.mmap_rnd_bits=28
-        working-directory: .
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push
-        uses: docker/build-push-action@v6
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
         with:
-          context: .
-          push: false
-          load: true
-          tags: ${{ matrix.cfg.id }}
-          file: .ci/docker/${{ matrix.cfg.platform }}.Dockerfile
-          build-args: |
-            cc=${{ matrix.cfg.cc }}
-            cxx=${{ matrix.cfg.cpp }}
-            cmake_args=${{ matrix.cfg.cmake_args }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-      - name: Run tests
+          cmakeVersion: "~3.25.0"
+          ninjaVersion: "^1.11.1"
+        # GitHub Action comes with the latest stable G++ already.
+      - name: Install Clang
         run: |
-          docker run ${{ matrix.cfg.id }} ctest --test-dir build -C Release
-          docker run ${{ matrix.cfg.id }} ctest --test-dir build -C Debug
+          sudo apt-get update
+          sudo apt-get install clang
+      - name: Build
+        run: |
+          cmake -B build -S . "${{ matrix.cmake_args }}"
+          cmake --build build --config Release --verbose
+          cmake --build build --config Release --target all_verify_interface_header_sets
+          cmake --install build --config Release --prefix /opt/beman.exemplar
+          cmake --build build --config Debug --verbose
+          cmake --build build --config Debug --target all_verify_interface_header_sets
+          cmake --install build --config Debug --prefix /opt/beman.exemplar
+          find /opt/beman.exemplar -type f
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cpp }}
+          CMAKE_GENERATOR: "Ninja Multi-Config"
+          CMAKE_EXPORT_COMPILE_COMMANDS: "on"
+      - name: Test
+        run: |
+          ctest --test-dir build -C Release
+          ctest --test-dir build -C Debug
 
   create-issue-when-fault:
     runs-on: ubuntu-latest
