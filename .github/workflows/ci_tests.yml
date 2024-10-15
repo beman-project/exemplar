@@ -12,124 +12,90 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        platform: [ubuntu-latest]
+        compiler:
+          - cpp: g++
+            c: gcc
+          - cpp: clang++
+            c: clang
+        cmake_args:
+          - description: "Static default"
+            args: "" 
+          - description: "Dynamic default"
+            args: "-DBUILD_SHARED_LIBS=on"
+          - description: "static C++20"
+            args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - description: "static C++23"
+            args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - description: "static C++26"
+            args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"
         include:
-          - id: ubuntu-gcc-werror
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
-          - id: ubuntu-gcc-aubsan
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"
-          - id: ubuntu-gcc-tsan
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
-          - id: ubuntu-gcc-static
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: ""
-          - id: ubuntu-gcc-dynamic
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: "-DBUILD_SHARED_LIBS=on"
-          - id: ubuntu-clang-static
-            platform: ubuntu
-            cc: clang
-            cpp: clang++
-            cmake_args: ""
-          - id: ubuntu-clang-dynamic
-            platform: ubuntu
-            cc: clang
-            cpp: clang++
-            cmake_args: "-DBUILD_SHARED_LIBS=on"
-          - id: ubuntu-gcc-static-cxx20
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
-          - id: ubuntu-gcc-static-cxx23
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"
-          - id: ubuntu-gcc-static-cxx26
-            platform: ubuntu
-            cc: gcc
-            cpp: g++
-            cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"
-          - id: ubuntu-clang-static-cxx20
-            platform: ubuntu
-            cc: clang
-            cpp: clang++
-            cmake_args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
-          - id: ubuntu-clang-static-cxx23
-            platform: ubuntu
-            cc: clang
-            cpp: clang++
-            cmake_args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"
-          - id: ubuntu-clang-static-cxx26
-            platform: ubuntu
-            cc: clang
-            cpp: clang++
-            cmake_args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+          - platform: ubuntu-latest
+            compiler:
+              cpp: g++
+              c: gcc
+            cmake_args:
+              description: "Werror"
+              cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
+          - platform: ubuntu-latest
+            compiler:
+              cpp: g++
+              c: gcc
+            cmake_args:
+              description: "A-San"
+              cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"
+          - platform: ubuntu-latest
+            compiler:
+              cpp: g++
+              c: gcc
+            cmake_args:
+              description: "T-San"
+              cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
 
+    name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cmake_args.description }}"
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
-      # GitHub runners have updated the Ubuntu Linux Kernel to use strong ASLR,
-      # but LLVM is not configured for this change, and thus the address
-      # sanitizer breaks.
-      #
-      # The next image is supposed to fix this, so if the Ubuntu image has been
-      # updated, this work around is no longer required.
-      - name: get runner image version
-        id: runner-image-version
-        run: |
-          echo "image-version=$(echo $ImageVersion)" >> "$GITHUB_OUTPUT"
-        working-directory: .
-      - name: modify number of bits to use for ASLR entropy
-        if: ${{ steps.runner-image-version.outputs.ImageVersion }} == '20240310.1.0'
-        run: |
-          sudo sysctl -a | grep vm.mmap.rnd
-          sudo sysctl -w vm.mmap_rnd_bits=28
-      - name: Install CMake
+      - name: Install Ninja
         uses: lukka/get-cmake@latest
         with:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
-        # GitHub Action comes with the latest stable G++ already.
-      - name: Install Clang
+      - name: Print installed softwares
         run: |
-          sudo apt-get update
-          sudo apt-get install clang
-      - name: Build
+          clang++ --version
+          g++ --version
+          cmake --version
+          ninja --version
+      - name: Build Release
         run: |
-          cmake -B build -S . "${{ matrix.cmake_args }}"
+          cmake -B build -S . "${{ matrix.cmake_args.args }}"
           cmake --build build --config Release --verbose
           cmake --build build --config Release --target all_verify_interface_header_sets
           cmake --install build --config Release --prefix /opt/beman.exemplar
+          find /opt/beman.exemplar -type f
+        env:
+          CC: ${{ matrix.compiler.c }}
+          CXX: ${{ matrix.compiler.cpp }}
+          CMAKE_GENERATOR: "Ninja Multi-Config"
+      - name: Test Release
+        run: ctest --test-dir build -C Release
+      - name: Build Debug
+        run: |
+          cmake -B build -S . "${{ matrix.cmake_args.args }}"
           cmake --build build --config Debug --verbose
           cmake --build build --config Debug --target all_verify_interface_header_sets
           cmake --install build --config Debug --prefix /opt/beman.exemplar
           find /opt/beman.exemplar -type f
         env:
-          CC: ${{ matrix.cc }}
-          CXX: ${{ matrix.cpp }}
+          CC: ${{ matrix.compiler.c }}
+          CXX: ${{ matrix.compiler.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
-          CMAKE_EXPORT_COMPILE_COMMANDS: "on"
-      - name: Test
-        run: |
-          ctest --test-dir build -C Release
-          ctest --test-dir build -C Debug
+      - name: Test Release
+        run: ctest --test-dir build -C Debug
 
   create-issue-when-fault:
     runs-on: ubuntu-latest
