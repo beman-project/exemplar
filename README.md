@@ -6,22 +6,24 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 ![Continuous Integration Tests](https://github.com/beman-project/exemplar/actions/workflows/ci_tests.yml/badge.svg)
 
-`beman.exemplar` is a minimal C++ library conforming to [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/beman-standard.md). This can be used as a template for those intending to write Beman libraries. It may also find use as a minimal and modern  C++ project structure.
+`beman.exemplar` is a minimal C++ library conforming to [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/beman-standard.md).
+This can be used as a template for those intending to write Beman libraries.
+It may also find use as a minimal and modern  C++ project structure.
 
 Implements: `std::identity` proposed in [Standard Library Concepts (P0898R3)](https://wg21.link/P0898R3).
 
-
 ## Usage
 
-`std::identity` is a function object type whose `operator()` returns its argument unchanged. `std::identity` serves as the default projection in constrained algorithms. Its direct usage is usually not needed.
+`std::identity` is a function object type whose `operator()` returns its argument unchanged.
+`std::identity` serves as the default projection in constrained algorithms.
+Its direct usage is usually not needed.
 
 ### Usage: default projection in constrained algorithms
 
  The following code snippet illustrates how we can achieve a default projection using `beman::exemplar::identity`:
 
-
 ```cpp
-#include <beman/exemplar/identity.hpp> 
+#include <beman/exemplar/identity.hpp>
 
 namespace exe = beman::exemplar;
 
@@ -131,7 +133,9 @@ apt-get install                           \
 
 ### How to build beman.exemplar
 
-This project strives to be as normal and simple a CMake project as possible. This build workflow in particular will work, producing a static `libbeman.exemplar.a` library, ready to package with its headers:
+This project strives to be as normal and simple a CMake project as possible.
+This build workflow in particular will work,
+producing a static `libbeman.exemplar.a` library, ready to package with its headers:
 
 ```shell
 cmake -B build -S . -DCMAKE_CXX_STANDARD=20
@@ -231,7 +235,8 @@ $ tree /opt/beman.exemplar
 <details>
 <summary> Disable tests build </summary>
 
-To build this project with tests disabled (and their dependencies), simply use `BUILD_TESTING=OFF` as documented in upstream [CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html):
+To build this project with tests disabled (and their dependencies),
+simply use `BUILD_TESTING=OFF` as documented in upstream [CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html):
 
 ```shell
 cmake -B build -S . -DBUILD_TESTING=OFF
@@ -245,7 +250,8 @@ cmake -B build -S . -DBUILD_TESTING=OFF
 <summary> Use beman.exemplar directly from C++ </summary>
 <!-- TODO Darius: rewrite section!-->
 
-If you want to use `beman.exemplar` from your project, you can include `beman/exemplar/*.hpp`  files from your C++ source files
+If you want to use `beman.exemplar` from your project,
+you can include `beman/exemplar/*.hpp`  files from your C++ source files
 
 ```cpp
 #include <beman/exemplar/identity.hpp>
@@ -273,7 +279,8 @@ For CMake based projects, you will need to use the `beman.exemplar` CMake module
 find_package(beman.exemplar REQUIRED)
 ```
 
-You will also need to add `beman::exemplar` to the link libraries of any libraries or executables that include `beman/exemplar/*.hpp` in their source or header file.
+You will also need to add `beman::exemplar`
+to the link libraries of any libraries or executables that include `beman/exemplar/*.hpp` in their source or header file.
 
 ```cmake
 target_link_libraries(yourlib PUBLIC beman::exemplar)
@@ -286,7 +293,8 @@ target_link_libraries(yourlib PUBLIC beman::exemplar)
 
 <!-- TODO Darius: rewrite section! Add examples. -->
 
-Build systems that support `pkg-config` by providing a `beman.exemplar.pc` file. Build systems that support interoperation via `pkg-config` should be able to detect `beman.exemplar` for you automatically.
+Build systems that support `pkg-config` by providing a `beman.exemplar.pc` file.
+Build systems that support interoperation via `pkg-config` should be able to detect `beman.exemplar` for you automatically.
 
 </details>
 

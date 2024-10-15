@@ -27,16 +27,14 @@ namespace beman::exemplar {
 struct __is_transparent; // not defined
 
 // A function object that returns its argument unchanged.
-struct identity
-{
+struct identity {
     // Returns `t`.
     template <class T>
 #if defined(__cpp_constexpr)
     constexpr
 #endif
-        T &&
-        operator()(T &&t) const noexcept
-    {
+        T&&
+        operator()(T&& t) const noexcept {
         return std::forward<T>(t);
     }
 
