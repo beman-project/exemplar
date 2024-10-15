@@ -87,7 +87,7 @@ jobs:
 
   create-issue-when-fault:
     runs-on: ubuntu-latest
-    needs: [test, preset-test]
+    needs: [preset-test, test]
     if: failure() && github.event_name == 'schedule'
     steps:
       # See https://github.com/cli/cli/issues/5075 
