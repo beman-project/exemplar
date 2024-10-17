@@ -75,7 +75,7 @@ int main()
 
 ```
 
-Full runable examples can be found in `examples/` (e.g., [./examples/identity_as_default_projection.cpp.cpp](./examples/identity_as_default_projection.cpp.cpp)).
+Full runnable examples can be found in `examples/` (e.g., [./examples/identity_as_default_projection.cpp](./examples/identity_as_default_projection.cpp)).
 
 ## Building beman.exemplar
 
