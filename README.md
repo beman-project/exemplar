@@ -138,9 +138,7 @@ This build workflow in particular will work,
 producing a static `libbeman.exemplar.a` library, ready to package with its headers:
 
 ```shell
-cmake -B build -S . -DCMAKE_CXX_STANDARD=20
-cmake --build build
-ctest --test-dir build
+cmake --workflow --preset gcc-debug
 cmake --install build --prefix /opt/beman.exemplar
 ```
 
