@@ -23,7 +23,7 @@ jobs:
             c: clang
         cmake_args:
           - description: "Static default"
-            args: "" 
+            args: ""
           - description: "Dynamic default"
             args: "-DBUILD_SHARED_LIBS=on"
           - description: "static C++20"
