@@ -10,6 +10,8 @@ jobs:
     name: pre-commit
     permissions:
       contents: read
+      checks: write
+      issues: write
       pull-requests: write
 
     steps:
@@ -20,12 +22,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: 3.13
-
-      - name: Cache pre-commit hooks
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pre-commit
-          key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
 
       - name: Get Changed Files
         id: changed-files
@@ -39,8 +35,9 @@ jobs:
         continue-on-error: true
 
       - name: suggester / pre-commit
+        if: ${{ github.event_name == 'pull_request' }}
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: pre-commit
-          fail_on_error: true
           level: warning
+          reviewdog_flags: "-fail-level=error"
