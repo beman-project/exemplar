@@ -23,12 +23,6 @@ jobs:
         with:
           python-version: 3.13
 
-      - name: Cache pre-commit hooks
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pre-commit
-          key: ${{ runner.os }}-precommit-${{ hashFiles('.pre-commit-config.yaml') }}
-
       - name: Get Changed Files
         id: changed-files
         uses: tj-actions/changed-files@v45
