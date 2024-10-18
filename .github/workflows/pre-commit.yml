@@ -10,6 +10,8 @@ jobs:
     name: pre-commit
     permissions:
       contents: read
+      checks: write
+      issues: write
       pull-requests: write
 
     steps:
