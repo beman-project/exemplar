@@ -44,5 +44,5 @@ jobs:
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: pre-commit
-          fail_on_error: true
           level: warning
+          reviewdog_flags: "-fail-level=error"
