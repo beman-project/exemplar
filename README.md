@@ -170,10 +170,10 @@ Preset CMake variables:
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter 
+-- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE  
+-- Found Threads: TRUE
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/runner/work/exemplar/exemplar/build/gcc-debug
@@ -234,10 +234,10 @@ Preset CMake variables:
 -- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter 
+-- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
--- Found Threads: TRUE  
+-- Found Threads: TRUE
 -- Configuring done
 -- Generating done
 -- Build files have been written to: /home/runner/work/exemplar/exemplar/build/gcc-release
@@ -276,7 +276,7 @@ Test project /home/runner/work/exemplar/exemplar/build/gcc-release
 Total Test time (real) =   0.01 sec
 
 # Run examples.
-$ build/gcc-release/examples/beman.exemplar.examples.identity_direct_usage 
+$ build/gcc-release/examples/beman.exemplar.examples.identity_direct_usage
 2024
 
 ```
