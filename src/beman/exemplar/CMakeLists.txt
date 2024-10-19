@@ -23,16 +23,3 @@ install(
     RUNTIME DESTINATION $<$<CONFIG:Debug>:debug/>${CMAKE_INSTALL_BINDIR}
     FILE_SET HEADERS DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
-
-if(BUILD_TESTING)
-    include(GoogleTest)
-
-    add_executable(beman.exemplar.tests)
-    target_sources(beman.exemplar.tests PRIVATE identity.t.cpp)
-    target_link_libraries(
-        beman.exemplar.tests
-        PRIVATE beman::exemplar GTest::gtest GTest::gtest_main
-    )
-
-    gtest_add_tests(beman.exemplar.tests "" AUTO)
-endif()
