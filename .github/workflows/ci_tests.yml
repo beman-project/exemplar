@@ -95,7 +95,7 @@ jobs:
           CXX: ${{ matrix.compiler.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Test Release
-        run: ctest --test-dir build -C Debug
+        run: ctest --test-dir build --build-config Debug
 
   create-issue-when-fault:
     runs-on: ubuntu-latest
