@@ -135,7 +135,8 @@ This project strives to be as normal and simple a CMake project as possible. Thi
 
 ```shell
 cmake --workflow --preset gcc-debug
-cmake --install build --prefix /opt/beman.exemplar
+cmake --workflow --preset gcc-release
+cmake --install build/gcc-release --prefix /opt/beman.exemplar
 ```
 
 <details>
