@@ -82,7 +82,7 @@ jobs:
           CXX: ${{ matrix.compiler.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Test Release
-        run: ctest --test-dir build -C Release
+        run: ctest --test-dir build --build-config Release
       - name: Build Debug
         run: |
           cmake -B build -S . "${{ matrix.cmake_args.args }}"
