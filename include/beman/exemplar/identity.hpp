@@ -35,6 +35,10 @@ struct identity {
 #endif
         T&&
         operator()(T&& t) const noexcept {
+        int 
+            size
+        =
+            0;
         return std::forward<T>(t);
     }
 
