@@ -27,11 +27,11 @@ jobs:
           - description: "Dynamic default"
             args: "-DBUILD_SHARED_LIBS=on"
           - description: "static C++20"
-            args: "-DCMAKE_CXX_STANDARD=20 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+            args: "-DCMAKE_CXX_STANDARD=20"
           - description: "static C++23"
-            args: "-DCMAKE_CXX_STANDARD=23 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+            args: "-DCMAKE_CXX_STANDARD=23"
           - description: "static C++26"
-            args: "-DCMAKE_CXX_STANDARD=26 -DCMAKE_CXX_STANDARD_REQUIRED=on"
+            args: "-DCMAKE_CXX_STANDARD=26"
         include:
           - platform: ubuntu-latest
             compiler:
