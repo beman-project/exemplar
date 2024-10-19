@@ -9,7 +9,7 @@ target_sources(
     beman.exemplar
     PUBLIC
         FILE_SET HEADERS
-        BASE_DIRS ${PROJET_SOURCE_DIR}/include
+        BASE_DIRS ${PROJECT_SOURCE_DIR}/include
         FILES ${PROJECT_SOURCE_DIR}/include/beman/exemplar/identity.hpp
 )
 
