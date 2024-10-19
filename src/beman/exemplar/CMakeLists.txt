@@ -5,14 +5,12 @@ add_library(beman::exemplar ALIAS beman.exemplar)
 
 target_sources(beman.exemplar PRIVATE identity.cpp)
 
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../include/)
-
 target_sources(
     beman.exemplar
     PUBLIC
         FILE_SET HEADERS
-        BASE_DIRS ${INCLUDE_DIR}
-        FILES ${INCLUDE_DIR}/beman/exemplar/identity.hpp
+        BASE_DIRS ${PROJECT_SOURCE_DIR}/include
+        FILES ${PROJECT_SOURCE_DIR}/include/beman/exemplar/identity.hpp
 )
 
 set_target_properties(beman.exemplar PROPERTIES VERIFY_INTERFACE_HEADER_SETS ON)
