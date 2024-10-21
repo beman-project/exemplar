@@ -41,6 +41,8 @@ jobs:
             args: ""
           - description: "Dynamic default"
             args: "-DBUILD_SHARED_LIBS=on"
+          - description: "static C++17"
+            args: "-DCMAKE_CXX_STANDARD=17"
           - description: "static C++20"
             args: "-DCMAKE_CXX_STANDARD=20"
           - description: "static C++23"

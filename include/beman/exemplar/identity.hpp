@@ -30,11 +30,7 @@ struct __is_transparent; // not defined
 struct identity {
     // Returns `t`.
     template <class T>
-#if defined(__cpp_constexpr)
-    constexpr
-#endif
-        T&&
-        operator()(T&& t) const noexcept {
+    constexpr T&& operator()(T&& t) const noexcept {
         return std::forward<T>(t);
     }
 
