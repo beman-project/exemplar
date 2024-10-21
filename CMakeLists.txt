@@ -8,8 +8,11 @@ project(
   DESCRIPTION "A Beman library exemplar"
   LANGUAGES CXX)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(CTest)
 include(FetchContent)
+include(CompilerFeatureTest)
+beman_check_range_support(COMPILER_SUPPORTS_RANGES)
 
 if(BUILD_TESTING)
   enable_testing()

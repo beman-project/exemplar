@@ -1,8 +1,11 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-set(ALL_EXAMPLES
-  #identity_as_default_projection
-identity_direct_usage)
+set(ALL_EXAMPLES identity_direct_usage)
+if (COMPILER_SUPPORTS_RANGES)
+  list(APPEND ALL_EXAMPLES identity_as_default_projection)
+else()
+  message(WARNING "Compiler does not support ranges. Skip: identity_as_default_projection")
+endif()
 
 foreach(example ${ALL_EXAMPLES})
   add_executable(beman.exemplar.examples.${example})
