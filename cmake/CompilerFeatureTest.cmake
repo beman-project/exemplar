@@ -13,11 +13,13 @@ function(beman_check_range_support result_var)
         return()
     endif()
 
-    check_cxx_source_compiles("
-// example specific check due to https://github.com/beman-project/exemplar/issues/41
-#include <ranges> // C++20 ranges; note that __cpp_lib_ranges is not defined for all compilers
-int main(){ return 0; }
-" _HAVE_RANGE_SUPPORT )
+    check_cxx_source_compiles(
+        "
+        #include <ranges> // C++20 ranges; note that __cpp_lib_ranges is not defined for all compilers
+        int main(){ return 0; }
+        "
+        _HAVE_RANGE_SUPPORT
+    )
 
     set(${result_var} ${_HAVE_RANGE_SUPPORT} PARENT_SCOPE)
 endfunction()

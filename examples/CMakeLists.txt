@@ -4,7 +4,10 @@ set(ALL_EXAMPLES identity_direct_usage)
 if(COMPILER_SUPPORTS_RANGES)
     list(APPEND ALL_EXAMPLES identity_as_default_projection)
 else()
-    message(WARNING "Missing range support! Skip: identity_as_default_projection")
+    message(
+        WARNING
+        "Missing range support! Skip: identity_as_default_projection"
+    )
 endif()
 
 foreach(example ${ALL_EXAMPLES})
