@@ -7,7 +7,6 @@ RUN sudo apt-get update && sudo apt-get install -y cmake
 
 # Install pre-commit
 RUN sudo apt-get install -y python3-pip && pip3 install pre-commit
-RUN pre-commit && pre-commit install
 
 # Avoid ASAN Stalling
 # Alternative is to update to clang-18 and 
