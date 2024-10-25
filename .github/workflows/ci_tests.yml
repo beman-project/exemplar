@@ -53,7 +53,7 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Werror"
-              cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
+              args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
           - platform: ubuntu-latest
             compiler:
               cpp: g++
@@ -62,6 +62,14 @@ jobs:
             cmake_args:
               description: "Dynamic"
               cmake_args: "-DBUILD_SHARED_LIBS=on"
+          - platform: ubuntu-latest
+            compiler:
+              cpp: g++
+              c: gcc
+            cpp_version: 17
+            cmake_args:
+              description: "vcpkg"
+              args: "-DCMAKE_TOOLCHAIN_FILE=$env{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
 
     name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform }}
@@ -78,6 +86,10 @@ jobs:
           g++ --version
           cmake --version
           ninja --version
+
+          echo $VCPKG_INSTALLATION_ROOT
+          cd $VCPKG_INSTALLATION_ROOT
+          git show --quiet HEAD
       - name: Configure CMake
         run: |
           cmake -B build -S . "-DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}"
