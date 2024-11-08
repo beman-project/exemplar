@@ -6,8 +6,7 @@
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
-	// TODO: these commands are failing
-	"postCreateCommand": ["bash postcreate.sh"],
+	"postCreateCommand": "bash .devcontainer/postcreate.sh",
 	"customizations": {
 		"vscode": {
 			"extensions": [
