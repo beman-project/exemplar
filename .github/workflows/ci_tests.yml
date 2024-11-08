@@ -61,7 +61,7 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Dynamic"
-              cmake_args: "-DBUILD_SHARED_LIBS=on"
+              args: "-DBUILD_SHARED_LIBS=on"
           - platform: ubuntu-latest
             compiler:
               cpp: g++
