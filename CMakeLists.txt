@@ -32,4 +32,8 @@ endif()
 
 add_subdirectory(src/beman/exemplar)
 
+if(BUILD_TESTING)
+    add_subdirectory(tests/beman/exemplar)
+endif()
+
 add_subdirectory(examples)

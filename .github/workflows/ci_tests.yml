@@ -16,13 +16,14 @@ jobs:
     strategy:
       matrix:
         preset: ["gcc-debug", "gcc-release"]
+    name: "Preset Test: ${{ matrix.preset }}"
     steps:
       - uses: actions/checkout@v4
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
+      - name: Setup build environment
+        uses: lukka/get-cmake@latest
         with:
-          cmake-version: '3.25.x'
-      - uses: seanmiddleditch/gha-setup-ninja@v5
+          cmakeVersion: "~3.25.0"
+          ninjaVersion: "^1.11.1"
       - name: Run preset
         run: cmake --workflow --preset ${{ matrix.preset }}
 
@@ -36,43 +37,33 @@ jobs:
             c: gcc
           - cpp: clang++
             c: clang
+        cpp_version: [17, 20, 23, 26]
         cmake_args:
-          - description: "Static default"
+          - description: "Default"
             args: ""
-          - description: "Dynamic default"
-            args: "-DBUILD_SHARED_LIBS=on"
-          - description: "static C++17"
-            args: "-DCMAKE_CXX_STANDARD=17"
-          - description: "static C++20"
-            args: "-DCMAKE_CXX_STANDARD=20"
-          - description: "static C++23"
-            args: "-DCMAKE_CXX_STANDARD=23"
-          - description: "static C++26"
-            args: "-DCMAKE_CXX_STANDARD=26"
+          - description: "TSan"
+            args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
+          - description: "ASan"
+            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
           - platform: ubuntu-latest
             compiler:
               cpp: g++
               c: gcc
+            cpp_version: 17
             cmake_args:
               description: "Werror"
-              cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
+              args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
           - platform: ubuntu-latest
             compiler:
               cpp: g++
               c: gcc
+            cpp_version: 17
             cmake_args:
-              description: "A-San"
-              cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"
-          - platform: ubuntu-latest
-            compiler:
-              cpp: g++
-              c: gcc
-            cmake_args:
-              description: "T-San"
-              cmake_args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
+              description: "Dynamic"
+              args: "-DBUILD_SHARED_LIBS=on"
 
-    name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cmake_args.description }}"
+    name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
@@ -87,31 +78,28 @@ jobs:
           g++ --version
           cmake --version
           ninja --version
+      - name: Configure CMake
+        run: |
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
+        env:
+          CC: ${{ matrix.compiler.c }}
+          CXX: ${{ matrix.compiler.cpp }}
+          CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
         run: |
-          cmake -B build -S . "${{ matrix.cmake_args.args }}"
           cmake --build build --config Release --verbose
           cmake --build build --config Release --target all_verify_interface_header_sets
           cmake --install build --config Release --prefix /opt/beman.exemplar
           find /opt/beman.exemplar -type f
-        env:
-          CC: ${{ matrix.compiler.c }}
-          CXX: ${{ matrix.compiler.cpp }}
-          CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Test Release
         run: ctest --test-dir build --build-config Release
       - name: Build Debug
         run: |
-          cmake -B build -S . "${{ matrix.cmake_args.args }}"
           cmake --build build --config Debug --verbose
           cmake --build build --config Debug --target all_verify_interface_header_sets
           cmake --install build --config Debug --prefix /opt/beman.exemplar
           find /opt/beman.exemplar -type f
-        env:
-          CC: ${{ matrix.compiler.c }}
-          CXX: ${{ matrix.compiler.cpp }}
-          CMAKE_GENERATOR: "Ninja Multi-Config"
-      - name: Test Release
+      - name: Test Debug
         run: ctest --test-dir build --build-config Debug
 
   create-issue-when-fault:
