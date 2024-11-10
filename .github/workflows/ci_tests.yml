@@ -44,7 +44,7 @@ jobs:
           - description: "TSan"
             args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
           - description: "ASan"
-            args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"
+            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
           - platform: ubuntu-latest
             compiler:
@@ -92,7 +92,7 @@ jobs:
           git show --quiet HEAD
       - name: Configure CMake
         run: |
-          cmake -B build -S . "-DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}"
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
         env:
           CC: ${{ matrix.compiler.c }}
           CXX: ${{ matrix.compiler.cpp }}
