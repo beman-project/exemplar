@@ -44,7 +44,7 @@ jobs:
           - description: "TSan"
             args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
           - description: "ASan"
-            args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"
+            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
           - platform: ubuntu-latest
             compiler:
@@ -53,7 +53,7 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Werror"
-              cmake_args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
+              args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
           - platform: ubuntu-latest
             compiler:
               cpp: g++
@@ -61,7 +61,7 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Dynamic"
-              cmake_args: "-DBUILD_SHARED_LIBS=on"
+              args: "-DBUILD_SHARED_LIBS=on"
 
     name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform }}
@@ -80,7 +80,7 @@ jobs:
           ninja --version
       - name: Configure CMake
         run: |
-          cmake -B build -S . "-DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}"
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
         env:
           CC: ${{ matrix.compiler.c }}
           CXX: ${{ matrix.compiler.cpp }}
