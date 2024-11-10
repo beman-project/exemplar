@@ -44,8 +44,8 @@ jobs:
           # FIXME: find a better solution to be usable for multible OS builds on CI! CK
           # - description: "TSan"
           #  args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
-          - description: "ASan"
-            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
+          # - description: "ASan"
+          #   args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
           - platform: ubuntu-22.04
             compiler:

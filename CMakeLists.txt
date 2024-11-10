@@ -35,7 +35,7 @@ if(BUILD_TESTING)
         set(INSTALL_GTEST OFF) # Disable GoogleTest installation
         set(BUILD_TESTING OFF) # Disable GoogleTest tests
         set(BUILD_GMOCK OFF)
-        set(CMAKE_CXX_FLAGS) # FIXME: Do not use our project settings!
+        set(CMAKE_CXX_FLAGS) # FIXME: Do not propagate our project settings! CK
         FetchContent_MakeAvailable(googletest)
     endblock()
 
