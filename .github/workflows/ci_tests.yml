@@ -44,7 +44,7 @@ jobs:
           - description: "TSan"
             args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
           - description: "ASan"
-            args: "-DCMAKE_CXX_FLAGS=-fsanitize=address -fsanitize=undefined"
+            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
           - platform: ubuntu-latest
             compiler:
