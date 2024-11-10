@@ -41,8 +41,9 @@ jobs:
         cmake_args:
           - description: "Default"
             args: ""
-          - description: "TSan"
-            args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
+          # FIXME: find a better solution to be usable for multible OS builds on CI! CK
+          # - description: "TSan"
+          #  args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
           - description: "ASan"
             args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
