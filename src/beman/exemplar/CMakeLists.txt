@@ -1,9 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-add_library(beman.exemplar STATIC)
+add_library(beman.exemplar INTERFACE)
 add_library(beman::exemplar ALIAS beman.exemplar)
-
-target_sources(beman.exemplar PRIVATE identity.cpp)
 
 target_sources(
     beman.exemplar

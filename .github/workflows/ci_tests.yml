@@ -31,12 +31,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-latest]
+        platform: [ubuntu-24.04, macos-15]
         compiler:
-          - cpp: g++
-            c: gcc
-          - cpp: clang++
-            c: clang
+          - cpp: g++-14
+            c: gcc-14
+          - cpp: clang++-18
+            c: clang-18
         cpp_version: [17, 20, 23, 26]
         cmake_args:
           - description: "Default"
@@ -46,24 +46,16 @@ jobs:
           - description: "ASan"
             args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
-          - platform: ubuntu-latest
+          - platform: ubuntu-22.04
             compiler:
               cpp: g++
               c: gcc
             cpp_version: 17
             cmake_args:
-              description: "Werror"
-              args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
-          - platform: ubuntu-latest
-            compiler:
-              cpp: g++
-              c: gcc
-            cpp_version: 17
-            cmake_args:
-              description: "Dynamic"
-              args: "-DBUILD_SHARED_LIBS=on"
+              - description: "Werror"
+                args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
 
-    name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
+    name: "${{ matrix.platform }}: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
@@ -74,31 +66,41 @@ jobs:
           ninjaVersion: "^1.11.1"
       - name: Print installed softwares
         run: |
-          clang++ --version
-          g++ --version
+          ${{ matrix.compiler.cpp }} --version || echo ignored
+          ${{ matrix.compiler.c }} --version || echo ignored
           cmake --version
           ninja --version
+
+      - name: Configure CMake on macos with clang
+        if: startsWith(matrix.compiler.c, 'clang') && startsWith(matrix.platform, 'macos')
+        run: |
+          CC=$(brew --prefix llvm@18)/bin/clang CXX=$(brew --prefix llvm@18)/bin/clang++ cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
+        env:
+          CMAKE_GENERATOR: "Ninja Multi-Config"
+
       - name: Configure CMake
+        if: ( startsWith(matrix.compiler.c, 'gcc') || startsWith(matrix.platform, 'ubuntu') ) || ( startsWith(matrix.compiler.c, 'gcc') && startsWith(matrix.platform, 'macos') )
         run: |
           cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
         env:
           CC: ${{ matrix.compiler.c }}
           CXX: ${{ matrix.compiler.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
+
       - name: Build Release
         run: |
           cmake --build build --config Release --verbose
           cmake --build build --config Release --target all_verify_interface_header_sets
-          cmake --install build --config Release --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          cmake --install build --config Release --prefix /tmp/beman.exemplar
+          find /tmp/beman.exemplar -type f
       - name: Test Release
         run: ctest --test-dir build --build-config Release
       - name: Build Debug
         run: |
           cmake --build build --config Debug --verbose
           cmake --build build --config Debug --target all_verify_interface_header_sets
-          cmake --install build --config Debug --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          cmake --install build --config Debug --prefix /tmp/beman.exemplar
+          find /tmp/beman.exemplar -type f
       - name: Test Debug
         run: ctest --test-dir build --build-config Debug
 

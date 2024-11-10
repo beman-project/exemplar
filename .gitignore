@@ -1,2 +1,8 @@
-/compile_commands.json
+#
+# prevent in source build!
+#
+/CMakeCache.txt
+/CMakeFiles/
+/CMakeUserPresets.json
 /build
+/stagedir

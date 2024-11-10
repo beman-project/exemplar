@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.25...3.31)
 
 project(
     beman.exemplar # CMake Project Name, which is also the name of the top-level
@@ -9,9 +9,17 @@ project(
     LANGUAGES CXX
 )
 
-include(CTest)
-include(FetchContent)
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
+    message(FATAL_ERROR "In-source builds are not allowed!")
+endif()
 
+include(CPack)
+include(FetchContent)
+include(GNUInstallDirs)
+
+add_subdirectory(src/beman/exemplar)
+
+option(BUILD_TESTING "build tests too" ${PROJECT_IS_TOP_LEVEL})
 if(BUILD_TESTING)
     enable_testing()
 
@@ -26,14 +34,14 @@ if(BUILD_TESTING)
     block()
         set(INSTALL_GTEST OFF) # Disable GoogleTest installation
         set(BUILD_TESTING OFF) # Disable GoogleTest tests
+        set(BUILD_GMOCK OFF)
+        set(CMAKE_CXX_FLAGS) # FIXME: Do not use our project settings!
         FetchContent_MakeAvailable(googletest)
     endblock()
-endif()
 
-add_subdirectory(src/beman/exemplar)
-
-if(BUILD_TESTING)
     add_subdirectory(tests/beman/exemplar)
 endif()
 
-add_subdirectory(examples)
+if(PROJECT_IS_TOP_LEVEL)
+    add_subdirectory(examples)
+endif()
