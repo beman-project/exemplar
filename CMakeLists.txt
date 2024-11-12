@@ -9,9 +9,9 @@ project(
     LANGUAGES CXX
 )
 
-include(GNUInstallDirs)
 include(CTest)
 include(FetchContent)
+include(GNUInstallDirs)
 
 if(BUILD_TESTING)
     enable_testing()
