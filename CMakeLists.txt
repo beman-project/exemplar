@@ -9,6 +9,7 @@ project(
     LANGUAGES CXX
 )
 
+include(GNUInstallDirs)
 include(CTest)
 include(FetchContent)
 
