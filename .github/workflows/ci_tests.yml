@@ -27,7 +27,7 @@ jobs:
       - name: Run preset
         run: cmake --workflow --preset ${{ matrix.preset }}
 
-  test:
+  gtest-test:
     strategy:
       fail-fast: false
       matrix:
@@ -102,9 +102,41 @@ jobs:
       - name: Test Debug
         run: ctest --test-dir build --build-config Debug
 
+  configuration-test:
+    runs-on: ubuntu-latest
+    name: "Configuration Test: No BUILD_TESTING"
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup build environment
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: "~3.25.0"
+          ninjaVersion: "^1.11.1"
+      - name: Print installed softwares
+        run: |
+          cmake --version
+          ninja --version
+      - name: Configure CMake
+        run: |
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=17 -DBUILD_TESTING=OFF
+        env:
+          CMAKE_GENERATOR: "Ninja Multi-Config"
+      - name: Build Release
+        run: |
+          cmake --build build --config Release --verbose
+          cmake --build build --config Release --target all_verify_interface_header_sets
+          cmake --install build --config Release --prefix /opt/beman.exemplar
+          find /opt/beman.exemplar -type f
+      - name: Build Debug
+        run: |
+          cmake --build build --config Debug --verbose
+          cmake --build build --config Debug --target all_verify_interface_header_sets
+          cmake --install build --config Debug --prefix /opt/beman.exemplar
+          find /opt/beman.exemplar -type f
+
   create-issue-when-fault:
     runs-on: ubuntu-latest
-    needs: [preset-test, test]
+    needs: [preset-test, gtest-test, configuration-test]
     if: failure() && github.event_name == 'schedule'
     steps:
       # See https://github.com/cli/cli/issues/5075

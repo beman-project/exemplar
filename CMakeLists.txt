@@ -11,6 +11,7 @@ project(
 
 include(CTest)
 include(FetchContent)
+include(GNUInstallDirs)
 
 if(BUILD_TESTING)
     enable_testing()
