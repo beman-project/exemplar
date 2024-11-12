@@ -11,6 +11,7 @@ RUN sudo apt-get update && sudo apt-get install -y cmake
 RUN sudo apt-get install -y python3-pip && pip3 install pre-commit
 
 # Avoid ASAN Stalling
-# Alternative is to update to clang-18 and gcc-13.2
+# See: https://github.com/google/sanitizers/issues/1614
+# Alternative is to update to above clang-18 and gcc-13.2
 # Maybe crashing codespace???
 RUN sudo sysctl -w vm.mmap_rnd_bits=28
