@@ -9,13 +9,27 @@ project(
     LANGUAGES CXX
 )
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+# [CMAKE.SKIP_TESTS]
+option(
+    BEMAN_EXEMPLAR_BUILD_TESTING
+    "Enable building tests and test infrastructure. Default: ON. Values: { ON, OFF }."
+    ${PROJECT_IS_TOP_LEVEL}
+)
+
+# [CMAKE.SKIP_EXAMPLES]
+option(
+    BEMAN_EXEMPLAR_BUILD_EXAMPLES
+    "Enable building examples. Default: ON. Values: { ON, OFF }."
+    ${PROJECT_IS_TOP_LEVEL}
+)
+
 include(CTest)
 include(FetchContent)
-include(CompilerFeatureTest)
-beman_check_range_support(COMPILER_SUPPORTS_RANGES)
+include(GNUInstallDirs)
 
-if(BUILD_TESTING)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
+if(BEMAN_EXEMPLAR_BUILD_TESTING)
     enable_testing()
 
     # Fetch GoogleTest
@@ -35,4 +49,10 @@ endif()
 
 add_subdirectory(src/beman/exemplar)
 
-add_subdirectory(examples)
+if(BEMAN_EXEMPLAR_BUILD_TESTING)
+    add_subdirectory(tests/beman/exemplar)
+endif()
+
+if(BEMAN_EXEMPLAR_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()

@@ -6,7 +6,7 @@ SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 ![Continuous Integration Tests](https://github.com/beman-project/exemplar/actions/workflows/ci_tests.yml/badge.svg)
 
-`beman.exemplar` is a minimal C++ library conforming to [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/beman-standard.md).
+`beman.exemplar` is a minimal C++ library conforming to [The Beman Standard](https://github.com/beman-project/beman/blob/main/docs/BEMAN_STANDARD.md).
 This can be used as a template for those intending to write Beman libraries.
 It may also find use as a minimal and modern  C++ project structure.
 
@@ -313,10 +313,10 @@ $ tree /opt/beman.exemplar
 <summary> Disable tests build </summary>
 
 To build this project with tests disabled (and their dependencies),
-simply use `BUILD_TESTING=OFF` as documented in upstream [CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html):
+simply use `BEMAN_EXEMPLAR_BUILD_TESTING=OFF` as documented in upstream [CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html):
 
 ```shell
-cmake -B build -S . -DBUILD_TESTING=OFF
+cmake -B build -S . -DBEMAN_EXEMPLAR_BUILD_TESTING=OFF
 ```
 
 </details>
