@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         preset: ["gcc-debug", "gcc-release"]
-    name: "Preset Test: ${{ matrix.preset }}"
+    name: "Preset: ${{ matrix.preset }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -63,7 +63,7 @@ jobs:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
 
-    name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
+    name: "Unit: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
@@ -111,7 +111,7 @@ jobs:
             arg: "-DBEMAN_EXEMPLAR_BUILD_TESTING=OFF"
           - name: "Disable example building"
             arg: "-DBEMAN_EXEMPLAR_BUILD_EXAMPLES=OFF"
-    name: "Configuration Test: ${{ matrix.args.name }}"
+    name: "CMake: ${{ matrix.args.name }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
