@@ -104,12 +104,14 @@ jobs:
 
   configuration-test:
     runs-on: ubuntu-latest
-    name: "Configuration Test: No BUILD_TESTING"
     strategy:
       matrix:
-        arg:
-          - "-DBEMAN_EXEMPLAR_BUILD_TESTING=OFF"
-          - "-DBEMAN_EXEMPLAR_BUILD_EXAMPLES=OFF"
+        args:
+          - name: "Disable build testing"
+            arg: "-DBEMAN_EXEMPLAR_BUILD_TESTING=OFF"
+          - name: "Disable example building"
+            arg: "-DBEMAN_EXEMPLAR_BUILD_EXAMPLES=OFF"
+    name: "Configuration Test: ${{ matrix.args.name }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -123,7 +125,7 @@ jobs:
           ninja --version
       - name: Configure CMake
         run: |
-          cmake -B build -S . -DCMAKE_CXX_STANDARD=17 ${{ matrix.arg }}
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=17 ${{ matrix.args.arg }}
         env:
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
