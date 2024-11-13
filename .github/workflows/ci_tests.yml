@@ -118,7 +118,7 @@ jobs:
           ninja --version
       - name: Configure CMake
         run: |
-          cmake -B build -S . -DCMAKE_CXX_STANDARD=17 -DBUILD_TESTING=OFF
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=17 -DBEMAN_EXEMPLAR_BUILD_TESTING=OFF
         env:
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release

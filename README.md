@@ -313,10 +313,10 @@ $ tree /opt/beman.exemplar
 <summary> Disable tests build </summary>
 
 To build this project with tests disabled (and their dependencies),
-simply use `BUILD_TESTING=OFF` as documented in upstream [CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html):
+simply use `BEMAN_EXEMPLAR_BUILD_TESTING=OFF` as documented in upstream [CMake documentation](https://cmake.org/cmake/help/latest/module/CTest.html):
 
 ```shell
-cmake -B build -S . -DBUILD_TESTING=OFF
+cmake -B build -S . -DBEMAN_EXEMPLAR_BUILD_TESTING=OFF
 ```
 
 </details>
