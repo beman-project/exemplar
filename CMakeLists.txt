@@ -27,8 +27,6 @@ include(CTest)
 include(FetchContent)
 include(GNUInstallDirs)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-
 if(BEMAN_EXEMPLAR_BUILD_TESTING)
     enable_testing()
 
