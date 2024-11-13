@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         preset: ["gcc-debug", "gcc-release"]
-    name: "Preset Test: ${{ matrix.preset }}"
+    name: "Preset: ${{ matrix.preset }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -63,7 +63,7 @@ jobs:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
 
-    name: "Bulid & Test: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
+    name: "Unit: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
@@ -104,12 +104,14 @@ jobs:
 
   configuration-test:
     runs-on: ubuntu-latest
-    name: "Configuration Test: No BUILD_TESTING"
     strategy:
       matrix:
-        arg:
-          - "-DBEMAN_EXEMPLAR_BUILD_TESTING=OFF"
-          - "-DBEMAN_EXEMPLAR_BUILD_EXAMPLES=OFF"
+        args:
+          - name: "Disable build testing"
+            arg: "-DBEMAN_EXEMPLAR_BUILD_TESTING=OFF"
+          - name: "Disable example building"
+            arg: "-DBEMAN_EXEMPLAR_BUILD_EXAMPLES=OFF"
+    name: "CMake: ${{ matrix.args.name }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -123,7 +125,7 @@ jobs:
           ninja --version
       - name: Configure CMake
         run: |
-          cmake -B build -S . -DCMAKE_CXX_STANDARD=17 ${{{ matrix.arg }}}
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=17 ${{ matrix.args.arg }}
         env:
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
