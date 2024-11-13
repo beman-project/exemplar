@@ -1,7 +1,12 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 set(ALL_EXAMPLES identity_direct_usage)
-if(COMPILER_SUPPORTS_RANGES)
+
+# Example: identity_as_default_projection need ranges support:
+include(CheckCXXSymbolExists)
+check_cxx_symbol_exists(__cpp_lib_ranges "ranges" HAS_RANGES)
+
+if(HAS_RANGES)
     list(APPEND ALL_EXAMPLES identity_as_default_projection)
 else()
     message(
