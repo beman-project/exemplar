@@ -23,10 +23,10 @@ option(
     ${PROJECT_IS_TOP_LEVEL}
 )
 
+include(FetchContent)
 include(GNUInstallDirs)
 
 if(BEMAN_EXEMPLAR_BUILD_TESTING)
-    include(FetchContent)
 
     enable_testing()
 
