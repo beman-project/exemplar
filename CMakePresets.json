@@ -15,7 +15,7 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=leak -fsanitize=undefined"
+        "CMAKE_TOOLCHAIN_FILE": "cmake/toolchain.cmake"
       }
     },
     {
@@ -23,7 +23,7 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_CXX_FLAGS": "-O3"
+        "CMAKE_TOOLCHAIN_FILE": "cmake/toolchain.cmake"
       }
     },
     {
