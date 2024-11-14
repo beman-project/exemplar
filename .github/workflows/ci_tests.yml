@@ -31,12 +31,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-latest, windows-latest]
-        compiler:
-          - cpp: g++
+        platform:
+          - description: "ubuntu gcc"
+            cpp: g++
             c: gcc
-          - cpp: clang++
+            os: ubuntu-latest
+          - description: "ubuntu clang"
+            cpp: clang++
             c: clang
+            os: ubuntu-latest
+          - description: "windows MSVC"
+            cpp: cl
+            c: cl
+            os: windows-latest
         cpp_version: [17, 20, 23, 26]
         cmake_args:
           - description: "Default"
@@ -46,25 +53,27 @@ jobs:
           - description: "ASan"
             args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
-          - platform: ubuntu-latest
-            compiler:
+          - platform:
+              description: "ubuntu gcc"
               cpp: g++
               c: gcc
+              os: ubuntu-latest
             cpp_version: 17
             cmake_args:
               description: "Werror"
               args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
-          - platform: ubuntu-latest
-            compiler:
+          - platform:
+              description: "ubuntu gcc"
               cpp: g++
               c: gcc
+              os: ubuntu-latest
             cpp_version: 17
             cmake_args:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
 
-    name: "Unit: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
-    runs-on: ${{ matrix.platform }}
+    name: "Unit: ${{ matrix.platform.description }} ${{ matrix.cmake_args.description }}"
+    runs-on: ${{ matrix.platform.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Ninja
@@ -72,18 +81,26 @@ jobs:
         with:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
+      - name: Setup MSVC
+        if: startsWith(matrix.platform.os, 'windows')
+        uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
       - name: Print installed softwares
         run: |
-          clang++ --version
-          g++ --version
+          echo "Compiler:"
+          ${{ matrix.platform.cpp }} --version
+          ${{ matrix.platform.c }} --version
+
+          echo "Build system:"
           cmake --version
           ninja --version
       - name: Configure CMake
         run: |
           cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
         env:
-          CC: ${{ matrix.compiler.c }}
-          CXX: ${{ matrix.compiler.cpp }}
+          CC: ${{ matrix.platform.c }}
+          CXX: ${{ matrix.platform.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
         run: |
