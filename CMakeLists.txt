@@ -23,11 +23,12 @@ option(
     ${PROJECT_IS_TOP_LEVEL}
 )
 
-include(CTest)
-include(FetchContent)
 include(GNUInstallDirs)
 
 if(BEMAN_EXEMPLAR_BUILD_TESTING)
+    include(CTest)
+    include(FetchContent)
+
     enable_testing()
 
     # Fetch GoogleTest
