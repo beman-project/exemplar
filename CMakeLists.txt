@@ -26,7 +26,6 @@ option(
 include(GNUInstallDirs)
 
 if(BEMAN_EXEMPLAR_BUILD_TESTING)
-    include(CTest)
     include(FetchContent)
 
     enable_testing()
