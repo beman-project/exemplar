@@ -27,7 +27,6 @@ include(FetchContent)
 include(GNUInstallDirs)
 
 if(BEMAN_EXEMPLAR_BUILD_TESTING)
-
     enable_testing()
 
     # Fetch GoogleTest
