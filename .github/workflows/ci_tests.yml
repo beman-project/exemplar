@@ -44,10 +44,10 @@ jobs:
             args: ""
           - description: "TSan"
             config: "Debug"
-            args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
+            args: "-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -DBEMAN_BUILDSYS_SANITIZER=TSan"
           - description: "ASan"
             config: "Debug"
-            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
+            args: "-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -DBEMAN_BUILDSYS_SANITIZER=ASan"
         include:
           - platform: ubuntu-latest
             compiler:
