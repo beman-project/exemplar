@@ -20,12 +20,8 @@ if(DEFINED BEMAN_BUILDSYS_SANITIZER)
             "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined"
         )
 
-        # Exclude -fsanitize=leak if using GCC on macOS
-        # TODO: Is there a way to detect Apple Clang???
-        if(
-            CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-            AND CMAKE_SYSTEM_NAME STREQUAL "Darwin"
-        )
+        # Exclude -fsanitize=leak on Apple Clang (gcc on macos) as it is not supported.
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
             message(STATUS "Using GCC on macOS; excluding -fsanitize=leak")
         else()
             set(SANITIZER_FLAGS "${SANITIZER_FLAGS} -fsanitize=leak")
