@@ -1,6 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-# Toolchain file
+set(CMAKE_C_FLAGS_RELEASE_INIT "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O3")
+
 set(CMAKE_C_FLAGS_RELWITHDEBINFO_INIT "-O3")
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O3")
 

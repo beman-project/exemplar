@@ -39,11 +39,14 @@ jobs:
             c: clang
         cpp_version: [17, 20, 23, 26]
         cmake_args:
-          - description: "Default"
+          - description: "Release Default"
+            config: "Release"
             args: ""
           - description: "TSan"
+            config: "Debug"
             args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
           - description: "ASan"
+            config: "Debug"
             args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
           - platform: ubuntu-latest
@@ -53,6 +56,7 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Werror"
+              config: "Release"
               args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
           - platform: ubuntu-latest
             compiler:
@@ -61,6 +65,7 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Dynamic"
+              config: "Release"
               args: "-DBUILD_SHARED_LIBS=on"
 
     name: "Unit: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
@@ -85,22 +90,14 @@ jobs:
           CC: ${{ matrix.compiler.c }}
           CXX: ${{ matrix.compiler.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
-      - name: Build Release
+      - name: Build
         run: |
-          cmake --build build --config Release --verbose
-          cmake --build build --config Release --target all_verify_interface_header_sets
-          cmake --install build --config Release --prefix /opt/beman.exemplar
+          cmake --build build --config ${{ matrix.cmake_args.config }} --verbose
+          cmake --build build --config ${{ matrix.cmake_args.config }} --target all_verify_interface_header_sets
+          cmake --install build --config ${{ matrix.cmake_args.config }} --prefix /opt/beman.exemplar
           find /opt/beman.exemplar -type f
-      - name: Test Release
-        run: ctest --test-dir build --build-config Release
-      - name: Build Debug
-        run: |
-          cmake --build build --config Debug --verbose
-          cmake --build build --config Debug --target all_verify_interface_header_sets
-          cmake --install build --config Debug --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
-      - name: Test Debug
-        run: ctest --test-dir build --build-config Debug
+      - name: Test
+        run: ctest --test-dir build --build-config ${{ matrix.cmake_args.config }}
 
   configuration-test:
     runs-on: ubuntu-latest
