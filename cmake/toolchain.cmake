@@ -26,9 +26,10 @@ if(DEFINED BEMAN_BUILDSYS_SANITIZER)
         )
             message(STATUS "Using GCC on macOS; excluding -fsanitize=leak")
         else()
-            list(APPEND SANITIZER_FLAGS "-fsanitize=leak")
+            set(SANITIZER_FLAGS "${SANITIZER_FLAGS} -fsanitize=leak")
         endif()
     elseif(BEMAN_BUILDSYS_SANITIZER STREQUAL "TSan")
+        # Basic ASan flags
         set(SANITIZER_FLAGS "-fsanitize=thread")
     elseif(BEMAN_BUILDSYS_SANITIZER STREQUAL "OFF")
         set(SANITIZER_FLAGS "")
@@ -39,7 +40,6 @@ if(DEFINED BEMAN_BUILDSYS_SANITIZER)
         )
     endif()
 
-    # Apply flags to both C and C++ compilers, along with debug settings
     set(CMAKE_C_FLAGS_DEBUG_INIT
         "${CMAKE_C_FLAGS_DEBUG_INIT} ${SANITIZER_FLAGS}"
     )
