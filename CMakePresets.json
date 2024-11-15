@@ -23,6 +23,7 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_CXX_FLAGS": "-O3",
         "BEMAN_BUILDSYS_SANITIZER": "OFF"
       }
     },
