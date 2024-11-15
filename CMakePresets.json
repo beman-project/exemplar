@@ -15,7 +15,6 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_TOOLCHAIN_FILE": "cmake/toolchain.cmake",
         "BEMAN_BUILDSYS_SANITIZER": "ASan"
       }
     },
@@ -24,7 +23,6 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_TOOLCHAIN_FILE": "cmake/toolchain.cmake",
         "BEMAN_BUILDSYS_SANITIZER": "OFF"
       }
     },

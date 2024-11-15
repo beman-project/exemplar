@@ -51,10 +51,10 @@ jobs:
             args: ""
           - description: "TSan"
             config: "Debug"
-            args: "-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -DBEMAN_BUILDSYS_SANITIZER=TSan"
+            args: "-DBEMAN_BUILDSYS_SANITIZER=TSan"
           - description: "ASan"
             config: "Debug"
-            args: "-DCMAKE_TOOLCHAIN_FILE=cmake/toolchain.cmake -DBEMAN_BUILDSYS_SANITIZER=ASan"
+            args: "-DBEMAN_BUILDSYS_SANITIZER=ASan"
         include:
           - platform: ubuntu-latest
             compiler:
