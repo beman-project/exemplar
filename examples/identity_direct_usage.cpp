@@ -7,6 +7,7 @@
 namespace exe = beman::exemplar;
 
 int main() {
-    std::cout << exe::identity()(2024) << '\n';
+    std::cout <<
+        exe::identity()(2024) << '\n';
     return 0;
 }
