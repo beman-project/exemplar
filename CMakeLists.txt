@@ -23,12 +23,12 @@ option(
     ${PROJECT_IS_TOP_LEVEL}
 )
 
+include(FetchContent)
+include(GNUInstallDirs)
+
 if(DEFINED BEMAN_BUILDSYS_SANITIZER)
     include(cmake/apply_santizers.cmake)
 endif()
-
-include(FetchContent)
-include(GNUInstallDirs)
 
 if(BEMAN_EXEMPLAR_BUILD_TESTS)
     enable_testing()
