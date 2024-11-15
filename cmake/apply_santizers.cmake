@@ -10,20 +10,45 @@
 message("Applying sanitizers for ${CMAKE_CXX_COMPILER_ID}")
 
 if(BEMAN_BUILDSYS_SANITIZER STREQUAL "ASan")
-    # Basic ASan flags
-    set(SANITIZER_FLAGS
+    set(_ASAN_ADDR "-fsanitize=address")
+    set(_ASAN_LEAK "-fsanitize=leak")
+    set(_ASAN_MISC
         "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined"
     )
 
-    # Exclude -fsanitize=leak on Apple Clang (gcc on macos) as it is not supported.
+    # Exclude -fsanitize=leak on Apple Clang as it is not supported.
     if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-        message(STATUS "Using GCC on macOS; excluding -fsanitize=leak")
+        message(STATUS "Using AppleClang; excluding -fsanitize=leak")
+        set(SANITIZER_FLAGS "${_ASAN_ADDR} ${_ASAN_MISC}")
+        # Only include Address sanitizer on MSVC
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        message(STATUS "Using MSVC; only Address sanitizer is set")
+        set(SANITIZER_FLAGS _ASAN_ADDR)
+        # We are able to enable all sanitizers on Clang and GNU
+    elseif(
+        CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
+        OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+    )
+        set(SANITIZER_FLAGS "${_ASAN_ADDR} ${_ASAN_LEAK} ${_ASAN_MISC}")
     else()
-        set(SANITIZER_FLAGS "${SANITIZER_FLAGS} -fsanitize=leak")
+        message(
+            STATUS
+            "Unknown compiler ${CMAKE_CXX_COMPILER_ID}, no sanitizer is set"
+        )
     endif()
 elseif(BEMAN_BUILDSYS_SANITIZER STREQUAL "TSan")
-    # Basic ASan flags
-    set(SANITIZER_FLAGS "-fsanitize=thread")
+    # Basic TSan flags
+    if(
+        CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
+        OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+    )
+        set(SANITIZER_FLAGS "-fsanitize=thread")
+    else()
+        message(
+            STATUS
+            "TSan not supported/ Unknown compiler: ${CMAKE_CXX_COMPILER_ID}, no sanitizer is set"
+        )
+    endif()
 elseif(BEMAN_BUILDSYS_SANITIZER STREQUAL "OFF")
     set(SANITIZER_FLAGS "")
 else()
