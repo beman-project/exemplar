@@ -12,11 +12,18 @@ on:
 
 jobs:
   preset-test:
-    runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        preset: ["gcc-debug", "gcc-release"]
-    name: "Preset: ${{ matrix.preset }}"
+        mtx:
+          - preset: "gcc-release"
+            os: ubuntu-latest
+          - preset: "gcc-debug"
+            os: ubuntu-latest
+          - preset: "gcc-debug"
+            os: macos-latest
+    runs-on: ${{ matrix.mtx.os }}
+    name: "Preset: ${{ matrix.mtx.preset }} on ${{ matrix.mtx.os }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -25,7 +32,7 @@ jobs:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
       - name: Run preset
-        run: cmake --workflow --preset ${{ matrix.preset }}
+        run: cmake --workflow --preset ${{ matrix.mtx.preset }}
 
   gtest-test:
     strategy:
