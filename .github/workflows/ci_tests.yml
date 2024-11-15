@@ -15,15 +15,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        mtx:
+        preset: ["gcc-debug"]
+        os: [ubuntu-latest, macos-latest]
+        include:
+          # Release don't have variants among platforms
           - preset: "gcc-release"
             os: ubuntu-latest
-          - preset: "gcc-debug"
-            os: ubuntu-latest
-          - preset: "gcc-debug"
-            os: macos-latest
-    runs-on: ${{ matrix.mtx.os }}
-    name: "Preset: ${{ matrix.mtx.preset }} on ${{ matrix.mtx.os }}"
+    runs-on: ${{ matrix.os }}
+    name: "Preset: ${{ matrix.preset }} on ${{ matrix.os }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -32,7 +31,7 @@ jobs:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
       - name: Run preset
-        run: cmake --workflow --preset ${{ matrix.mtx.preset }}
+        run: cmake --workflow --preset ${{ matrix.preset }}
 
   gtest-test:
     strategy:
@@ -46,14 +45,11 @@ jobs:
             c: clang
         cpp_version: [17, 20, 23, 26]
         cmake_args:
-          - description: "Release Default"
-            config: "Release"
+          - description: "Default"
             args: ""
           - description: "TSan"
-            config: "Debug"
             args: "-DBEMAN_BUILDSYS_SANITIZER=TSan"
           - description: "ASan"
-            config: "Debug"
             args: "-DBEMAN_BUILDSYS_SANITIZER=ASan"
         include:
           - platform: ubuntu-latest
@@ -63,7 +59,6 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Werror"
-              config: "Release"
               args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
           - platform: ubuntu-latest
             compiler:
@@ -72,7 +67,6 @@ jobs:
             cpp_version: 17
             cmake_args:
               description: "Dynamic"
-              config: "Release"
               args: "-DBUILD_SHARED_LIBS=on"
 
     name: "Unit: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
@@ -97,14 +91,22 @@ jobs:
           CC: ${{ matrix.compiler.c }}
           CXX: ${{ matrix.compiler.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
-      - name: Build
+      - name: Build Release
         run: |
-          cmake --build build --config ${{ matrix.cmake_args.config }} --verbose
-          cmake --build build --config ${{ matrix.cmake_args.config }} --target all_verify_interface_header_sets
-          cmake --install build --config ${{ matrix.cmake_args.config }} --prefix /opt/beman.exemplar
+          cmake --build build --config Release --verbose
+          cmake --build build --config Release --target all_verify_interface_header_sets
+          cmake --install build --config Release --prefix /opt/beman.exemplar
           find /opt/beman.exemplar -type f
-      - name: Test
-        run: ctest --test-dir build --build-config ${{ matrix.cmake_args.config }}
+      - name: Test Release
+        run: ctest --test-dir build --build-config Release
+      - name: Build Debug
+        run: |
+          cmake --build build --config Debug --verbose
+          cmake --build build --config Debug --target all_verify_interface_header_sets
+          cmake --install build --config Debug --prefix /opt/beman.exemplar
+          find /opt/beman.exemplar -type f
+      - name: Test Debug
+        run: ctest --test-dir build --build-config Debug
 
   configuration-test:
     runs-on: ubuntu-latest
