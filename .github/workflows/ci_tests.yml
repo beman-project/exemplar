@@ -112,7 +112,7 @@ jobs:
       matrix:
         args:
           - name: "Disable build testing"
-            arg: "-DBEMAN_EXEMPLAR_BUILD_TESTING=OFF"
+            arg: "-DBEMAN_EXEMPLAR_BUILD_TESTS=OFF"
           - name: "Disable example building"
             arg: "-DBEMAN_EXEMPLAR_BUILD_EXAMPLES=OFF"
     name: "CMake: ${{ matrix.args.name }}"

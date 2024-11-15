@@ -11,7 +11,7 @@ project(
 
 # [CMAKE.SKIP_TESTS]
 option(
-    BEMAN_EXEMPLAR_BUILD_TESTING
+    BEMAN_EXEMPLAR_BUILD_TESTS
     "Enable building tests and test infrastructure. Default: ON. Values: { ON, OFF }."
     ${PROJECT_IS_TOP_LEVEL}
 )
@@ -27,11 +27,10 @@ if(DEFINED BEMAN_BUILDSYS_SANITIZER)
     include(cmake/apply_santizers.cmake)
 endif()
 
-include(CTest)
 include(FetchContent)
 include(GNUInstallDirs)
 
-if(BEMAN_EXEMPLAR_BUILD_TESTING)
+if(BEMAN_EXEMPLAR_BUILD_TESTS)
     enable_testing()
 
     # Fetch GoogleTest
@@ -51,7 +50,7 @@ endif()
 
 add_subdirectory(src/beman/exemplar)
 
-if(BEMAN_EXEMPLAR_BUILD_TESTING)
+if(BEMAN_EXEMPLAR_BUILD_TESTS)
     add_subdirectory(tests/beman/exemplar)
 endif()
 
