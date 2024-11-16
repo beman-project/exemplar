@@ -99,6 +99,29 @@ class BemanStandardCheckLicenseExists(BemanStandardCheckTopLevel):
     def __init__(self):
         super().__init__("TOPLEVEL.LICENSE", "xLICENSE")
 
+class BemanStandardCheckReadmeExists(BemanStandardCheckTopLevel):
+    """
+    [TOPLEVEL.README] REQUIREMENT: There must be a markdown-formatted README.md file at the repository's root that describes the library, explains how to build it, and links to further documentation.
+    """
+    def __init__(self):
+        super().__init__("TOPLEVEL.README", "xREADME.md")
+
+    def fix(self):
+        with open(self.file, "w") as readme:
+            readme.write(f"""<!--
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+-->
+
+# beman.{self.repo_name}: The Beman {self.repo_name.title()} Library
+
+![Continuous Integration Tests](https://github.com/beman-project/{self.repo_name}/actions/workflows/ci_tests.yml/badge.svg)
+
+TODO `beman.{self.repo_name}` needs a description!
+
+Implements: TODO [Pxxxx](http://wg21.link/pxxxx)
+""")
+        return True
+
 
 class BemanStandardCheckCMakeBase(BemanStandardCheckBase):
     def __init__(self, name, level):
@@ -262,26 +285,3 @@ class BemanStandardCheckCMakeLibraryAlias(BemanStandardCheckCMakeSingleRule):
     # TODO: Darius: This rule is not correct. It should be more general.
     def __init__(self):
         super().__init__("CMAKE.LIBRARY_ALIAS", "REQUIREMENT", r'add_library\(\s*([a-zA-Z_][a-zA-Z0-9_:]*)\s+ALIAS\s+\1\)')
-
-class BemanStandardCheckReadmeExists(BemanStandardCheckTopLevel):
-    """
-    [TOPLEVEL.README] REQUIREMENT: There must be a markdown-formatted README.md file at the repository's root that describes the library, explains how to build it, and links to further documentation.
-    """
-    def __init__(self):
-        super().__init__("TOPLEVEL.README", "xREADME.md")
-
-    def fix(self):
-        with open(self.file, "w") as readme:
-            readme.write(f"""<!--
-SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
--->
-
-# beman.{self.repo_name}: The Beman {self.repo_name.title()} Library
-
-![Continuous Integration Tests](https://github.com/beman-project/{self.repo_name}/actions/workflows/ci_tests.yml/badge.svg)
-
-TODO `beman.{self.repo_name}` needs a description!
-
-Implements: TODO [Pxxxx](http://wg21.link/pxxxx)
-""")
-        return True
