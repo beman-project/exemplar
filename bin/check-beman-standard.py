@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+import argparse
 
 from check_beman_standard.checks import *
 from check_beman_standard.utils import *
@@ -25,27 +26,6 @@ def skip_md_header(lines):
         index += 1
 
     return lines[index:]
-
-def check_repo_name(name):
-    """
-    [LIBRARY.NAMES]: snake_case short name
-    """
-    if not re.match("(^[a-z0-9]+$)|(^[a-z0-9][a-z0-9_]+[a-z0-9]$)", name):
-        print(f'WARN: the name "{name}" should be snake_case')
-    return True
-
-def check_top_level_files(toplevel):
-    """
-    [TOPLEVEL.CMAKE]: toplevel/CMakeLists.txt exists
-    [TOPLEVEL.LICENSE]: toplevel/LICENSE.txt exists
-    [TOPLEVEL.README]: toplevel/LICENSE.txt exists
-    """
-    result = True
-    for file in ["CMakeLists.txt", "LICENSE", "README.md"]:
-        if not os.path.isfile(os.path.join(toplevel, file)):
-            print(f'ERROR: missing top level {file}')
-            result = False
-    return result
 
 def check_readme(readme, name):
     """
@@ -87,6 +67,10 @@ def check_directory_layout(toplevel, name):
     return result
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--fix", help="fix fixable problems", action=argparse.BooleanOptionalAction)
+    args = parser.parse_args()
+
     toplevel = get_repo_toplevel()
     repo_name = get_repo_name()
     print(f"Checking {repo_name} at {toplevel}")
@@ -106,10 +90,9 @@ def main():
         # REPOSITORY.CODEOWNERS
 
         ## Top-level
-        # TOPLEVEL.CMAKE
-        # TOPLEVEL.LICENSE
-        # TOPLEVEL.README
-        BemanStandardCheckTopLevel(),
+        BemanStandardCheckCmakeExists(), # TOPLEVEL.CMAKE
+        BemanStandardCheckLicenseExists(), # TOPLEVEL.LICENSE
+        BemanStandardCheckReadmeExists(), # TOPLEVEL.README
 
         ## README.md
         # README.TITLE
@@ -155,11 +138,13 @@ def main():
         check.set_top_level(toplevel)
 
     # Actually run the checks
-    fix_inplace = False
+        print(f'CHECK {check.name} --\n\n\n')
+    print(f"args.fix={args.fix}")
+    fix_inplace = args.fix == True
     for check in checks:
         print(f'CHECK {check.name} ++')
-        if not check.check() and fix_inplace:
-            check.fix()
+        if not check.check() and fix_inplace and check.fix():
+            print(f"      [{check.name}] fixed")
         print(f'CHECK {check.name} --\n\n\n')
 
 if __name__ == "__main__":

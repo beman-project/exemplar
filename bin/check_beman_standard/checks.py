@@ -39,8 +39,7 @@ class BemanStandardCheckBase:
     # - If the standard is applied, the check should return True.
     # - Otherwise, the check should be applied inplace. If the check cannot be applied inplace, the check should return False.
     def fix(self):
-        print(f'{self.log_level} [{self.name}]: Fixing the issue - N/A!!!')
-        return True
+        return False
 
     # Logs a message with the check's log level.
     # e.g. WARN REPOSITORY.NAME: The name "${name}" should be snake_case.'
@@ -68,33 +67,38 @@ class BemanStandardCheckRepoName(BemanStandardCheckBase):
         self.log(f'The name "{self.repo_name}" should be snake_case')
         return False
 
-
 class BemanStandardCheckTopLevel(BemanStandardCheckBase):
-    def __init__(self):
-        super().__init__("TOPLEVEL", "REQUIREMENT")
+    def __init__(self, name, file):
+        super().__init__(name, "REQUIREMENT")
+        self.file = file
 
     def check(self):
         """
-        The top-level of a Beman library repository must consist of CMakeLists.txt, LICENSE, and README.md files.
-
-        [TOPLEVEL.CMAKE] REQUIREMENT: There must be a CMakeLists.txt file at the repository's root that builds and tests (via. CTest) the library.
-
-        [TOPLEVEL.LICENSE] REQUIREMENT: There must be a LICENSE file at the repository's root with the contents of an approved license that covers the contents of the repository.
-
-        [TOPLEVEL.README] REQUIREMENT: There must be a markdown-formatted README.md file at the repository's root that describes the library, explains how to build it, and links to further documentation.
+        Check if the specified file exists. Otherwise report the file as missing.
         """
         if not super().check():
             return False
 
-        def check_file(file):
-            if os.path.isfile(os.path.join(self.top_level, file)):
-                return True
+        if os.path.isfile(os.path.join(self.top_level, self.file)):
+            return True
 
-            self.log(f'Missing top level {file}')
-            return False
+        self.log(f'Missing top level {self.file}')
+        return False
 
-        top_level_files = ['CMakeLists.txt', 'LICENSE', 'README.md']
-        return all(map(check_file, top_level_files))
+class BemanStandardCheckCmakeExists(BemanStandardCheckTopLevel):
+    """
+    [TOPLEVEL.CMAKE] REQUIREMENT: There must be a CMakeLists.txt file at the repository's root that builds and tests (via. CTest) the library.
+    """
+    def __init__(self):
+        super().__init__("TOPLEVEL.CMAKE", "xCMakeLists.txt")
+
+class BemanStandardCheckLicenseExists(BemanStandardCheckTopLevel):
+    """
+    [TOPLEVEL.LICENSE] REQUIREMENT: There must be a LICENSE file at the repository's root with the contents of an approved license that covers the contents of the repository.
+    """
+    def __init__(self):
+        super().__init__("TOPLEVEL.LICENSE", "xLICENSE")
+
 
 class BemanStandardCheckCMakeBase(BemanStandardCheckBase):
     def __init__(self, name, level):
@@ -258,3 +262,26 @@ class BemanStandardCheckCMakeLibraryAlias(BemanStandardCheckCMakeSingleRule):
     # TODO: Darius: This rule is not correct. It should be more general.
     def __init__(self):
         super().__init__("CMAKE.LIBRARY_ALIAS", "REQUIREMENT", r'add_library\(\s*([a-zA-Z_][a-zA-Z0-9_:]*)\s+ALIAS\s+\1\)')
+
+class BemanStandardCheckReadmeExists(BemanStandardCheckTopLevel):
+    """
+    [TOPLEVEL.README] REQUIREMENT: There must be a markdown-formatted README.md file at the repository's root that describes the library, explains how to build it, and links to further documentation.
+    """
+    def __init__(self):
+        super().__init__("TOPLEVEL.README", "xREADME.md")
+
+    def fix(self):
+        with open(self.file, "w") as readme:
+            readme.write(f"""<!--
+SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+-->
+
+# beman.{self.repo_name}: The Beman {self.repo_name.title()} Library
+
+![Continuous Integration Tests](https://github.com/beman-project/{self.repo_name}/actions/workflows/ci_tests.yml/badge.svg)
+
+TODO `beman.{self.repo_name}` needs a description!
+
+Implements: TODO [Pxxxx](http://wg21.link/pxxxx)
+""")
+        return True
