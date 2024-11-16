@@ -3,8 +3,6 @@
 import glob
 import os
 import re
-import subprocess
-import sys
 import argparse
 
 from check_beman_standard.checks import *

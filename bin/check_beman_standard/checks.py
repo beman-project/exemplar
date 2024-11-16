@@ -2,12 +2,34 @@
 
 import os
 import re
+import urllib.request
 from .utils import *
+
+class Git:
+    def __init__(self):
+        pass
+
+    def add(self, file):
+        run(f"git add {file}")
+
+git = Git()
+
+def copy_url(url, stream):
+    """
+    Get the resource pointed to by 'url' and write the content to
+    the stream passed as 'stream'. Upon success the function returns 'True'.
+    """
+    try:
+        stream.write(urllib.request.urlopen(url).read())
+        return True
+    except:
+        return False
 
 class BemanStandardCheckBase:
     def __init__(self, name, level):
         self.name = name
         self.log_level = 'ERROR' if level == 'REQUIREMENT' else 'WARN'
+        self.log_enabled = True
 
     def set_repo_name(self, repo_name):
         self.repo_name = repo_name
@@ -35,6 +57,13 @@ class BemanStandardCheckBase:
 
         return True
 
+    def check_no_log(self):
+        """
+        Disable logging and return the result of running the object's check.
+        """
+        self.log_enabled = False
+        self.check()
+
     # Fixes the issue if the standard is not applied.
     # - If the standard is applied, the check should return True.
     # - Otherwise, the check should be applied inplace. If the check cannot be applied inplace, the check should return False.
@@ -45,7 +74,8 @@ class BemanStandardCheckBase:
     # e.g. WARN REPOSITORY.NAME: The name "${name}" should be snake_case.'
     # e.g. ERROR TOPLEVEL.CMAKE: Missing top level CMakeLists.txt.'
     def log(self, message):
-        print(f'{self.log_level} [{self.name}]: {message}')
+        if self.log_enabled:
+            print(f'{self.log_level} [{self.name}]: {message}')
 
 
 class BemanStandardCheckRepoName(BemanStandardCheckBase):
@@ -97,17 +127,27 @@ class BemanStandardCheckLicenseExists(BemanStandardCheckTopLevel):
     [TOPLEVEL.LICENSE] REQUIREMENT: There must be a LICENSE file at the repository's root with the contents of an approved license that covers the contents of the repository.
     """
     def __init__(self):
-        super().__init__("TOPLEVEL.LICENSE", "xLICENSE")
+        super().__init__("TOPLEVEL.LICENSE", "LICENSE")
+
+    def fix(self):
+        if self.check_no_log():
+            return False
+        with open(self.file, "wb") as license:
+            git.add(self.file)
+            return copy_url("https://raw.githubusercontent.com/beman-project/beman/refs/heads/main/LICENSE.txt", license)
 
 class BemanStandardCheckReadmeExists(BemanStandardCheckTopLevel):
     """
     [TOPLEVEL.README] REQUIREMENT: There must be a markdown-formatted README.md file at the repository's root that describes the library, explains how to build it, and links to further documentation.
     """
     def __init__(self):
-        super().__init__("TOPLEVEL.README", "xREADME.md")
+        super().__init__("TOPLEVEL.README", "README.md")
 
     def fix(self):
+        if self.check_no_log():
+            return False
         with open(self.file, "w") as readme:
+            git.add(self.file)
             readme.write(f"""<!--
 SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 -->
