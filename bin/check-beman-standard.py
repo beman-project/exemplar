@@ -4,6 +4,7 @@ import glob
 import os
 import re
 import subprocess
+import sys
 
 from check_beman_standard.checks import *
 from check_beman_standard.utils import *
@@ -82,13 +83,13 @@ def check_directory_layout(toplevel, name):
     elif 0 == len(glob.glob(os.path.join(include_path, "*.hpp"))):
         print(f'ERROR: there needs to be at least on header ("*.hpp")')
         result = False
-    
-    return result
 
+    return result
 
 def main():
     toplevel = get_repo_toplevel()
     repo_name = get_repo_name()
+    print(f"Checking {repo_name} at {toplevel}")
 
     # Apply the [Beman Standard](https://github.com/beman-project/beman/blob/main/docs/BEMAN_STANDARD.md).
     # Manually update this list as you add checks:
@@ -118,6 +119,7 @@ def main():
         ## CMake
         # CMAKE.DEFAULT
         # CMAKE.PROJECT_NAME
+        BemanStandardCheckCMakeProjectName(),
         # CMAKE.LIBRARY_NAME
         # CMAKE.LIBRARY_ALIAS
         # CMAKE.TARGET_NAMES
@@ -150,17 +152,12 @@ def main():
         check.set_top_level(toplevel)
 
     # Actually run the checks
-    fix_inplace = True
+    fix_inplace = False
     for check in checks:
+        print(f'CHECK {check.name} ++')
         if not check.check() and fix_inplace:
             check.fix()
-
-    # if check_repo_name(repo_name) and \
-        # check_top_level_files(toplevel) and \
-        # check_readme(os.path.join(toplevel, "README.md"), repo_name) and \
-        # check_directory_layout(toplevel, repo_name) and \
-        # True:
-        # print("all checks passed!")
+        print(f'CHECK {check.name} --\n\n\n')
 
 if __name__ == "__main__":
     main()

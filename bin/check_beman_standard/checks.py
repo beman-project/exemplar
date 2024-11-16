@@ -2,6 +2,7 @@
 
 import os
 import re
+from .utils import *
 
 class BemanStandardCheckBase:
     def __init__(self, name, level):
@@ -13,6 +14,8 @@ class BemanStandardCheckBase:
 
     def set_top_level(self, top_level):
         self.top_level = top_level
+        self.cmakelists_path = os.path.join(self.top_level, 'CMakeLists.txt')
+
 
     # Checks if the Beman Standard is already applied.
     # - If the standard is applied, the check should return True.
@@ -21,7 +24,7 @@ class BemanStandardCheckBase:
         if self.name is None:
             self.log('The name is not set.')
             return False
-        
+
         if self.repo_name is None:
             self.log('The repo_name is not set.')
             return False
@@ -43,7 +46,7 @@ class BemanStandardCheckBase:
     # e.g. WARN REPOSITORY.NAME: The name "${name}" should be snake_case.'
     # e.g. ERROR TOPLEVEL.CMAKE: Missing top level CMakeLists.txt.'
     def log(self, message):
-        print(f'{self.log_level} [{self.name}]: {message}')  
+        print(f'{self.log_level} [{self.name}]: {message}')
 
 
 class BemanStandardCheckRepoName(BemanStandardCheckBase):
@@ -58,7 +61,7 @@ class BemanStandardCheckRepoName(BemanStandardCheckBase):
         if not super().check():
             return False
 
-        if re.match("(^[a-z0-9]+$)|(^[a-z0-9][a-z0-9_]+[a-z0-9]$)", self.repo_name):
+        if is_snake_case(self.repo_name):
             return True
 
         # Check failed.
@@ -68,7 +71,7 @@ class BemanStandardCheckRepoName(BemanStandardCheckBase):
 
 class BemanStandardCheckTopLevel(BemanStandardCheckBase):
     def __init__(self):
-        super().__init__("REPOSITORY.NAME", "REQUIREMENT")
+        super().__init__("TOPLEVEL", "REQUIREMENT")
 
     def check(self):
         """
@@ -92,3 +95,119 @@ class BemanStandardCheckTopLevel(BemanStandardCheckBase):
 
         top_level_files = ['CMakeLists.txt', 'LICENSE', 'README.md']
         return all(map(check_file, top_level_files))
+
+class BemanStandardCheckCMakeBase(BemanStandardCheckBase):
+    def __init__(self, name, level):
+        super().__init__(name, level)
+
+    # Reads the CMakeLists.txt file and returns a string.
+    def read(self):
+        with open(self.cmakelists_path) as f:
+            if not f:
+                self.log(f'Missing {self.cmakelists_path} or cannot open.)')
+                return None
+
+            return f.read()
+
+    # Reads the CMakeLists.txt file and returns all lines.
+    def readlines(self):
+        with open(self.cmakelists_path) as f:
+            if not f:
+                self.log(f'Missing {self.cmakelists_path} or cannot open.)')
+                return None
+
+            return f.readlines()
+
+    # Find line in CMakeLists.txt file and return it.
+    def find_line(self, lines, rule):
+        for line in lines:
+            if re.match(rule, line):
+                return line
+
+        self.log(f'Missing {rule} in {self.cmakelists_path}.')
+        return None
+
+class BemanStandardCheckCMakeProjectName(BemanStandardCheckCMakeBase):
+    """
+    Extract project name, description, and languages considering comments everywhere.
+
+    Example:
+
+    project(# can have comments here and parsing should still work
+        # can have comments here and parsing should still work
+        beman.exemplar # can have comments here and parsing should still work
+        # can have comments here and parsing should still work
+        DESCRIPTION "A Beman library exemplar" # can have comments here and parsing should still work
+        # can have comments here and parsing should still work
+        LANGUAGES CXX # can have comments here and parsing should still work
+        # can have comments here and parsing should still work
+    )
+    """
+    def __init__(self):
+        super().__init__("CMAKE.PROJECT_NAME", "REQUIREMENT")
+
+    def check(self):
+        if not super().check():
+            return False
+
+        cmakelists_content = self.read()
+        if not cmakelists_content:
+            return False
+
+        # Should have project(...) in CMakeLists.txt set exactly once.
+        all_matches = re.findall(r'project\((?:[^#()]*|#[^\n]*|\([^)]*\))*\)', cmakelists_content, re.DOTALL)
+        # print('all:', all_matches)
+        if not all_matches:
+            self.log(f'Missing project(...) in CMakeLists.txt.')
+            return False
+        if len(all_matches) > 1:
+            self.log(f'Multiple project(...) in CMakeLists.txt.')
+            return False
+        match = all_matches[0]
+
+        # Get and check project name.
+        print(f'Checking project name ...')
+        project_name = re.search(r'beman\.([a-z0-9_]+)', match)
+        if not project_name:
+            self.log(f'Missing or invalid project name in CMakeLists.txt. Expected: beman.{self.repo_name}')
+            return False
+        project_name = project_name.group(1)
+        if not is_snake_case(project_name):
+            self.log(f'The project name "{project_name}" should be snake_case.')
+            return False
+
+        # Get and check project description.
+        print(f'Checking project description ...')
+        project_description = re.search(r'DESCRIPTION\s+"(.*?)"', match)
+        if not project_description:
+            self.log(f'Missing project description in CMakeLists.txt.')
+            return False
+        project_description = project_description.group(1)
+        if len(project_description) < 10:
+            self.log(f'Invalid project description "{project_description}". Too short (<10 characters).')
+            return False
+
+        # Get and check project version.
+        # TODO: Darius: 2.1.1a is not valid version, but this check will pass.
+        print(f'Checking project version ...')
+        project_version = re.search(r'VERSION\s+((\d+\.\d+\.\d+)?)', match)
+        if not project_version:
+            self.log(f'Missing project version in CMakeLists.txt.')
+            return False
+        project_version = project_version.group(1)
+        if not re.match(r'^\d+\.\d+\.\d+$', project_version):
+            self.log(f'Invalid project version in CMakeLists.txt. \"{project_version}\" vs [0-9]*.[0-9]*.[0-9]*')
+            return False
+
+        # Get and check project languages.
+        print(f'Checking project languages ...')
+        project_languages = re.search(r'LANGUAGES\s+(.*)', match)
+        if not project_languages:
+            self.log(f'Missing project languages in CMakeLists.txt.')
+            return False
+        project_languages = project_languages.group(1).split()
+        if not all(map(lambda lang: lang in ['C', 'CXX'], project_languages)):
+            self.log(f'Invalid project languages "{project_languages}".')
+            return False
+
+        return True
