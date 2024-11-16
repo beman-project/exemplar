@@ -101,31 +101,16 @@ class BemanStandardCheckCMakeBase(BemanStandardCheckBase):
         super().__init__(name, level)
 
     # Reads the CMakeLists.txt file and returns a string.
-    def read(self):
-        with open(self.cmakelists_path) as f:
+    def read(self, path=None, log=True):
+        path = path if path is not None else self.cmakelists_path
+        with open(path) as f:
             if not f:
-                self.log(f'Missing {self.cmakelists_path} or cannot open.)')
+                if log:
+                    self.log(f'Missing {path} or cannot open.)')
                 return None
 
             return f.read()
 
-    # Reads the CMakeLists.txt file and returns all lines.
-    def readlines(self):
-        with open(self.cmakelists_path) as f:
-            if not f:
-                self.log(f'Missing {self.cmakelists_path} or cannot open.)')
-                return None
-
-            return f.readlines()
-
-    # Find line in CMakeLists.txt file and return it.
-    def find_line(self, lines, rule):
-        for line in lines:
-            if re.match(rule, line):
-                return line
-
-        self.log(f'Missing {rule} in {self.cmakelists_path}.')
-        return None
 
 class BemanStandardCheckCMakeProjectName(BemanStandardCheckCMakeBase):
     """
@@ -211,3 +196,65 @@ class BemanStandardCheckCMakeProjectName(BemanStandardCheckCMakeBase):
             return False
 
         return True
+
+class BemanStandardCheckCMakeSingleRule(BemanStandardCheckCMakeBase):
+    def __init__(self, name, level, rule):
+        super().__init__(name, level)
+        self.rule = rule
+    
+    def check(self):
+        if not super().check():
+            return False
+
+        def get_add_library_lines(path):
+            cmakelists_content = self.read(path, log=False)
+            if not cmakelists_content:
+                return None
+            all_matches = re.findall(self.rule, cmakelists_content, re.DOTALL)
+            if not all_matches:
+                return None
+            return all_matches
+        
+        # Check root CMakeLists.txt.
+        root_matches = get_add_library_lines(self.cmakelists_path)
+        non_root_matches = get_add_library_lines(f'{self.top_level}/src/beman/{self.repo_name}/CMakeLists.txt')
+        if root_matches is None and non_root_matches is None:
+            self.log(f'Missing add_library(...) in CMakeLists.txt. Expected: "add_library(beman.{self.repo_name} ...)".')
+            return False
+        # At least one of results should be empty.
+        if root_matches and non_root_matches:
+            self.log(f'Multiple add_library(...) in CMakeLists.txt. Expected: "add_library(beman.{self.repo_name} ...)" in a single file.')
+            return False
+        match = root_matches[0] if root_matches else non_root_matches[0]
+        print(f'match: {match}')
+
+        # Get and check library name.
+        print(f'Checking library name ...')
+        library_name = re.search(r'beman\.([a-z0-9_]+)', match)
+        if not library_name:
+            self.log(f'Missing or invalid library name in CMakeLists.txt. Expected: beman.{self.repo_name}')
+            return False
+        library_name = f'beman.{library_name.group(1)}'
+        if not is_snake_case(library_name):
+            self.log(f'The library name "{library_name}" should be snake_case. Expected: beman.{self.repo_name}')
+            return False
+        if library_name != f'beman.{self.repo_name}':
+            self.log(f'The library name "{library_name}" should match the repository name "{self.repo_name}". Expected: beman.{self.repo_name}')
+            return False
+
+        return True
+
+class BemanStandardCheckCMakeLibraryName(BemanStandardCheckCMakeSingleRule):
+    """
+    Example: add_library(beman.exemplar STATIC)
+    """
+    def __init__(self):
+        super().__init__("CMAKE.LIBRARY_NAME", "REQUIREMENT", r'add_library\((?:[^#()]*|#[^\n]*|\([^)]*\))*\)')
+
+class BemanStandardCheckCMakeLibraryAlias(BemanStandardCheckCMakeSingleRule):
+    """
+    Example: add_library(beman::exemplar ALIAS beman.exemplar)
+    """
+    # TODO: Darius: This rule is not correct. It should be more general.
+    def __init__(self):
+        super().__init__("CMAKE.LIBRARY_ALIAS", "REQUIREMENT", r'add_library\(\s*([a-zA-Z_][a-zA-Z0-9_:]*)\s+ALIAS\s+\1\)')

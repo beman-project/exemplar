@@ -16,4 +16,4 @@ def get_repo_toplevel():
     return run("git rev-parse --show-toplevel").strip()
 
 def is_snake_case(name):
-    return re.match("(^[a-z0-9]+$)|(^[a-z0-9][a-z0-9_]+[a-z0-9]$)", name)
+    return re.match("(^[a-z0-9]+$)|(^[a-z0-9][a-z0-9_.]+[a-z0-9]$)", name)

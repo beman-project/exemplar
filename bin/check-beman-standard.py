@@ -118,10 +118,13 @@ def main():
 
         ## CMake
         # CMAKE.DEFAULT
+        # TODO: Darius: actually check the CMakeLists.txt.
         # CMAKE.PROJECT_NAME
         BemanStandardCheckCMakeProjectName(),
         # CMAKE.LIBRARY_NAME
+        BemanStandardCheckCMakeLibraryName(),
         # CMAKE.LIBRARY_ALIAS
+        BemanStandardCheckCMakeLibraryAlias(),
         # CMAKE.TARGET_NAMES
         # CMAKE.CONFIG
         # CMAKE.SKIP_TESTS
