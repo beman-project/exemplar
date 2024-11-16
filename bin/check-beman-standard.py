@@ -5,16 +5,8 @@ import os
 import re
 import subprocess
 
-def run(command):
-    bin = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
-    return bin.decode("ascii")
-
-def get_repo_name():
-    remote = run("git config --get remote.origin.url")
-    return re.sub("\.git\s*$", "", os.path.basename(remote))
-
-def get_repo_toplevel():
-    return run("git rev-parse --show-toplevel").strip()
+from check_beman_standard.checks import *
+from check_beman_standard.utils import *
 
 def skip_md_header(lines):
     index = 0
@@ -94,12 +86,81 @@ def check_directory_layout(toplevel, name):
     return result
 
 
-toplevel = get_repo_toplevel()
-name = get_repo_name()
+def main():
+    toplevel = get_repo_toplevel()
+    repo_name = get_repo_name()
 
-if check_repo_name(name) and \
-    check_top_level_files(toplevel) and \
-    check_readme(os.path.join(toplevel, "README.md"), name) and \
-    check_directory_layout(toplevel, name) and \
-    True:
-    print("all checks passed!")
+    # Apply the [Beman Standard](https://github.com/beman-project/beman/blob/main/docs/BEMAN_STANDARD.md).
+    # Manually update this list as you add checks:
+    checks = [
+        ## License
+        # LICENSE.APPROVED
+        # LICENSE.APACHE_LLVM
+        # LICENSE.CRITERIA
+
+        ## General
+        # LIBRARY.NAMES
+        # REPOSITORY.NAME
+        BemanStandardCheckRepoName(),
+        # REPOSITORY.CODEOWNERS
+
+        ## Top-level
+        # TOPLEVEL.CMAKE
+        # TOPLEVEL.LICENSE
+        # TOPLEVEL.README
+        BemanStandardCheckTopLevel(),
+
+        ## README.md
+        # README.TITLE
+        # README.PURPOSE
+        # README.IMPLEMENTS
+
+        ## CMake
+        # CMAKE.DEFAULT
+        # CMAKE.PROJECT_NAME
+        # CMAKE.LIBRARY_NAME
+        # CMAKE.LIBRARY_ALIAS
+        # CMAKE.TARGET_NAMES
+        # CMAKE.CONFIG
+        # CMAKE.SKIP_TESTS
+        # CMAKE.SKIP_EXAMPLES
+        # CMAKE.AVOID_PASSTHROUGHS
+
+        ## Directory Layout
+        # DIRECTORY.INTERFACE_HEADERS
+        # DIRECTORY.IMPLEMENTATION_HEADERS
+        # DIRECTORY.SOURCES
+        # DIRECTORY.TESTS
+        # DIRECTORY.EXAMPLES
+        # DIRECTORY.DOCS
+        # DIRECTORY.PAPERS
+
+        ## File contents
+        # FILE.NAME
+        # FILE.TEST_NAMES
+        # FILE.LICENSE_ID
+        # FILE.COPYRIGHT
+
+        ## C++
+        # CPP.NAMESPACE
+    ]
+    # Append dynamic values to the checks.
+    for check in checks:
+        check.set_repo_name(repo_name)
+        check.set_top_level(toplevel)
+
+    # Actually run the checks
+    fix_inplace = True
+    for check in checks:
+        if not check.check() and fix_inplace:
+            check.fix()
+
+    # if check_repo_name(repo_name) and \
+        # check_top_level_files(toplevel) and \
+        # check_readme(os.path.join(toplevel, "README.md"), repo_name) and \
+        # check_directory_layout(toplevel, repo_name) and \
+        # True:
+        # print("all checks passed!")
+
+if __name__ == "__main__":
+    main()
