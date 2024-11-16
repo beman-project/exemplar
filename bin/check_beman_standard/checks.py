@@ -36,6 +36,7 @@ class BemanStandardCheckBase:
     # - If the standard is applied, the check should return True.
     # - Otherwise, the check should be applied inplace. If the check cannot be applied inplace, the check should return False.
     def fix(self):
+        print(f'{self.log_level} [{self.name}]: Fixing the issue - N/A!!!')
         return True
 
     # Logs a message with the check's log level.
@@ -64,8 +65,6 @@ class BemanStandardCheckRepoName(BemanStandardCheckBase):
         self.log(f'The name "{self.repo_name}" should be snake_case')
         return False
 
-    def fix(self):
-        return True
 
 class BemanStandardCheckTopLevel(BemanStandardCheckBase):
     def __init__(self):
@@ -93,6 +92,3 @@ class BemanStandardCheckTopLevel(BemanStandardCheckBase):
 
         top_level_files = ['CMakeLists.txt', 'LICENSE', 'README.md']
         return all(map(check_file, top_level_files))
-
-    def fix(self):
-        return True
