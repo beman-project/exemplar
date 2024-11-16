@@ -8,6 +8,9 @@ def run(command):
     bin = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).stdout.read()
     return bin.decode("ascii")
 
+def run_check(command):
+    return subprocess.Popen(command, shell=True, stdout=subprocess.PIPE).wait()
+
 def get_repo_name():
     remote = run("git config --get remote.origin.url")
     return re.sub("\.git\s*$", "", os.path.basename(remote))

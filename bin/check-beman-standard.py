@@ -136,9 +136,12 @@ def main():
         check.set_top_level(toplevel)
 
     # Actually run the checks
-        print(f'CHECK {check.name} --\n\n\n')
-    print(f"args.fix={args.fix}")
     fix_inplace = args.fix == True
+    if fix_inplace and run_check("git diff --quiet HEAD"):
+        print("ERROR: there are uncommited changes and a request for fixes.")
+        print("    Please commit the changes before running the checks with fixes.")
+        return
+
     for check in checks:
         print(f'CHECK {check.name} ++')
         if not check.check() and fix_inplace and check.fix():
