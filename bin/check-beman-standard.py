@@ -69,8 +69,8 @@ def main():
     parser.add_argument("--fix", help="fix fixable problems", action=argparse.BooleanOptionalAction)
     args = parser.parse_args()
 
-    toplevel = get_repo_toplevel()
-    repo_name = get_repo_name()
+    toplevel = git.get_repo_toplevel()
+    repo_name = git.get_repo_name()
     print(f"Checking {repo_name} at {toplevel}")
 
     # Apply the [Beman Standard](https://github.com/beman-project/beman/blob/main/docs/BEMAN_STANDARD.md).
@@ -137,7 +137,7 @@ def main():
 
     # Actually run the checks
     fix_inplace = args.fix == True
-    if fix_inplace and run_check("git diff --quiet HEAD"):
+    if fix_inplace and git.has_uncommited_changes():
         print("ERROR: there are uncommited changes and a request for fixes.")
         print("    Please commit the changes before running the checks with fixes.")
         return

@@ -5,15 +5,6 @@ import re
 import urllib.request
 from .utils import *
 
-class Git:
-    def __init__(self):
-        pass
-
-    def add(self, file):
-        run(f"git add {file}")
-
-git = Git()
-
 def copy_url(url, file, from_str=None, to_str=None):
     """
     Get the resource pointed to by 'url' and write the content to
