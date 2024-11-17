@@ -168,13 +168,12 @@ Implements: TODO [Pxxxx](http://wg21.link/pxxxx)
         return True
 
 
-class BemanStandardCheckCMakeBase(BemanStandardCheckBase):
+class BemanStandardCheckContentBase(BemanStandardCheckBase):
     def __init__(self, name, level):
         super().__init__(name, level)
 
     # Reads the CMakeLists.txt file and returns a string.
-    def read(self, path=None, log=True):
-        path = path if path is not None else self.cmakelists_path
+    def read(self, path, log=True):
         try:
             with open(path) as f:
                 if not f:
@@ -187,7 +186,7 @@ class BemanStandardCheckCMakeBase(BemanStandardCheckBase):
             return False
 
 
-class BemanStandardCheckCMakeProjectName(BemanStandardCheckCMakeBase):
+class BemanStandardCheckCMakeProjectName(BemanStandardCheckContentBase):
     """
     Extract project name, description, and languages considering comments everywhere.
 
@@ -210,7 +209,7 @@ class BemanStandardCheckCMakeProjectName(BemanStandardCheckCMakeBase):
         if not super().check():
             return False
 
-        cmakelists_content = self.read()
+        cmakelists_content = self.read(self.cmakelists_path)
         if not cmakelists_content:
             return False
 
@@ -272,7 +271,7 @@ class BemanStandardCheckCMakeProjectName(BemanStandardCheckCMakeBase):
 
         return True
 
-class BemanStandardCheckCMakeSingleRule(BemanStandardCheckCMakeBase):
+class BemanStandardCheckCMakeSingleRule(BemanStandardCheckContentBase):
     def __init__(self, name, level, rule):
         super().__init__(name, level)
         self.rule = rule
