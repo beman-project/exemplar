@@ -275,7 +275,7 @@ class BemanStandardCheckCMakeSingleRule(BemanStandardCheckContentBase):
     def __init__(self, name, level, rule):
         super().__init__(name, level)
         self.rule = rule
-    
+
     def check(self):
         if not super().check():
             return False
@@ -288,7 +288,7 @@ class BemanStandardCheckCMakeSingleRule(BemanStandardCheckContentBase):
             if not all_matches:
                 return None
             return all_matches
-        
+
         # Check root CMakeLists.txt.
         root_matches = get_add_library_lines(self.cmakelists_path)
         non_root_matches = get_add_library_lines(f'{self.top_level}/src/beman/{self.repo_name}/CMakeLists.txt')
@@ -332,3 +332,18 @@ class BemanStandardCheckCMakeLibraryAlias(BemanStandardCheckCMakeSingleRule):
     # TODO: Darius: This rule is not correct. It should be more general.
     def __init__(self):
         super().__init__("CMAKE.LIBRARY_ALIAS", "REQUIREMENT", r'add_library\(\s*([a-zA-Z_][a-zA-Z0-9_:]*)\s+ALIAS\s+\1\)')
+
+class BemanStandardCheckReadmeTitle(BemanStandardCheckContentBase):
+    def __init__(self):
+        super().__init__("README.TITLE", "REQUIREMENT")
+
+    def check(self):
+        if not super().check():
+            return False
+        content = self.read("README.md")
+
+        if re.match(f"(\s*<!--\s*SPDX-License-Identifier:.*\s*-->\s*)?#\s*beman\.{self.repo_name}.*", content, re.DOTALL):
+            return True
+
+        self.log(f"'README.md' needs to start with '# beman.{self.repo_name}' (possibly after a license declaration)")
+        return False
