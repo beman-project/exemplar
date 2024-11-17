@@ -14,13 +14,24 @@ class Git:
 
 git = Git()
 
-def copy_url(url, stream):
+def copy_url(url, file, from_str=None, to_str=None):
     """
     Get the resource pointed to by 'url' and write the content to
-    the stream passed as 'stream'. Upon success the function returns 'True'.
+    the file passed as 'file'. If the passed `from_str` and `to_str` aren't
+    `None` variations of the string `from` are replaced by corresponding
+    variations of `to` (variations are [identity, upper(), and title()]).
+    Upon success the function returns 'True'.
     """
     try:
-        stream.write(urllib.request.urlopen(url).read())
+        with open(file, "w") as stream:
+            content = urllib.request.urlopen(url).read()
+            git.add(file) # only add to git once we managed to get the content
+            str = content.decode()
+            if from_str != None and to_str != None:
+                str = str.replace(from_str, to_str)
+                str = str.replace(from_str.upper(), to_str.upper())
+                str = str.replace(from_str.title(), to_str.title())
+            stream.write(str)
         return True
     except:
         return False
@@ -120,7 +131,12 @@ class BemanStandardCheckCmakeExists(BemanStandardCheckTopLevel):
     [TOPLEVEL.CMAKE] REQUIREMENT: There must be a CMakeLists.txt file at the repository's root that builds and tests (via. CTest) the library.
     """
     def __init__(self):
-        super().__init__("TOPLEVEL.CMAKE", "xCMakeLists.txt")
+        super().__init__("TOPLEVEL.CMAKE", "CMakeLists.txt")
+
+    def fix(self):
+        if self.check_no_log():
+            return False
+        return copy_url("https://raw.githubusercontent.com/beman-project/exemplar/refs/heads/main/CMakeLists.txt", self.file, "exemplar", self.repo_name)
 
 class BemanStandardCheckLicenseExists(BemanStandardCheckTopLevel):
     """
@@ -132,9 +148,7 @@ class BemanStandardCheckLicenseExists(BemanStandardCheckTopLevel):
     def fix(self):
         if self.check_no_log():
             return False
-        with open(self.file, "wb") as license:
-            git.add(self.file)
-            return copy_url("https://raw.githubusercontent.com/beman-project/beman/refs/heads/main/LICENSE.txt", license)
+        return copy_url("https://raw.githubusercontent.com/beman-project/beman/refs/heads/main/LICENSE.txt", self.file)
 
 class BemanStandardCheckReadmeExists(BemanStandardCheckTopLevel):
     """
@@ -170,13 +184,16 @@ class BemanStandardCheckCMakeBase(BemanStandardCheckBase):
     # Reads the CMakeLists.txt file and returns a string.
     def read(self, path=None, log=True):
         path = path if path is not None else self.cmakelists_path
-        with open(path) as f:
-            if not f:
-                if log:
-                    self.log(f'Missing {path} or cannot open.)')
-                return None
+        try:
+            with open(path) as f:
+                if not f:
+                    if log:
+                        self.log(f'Missing {path} or cannot open.)')
+                    return None
 
-            return f.read()
+                return f.read()
+        except:
+            return False
 
 
 class BemanStandardCheckCMakeProjectName(BemanStandardCheckCMakeBase):
