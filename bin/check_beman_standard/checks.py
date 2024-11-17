@@ -335,15 +335,30 @@ class BemanStandardCheckCMakeLibraryAlias(BemanStandardCheckCMakeSingleRule):
 
 class BemanStandardCheckReadmeTitle(BemanStandardCheckContentBase):
     def __init__(self):
-        super().__init__("README.TITLE", "REQUIREMENT")
+        super().__init__("README.TITLE", "RECOMMENDATION")
 
     def check(self):
         if not super().check():
             return False
         content = self.read("README.md")
 
-        if re.match(f"(\s*<!--\s*SPDX-License-Identifier:.*\s*-->\s*)?#\s*beman\.{self.repo_name}.*", content, re.DOTALL):
+        if re.match(f"(\s*<!--\s*SPDX-License-Identifier:.*\s*-->\s*)?#\s*beman\.{self.repo_name}:.*", content, re.DOTALL):
             return True
 
-        self.log(f"'README.md' needs to start with '# beman.{self.repo_name}' (possibly after a license declaration)")
+        self.log(f"'README.md' should start with '# beman.{self.repo_name}: <description>' (possibly after a license declaration)")
+        return False
+
+class BemanStandardCheckReadmeImplements(BemanStandardCheckContentBase):
+    def __init__(self):
+        super().__init__("README.IMPLEMENTS", "RECOMMENDATION")
+
+    def check(self):
+        if not super().check():
+            return False
+        content = self.read("README.md")
+
+        if re.match(f"(?s:.)*Implements:(?s:.)*https://wg21.link/[pP][0-9]*(?s:.)*", content, re.MULTILINE):
+            return True
+
+        self.log(f"'README.md' should contain a declaration of the paper(s) implemented (Implements: ... https://wg21.link/Pxxxx)")
         return False

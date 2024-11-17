@@ -95,7 +95,7 @@ def main():
         ## README.md
         BemanStandardCheckReadmeTitle(), # README.TITLE
         # README.PURPOSE
-        # README.IMPLEMENTS
+        BemanStandardCheckReadmeImplements(), # README.IMPLEMENTS
 
         ## CMake
         # CMAKE.DEFAULT
@@ -137,7 +137,7 @@ def main():
 
     # Actually run the checks
     fix_inplace = args.fix == True
-    if fix_inplace and git.has_uncommited_changes() and False:
+    if fix_inplace and git.has_uncommited_changes():
         print("ERROR: there are uncommited changes and a request for fixes.")
         print("    Please commit the changes before running the checks with fixes.")
         return
