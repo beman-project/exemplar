@@ -40,10 +40,6 @@ jobs:
             cpp: clang++
             c: clang
             os: ubuntu-latest
-          - description: "windows MSVC"
-            cpp: cl
-            c: cl
-            os: windows-latest
         cpp_version: [17, 20, 23, 26]
         cmake_args:
           - description: "Default"
@@ -71,6 +67,25 @@ jobs:
             cmake_args:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
+          - platform:
+              description: "windows MSVC"
+              cpp: cl
+              c: cl
+              os: windows-latest
+            cpp_version: 17
+            cmake_args:
+              description: "ASan"
+              args: "-DCMAKE_CXX_FLAGS=-fsanitize=address"
+          - platform:
+              description: "windows MSVC"
+              cpp: cl
+              c: cl
+              os: windows-latest
+            cpp_version: 17
+            cmake_args:
+              description: "Default"
+              args: ""
+
 
     name: "Unit: ${{ matrix.platform.description }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform.os }}
