@@ -12,11 +12,15 @@ on:
 
 jobs:
   preset-test:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        preset: ["gcc-debug", "gcc-release"]
-    name: "Preset: ${{ matrix.preset }}"
+        presets:
+          - preset: "gcc-debug"
+            platform: "ubuntu-latest"
+          - preset: "gcc-release"
+            platform: "ubuntu-latest"
+    name: "Preset: ${{ matrix.presets.preset }} on ${{ matrix.presets.platform }}"
+    runs-on: ${{ matrix.presets.platform }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -25,7 +29,7 @@ jobs:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
       - name: Run preset
-        run: cmake --workflow --preset ${{ matrix.preset }}
+        run: cmake --workflow --preset ${{ matrix.presets.preset }}
 
   gtest-test:
     strategy:
