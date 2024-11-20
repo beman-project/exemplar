@@ -23,6 +23,10 @@ jobs:
             platform: "macos-latest"
           - preset: "xcode-release"
             platform: "macos-latest"
+          - preset: "msvc-debug"
+            platform: "windows-latest"
+          - preset: "msvc-release"
+            platform: "windows-latest"
     name: "Preset: ${{ matrix.presets.preset }} on ${{ matrix.presets.platform }}"
     runs-on: ${{ matrix.presets.platform }}
     steps:

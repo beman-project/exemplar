@@ -36,7 +36,9 @@
         "_release-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=leak -fsanitize=undefined"
       }
     },
     {
@@ -59,6 +61,26 @@
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "g++"
       }
+    },
+    {
+      "name": "msvc-debug",
+      "displayName": "MSVC Debug Build",
+      "inherits": ["_root-config"],
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS": "/fsanitize=address /Zi"
+      }
+    },
+    {
+      "name": "msvc-release",
+      "displayName": "MSVC Release Build",
+      "inherits": ["_root-config"],
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_CXX_FLAGS": "/O2"
+      }
     }
   ],
   "buildPresets": [
@@ -77,6 +99,14 @@
     {
       "name": "xcode-release",
       "configurePreset": "xcode-release"
+    },
+    {
+      "name": "msvc-debug",
+      "configurePreset": "msvc-debug"
+    },
+    {
+      "name": "msvc-release",
+      "configurePreset": "msvc-release"
     }
   ],
   "testPresets": [
@@ -110,6 +140,16 @@
       "name": "xcode-release",
       "inherits": "_test_base",
       "configurePreset": "xcode-release"
+    },
+    {
+      "name": "msvc-debug",
+      "inherits": "_test_base",
+      "configurePreset": "msvc-debug"
+    },
+    {
+      "name": "msvc-release",
+      "inherits": "_test_base",
+      "configurePreset": "msvc-release"
     }
   ],
   "workflowPresets": [
@@ -178,6 +218,40 @@
         {
           "type": "test",
           "name": "xcode-release"
+        }
+      ]
+    },
+    {
+      "name": "msvc-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "test",
+          "name": "msvc-debug"
+        }
+      ]
+    },
+    {
+      "name": "msvc-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-release"
+        },
+        {
+          "type": "test",
+          "name": "msvc-release"
         }
       ]
     }
