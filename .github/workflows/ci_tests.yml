@@ -19,6 +19,8 @@ jobs:
             platform: "ubuntu-latest"
           - preset: "gcc-release"
             platform: "ubuntu-latest"
+          - preset: "xcode-debug"
+            platform: "macos-latest"
     name: "Preset: ${{ matrix.presets.preset }} on ${{ matrix.presets.platform }}"
     runs-on: ${{ matrix.presets.platform }}
     steps:
