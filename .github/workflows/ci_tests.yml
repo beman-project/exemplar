@@ -36,6 +36,11 @@ jobs:
         with:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
+      - name: Setup MSVC
+        if: startsWith(matrix.presets.platform, 'windows')
+        uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
       - name: Run preset
         run: cmake --workflow --preset ${{ matrix.presets.preset }}
 
