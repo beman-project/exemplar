@@ -12,17 +12,11 @@ on:
 
 jobs:
   preset-test:
+    runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        preset: ["gcc-debug"]
-        os: [ubuntu-latest, macos-latest]
-        include:
-          # Release don't have variants among platforms
-          - preset: "gcc-release"
-            os: ubuntu-latest
-    runs-on: ${{ matrix.os }}
-    name: "Preset: ${{ matrix.preset }} on ${{ matrix.os }}"
+        preset: ["gcc-debug", "gcc-release"]
+    name: "Preset: ${{ matrix.preset }}"
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
