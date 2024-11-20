@@ -41,12 +41,23 @@
     },
     {
       "name": "xcode-debug",
-      "displayName": "XCode Debug Build",
+      "displayName": "xcode Debug Build",
       "inherits": ["_root-config"],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "g++",
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined"
+      }
+    },
+    {
+      "name": "xcode-release",
+      "displayName": "xcode Release Build",
+      "inherits": [
+        "_root-config",
+        "_release-base"
+      ],
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "g++"
       }
     }
   ],
@@ -62,6 +73,10 @@
     {
       "name": "xcode-debug",
       "configurePreset": "xcode-debug"
+    },
+    {
+      "name": "xcode-release",
+      "configurePreset": "xcode-release"
     }
   ],
   "testPresets": [
@@ -90,6 +105,11 @@
       "name": "xcode-debug",
       "inherits": "_test_base",
       "configurePreset": "xcode-debug"
+    },
+    {
+      "name": "xcode-release",
+      "inherits": "_test_base",
+      "configurePreset": "xcode-release"
     }
   ],
   "workflowPresets": [
@@ -141,6 +161,23 @@
         {
           "type": "test",
           "name": "xcode-debug"
+        }
+      ]
+    },
+    {
+      "name": "xcode-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "xcode-release"
+        },
+        {
+          "type": "build",
+          "name": "xcode-release"
+        },
+        {
+          "type": "test",
+          "name": "xcode-release"
         }
       ]
     }
