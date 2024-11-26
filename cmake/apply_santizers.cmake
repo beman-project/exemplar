@@ -7,58 +7,46 @@
 # ASan: All sanitizer (majorly Address sanitizer) that doesn't conflict with TSan
 # OFF: No sanitizer
 
-if(DEFINED BEMAN_BUILDSYS_SANITIZER)
-    message("Applying sanitizers for ${CMAKE_CXX_COMPILER_ID}")
-
-    if(BEMAN_BUILDSYS_SANITIZER STREQUAL "ASan")
+function(GENERATE_SANITIZER_PARAM KIND COMPILER_ID SANITIZER_FLAGS)
+    if(${KIND} STREQUAL "ASan")
         set(_ASAN_ADDR "-fsanitize=address")
         set(_ASAN_LEAK "-fsanitize=leak")
         set(_ASAN_MISC
             "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined"
         )
 
-        # Exclude -fsanitize=leak on Apple Clang as it is not supported.
-        if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+        if(${COMPILER_ID} STREQUAL "AppleClang")
+            # Exclude -fsanitize=leak on Apple Clang as it is not supported.
             message(STATUS "Using AppleClang; excluding -fsanitize=leak")
-            set(SANITIZER_FLAGS "${_ASAN_ADDR} ${_ASAN_MISC}")
+            set(RES "${_ASAN_ADDR} ${_ASAN_MISC}")
+        elseif(${COMPILER_ID} STREQUAL "MSVC")
             # Only include Address sanitizer on MSVC, debug info must be included for MSVC to work
-        elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
             message(STATUS "Using MSVC; only Address sanitizer is set")
-            set(SANITIZER_FLAGS "/fsanitize=address /Zi")
+            set(RES "/fsanitize=address /Zi")
+        elseif(${COMPILER_ID} STREQUAL "Clang" OR ${COMPILER_ID} STREQUAL "GNU")
             # We are able to enable all sanitizers on Clang and GNU
-        elseif(
-            CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
-            OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-        )
-            set(SANITIZER_FLAGS "${_ASAN_ADDR} ${_ASAN_LEAK} ${_ASAN_MISC}")
+            set(RES "${_ASAN_ADDR} ${_ASAN_LEAK} ${_ASAN_MISC}")
         else()
             message(
                 STATUS
-                "Unknown compiler ${CMAKE_CXX_COMPILER_ID}, no sanitizer is set"
+                "Unknown compiler ${${COMPILER_ID}}, no sanitizer is set"
             )
         endif()
-    elseif(BEMAN_BUILDSYS_SANITIZER STREQUAL "TSan")
+    elseif(KIND STREQUAL "TSan")
         # Basic TSan flags
-        if(
-            CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
-            OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-        )
-            set(SANITIZER_FLAGS "-fsanitize=thread")
+        if(${COMPILER_ID} STREQUAL "Clang" OR ${COMPILER_ID} STREQUAL "GNU")
+            set(RES "-fsanitize=thread")
         else()
             message(
                 STATUS
-                "TSan not supported/ Unknown compiler: ${CMAKE_CXX_COMPILER_ID}, no sanitizer is set"
+                "TSan not supported/ Unknown compiler: ${${COMPILER_ID}}, no sanitizer is set"
             )
         endif()
-    elseif(BEMAN_BUILDSYS_SANITIZER STREQUAL "OFF")
-        set(SANITIZER_FLAGS "")
+    elseif(KIND STREQUAL "OFF")
+        set(RES "")
     else()
-        message(
-            FATAL_ERROR
-            "Invalid BEMAN_BUILDSYS_SANITIZER option: ${BEMAN_BUILDSYS_SANITIZER}"
-        )
+        message(FATAL_ERROR "Invalid Sanitizer class kind option: ${KIND}")
     endif()
 
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
-endif()
+    set(${SANITIZER_FLAGS} ${RES} PARENT_SCOPE)
+endfunction()

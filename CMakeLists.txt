@@ -26,8 +26,17 @@ option(
 include(FetchContent)
 include(GNUInstallDirs)
 
+include(cmake/apply_santizers.cmake)
+
 if(DEFINED BEMAN_BUILDSYS_SANITIZER)
-    include(cmake/apply_santizers.cmake)
+    message(
+        "Applying sanitizer set ${BEMAN_BUILDSYS_SANITIZER} for ${CMAKE_CXX_COMPILER_ID}"
+    )
+
+    generate_sanitizer_param(${BEMAN_BUILDSYS_SANITIZER} ${CMAKE_CXX_COMPILER_ID} SANITIZER_FLAGS)
+
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${SANITIZER_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SANITIZER_FLAGS}")
 endif()
 
 if(BEMAN_EXEMPLAR_BUILD_TESTS)
