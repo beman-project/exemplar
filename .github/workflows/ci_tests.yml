@@ -147,8 +147,6 @@ jobs:
       matrix:
         compilers:
           - class: GNU
-            version: 15
-          - class: GNU
             version: 14
     name: "Compiler: ${{ matrix.compilers.class }} ${{ matrix.compilers.version }}"
     steps:
