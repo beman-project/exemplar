@@ -160,21 +160,37 @@ jobs:
         with:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
-      - name: Install GCC
+      - name: Install Compiler
+        id: install-compiler
         run: |
-          sudo add-apt-repository universe
-          sudo apt-get update
-          sudo apt-get install -y gcc-${{ matrix.compilers.version }}
-          sudo apt-get install -y g++-${{ matrix.compilers.version }}
+          if [ "${{ matrix.compilers.class }}" = "GNU" ]; then
+            CC=gcc-${{ matrix.compilers.version }}
+            CXX=g++-${{ matrix.compilers.version }}
 
-          gcc-${{ matrix.compilers.version }} --version
-          g++-${{ matrix.compilers.version }} --version
+            sudo add-apt-repository universe
+            sudo apt-get update
+            sudo apt-get install -y $CC
+            sudo apt-get install -y $CXX
+
+            $CC --version
+            $CXX --version
+
+            echo "CC=$CC" >> "$GITHUB_OUTPUT"
+            echo "CXX=$CXX" >> "$GITHUB_OUTPUT"
+          else
+            wget https://apt.llvm.org/llvm.sh
+            chmod +x llvm.sh
+            sudo bash llvm.sh ${{ matrix.compilers.version }}
+
+            clang-${{ matrix.compilers.version }} --version
+            clang++-${{ matrix.compilers.version }} --version
+          fi
       - name: Configure CMake
         run: |
           cmake -B build -S . -DCMAKE_CXX_STANDARD=20
         env:
-          CC: gcc
-          CXX: g++
+          CC: ${{ steps.install-compiler.outputs.CC }}
+          CXX: ${{ steps.install-compiler.outputs.CXX }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Debug
         run: |
