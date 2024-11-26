@@ -152,6 +152,8 @@ jobs:
             version: 13
           - class: GNU
             version: 12
+          - class: LLVM
+            version: 20
     name: "Compiler: ${{ matrix.compilers.class }} ${{ matrix.compilers.version }}"
     steps:
       - uses: actions/checkout@v4
@@ -182,8 +184,14 @@ jobs:
             chmod +x llvm.sh
             sudo bash llvm.sh ${{ matrix.compilers.version }}
 
-            clang-${{ matrix.compilers.version }} --version
-            clang++-${{ matrix.compilers.version }} --version
+            CC=clang-${{ matrix.compilers.version }}
+            CXX=clang++-${{ matrix.compilers.version }}
+
+            $CC --version
+            $CXX --version
+
+            echo "CC=$CC" >> "$GITHUB_OUTPUT"
+            echo "CXX=$CXX" >> "$GITHUB_OUTPUT"
           fi
       - name: Configure CMake
         run: |
