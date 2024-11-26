@@ -172,18 +172,14 @@ jobs:
           CC: gcc
           CXX: g++
           CMAKE_GENERATOR: "Ninja Multi-Config"
-      - name: Build Release
-        run: |
-          cmake --build build --config Release --verbose
-          cmake --build build --config Release --target all_verify_interface_header_sets
-          cmake --install build --config Release --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
       - name: Build Debug
         run: |
           cmake --build build --config Debug --verbose
           cmake --build build --config Debug --target all_verify_interface_header_sets
           cmake --install build --config Debug --prefix /opt/beman.exemplar
           find /opt/beman.exemplar -type f
+      - name: Test Debug
+        run: ctest --test-dir build --build-config Debug
 
 
   create-issue-when-fault:
