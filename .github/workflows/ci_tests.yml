@@ -148,6 +148,10 @@ jobs:
         compilers:
           - class: GNU
             version: 14
+          - class: GNU
+            version: 13
+          - class: GNU
+            version: 12
     name: "Compiler: ${{ matrix.compilers.class }} ${{ matrix.compilers.version }}"
     steps:
       - uses: actions/checkout@v4
