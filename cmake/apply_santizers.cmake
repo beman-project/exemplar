@@ -1,12 +1,9 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-# BEMAN_BUILDSYS_SANITIZER is not a general use option
-# It is used by preset and CI system.
 # There's three possible values:
 # TSan: Thread sanitizer
 # ASan: All sanitizer (majorly Address sanitizer) that doesn't conflict with TSan
 # OFF: No sanitizer
-
 function(GENERATE_SANITIZER_PARAM KIND COMPILER_ID SANITIZER_FLAGS)
     if(${KIND} STREQUAL "ASan")
         set(_ASAN_ADDR "-fsanitize=address")

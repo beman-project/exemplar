@@ -29,6 +29,8 @@ include(GNUInstallDirs)
 include(cmake/apply_santizers.cmake)
 
 if(DEFINED BEMAN_BUILDSYS_SANITIZER)
+    # BEMAN_BUILDSYS_SANITIZER is not a general use option
+    # It is used by preset and CI system.
     message(
         "Applying sanitizer set ${BEMAN_BUILDSYS_SANITIZER} for ${CMAKE_CXX_COMPILER_ID}"
     )
