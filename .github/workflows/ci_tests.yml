@@ -154,6 +154,12 @@ jobs:
             version: 12
           - class: LLVM
             version: 20
+          - class: LLVM
+            version: 19
+          - class: LLVM
+            version: 18
+          - class: LLVM
+            version: 17
     name: "Compiler: ${{ matrix.compilers.class }} ${{ matrix.compilers.version }}"
     steps:
       - uses: actions/checkout@v4
