@@ -20,10 +20,10 @@ if(BEMAN_BUILDSYS_SANITIZER STREQUAL "ASan")
     if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
         message(STATUS "Using AppleClang; excluding -fsanitize=leak")
         set(SANITIZER_FLAGS "${_ASAN_ADDR} ${_ASAN_MISC}")
-        # Only include Address sanitizer on MSVC
+        # Only include Address sanitizer on MSVC, debug info must be included for MSVC to work
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         message(STATUS "Using MSVC; only Address sanitizer is set")
-        set(SANITIZER_FLAGS _ASAN_ADDR)
+        set(SANITIZER_FLAGS "/fsanitize=address /Zi")
         # We are able to enable all sanitizers on Clang and GNU
     elseif(
         CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
