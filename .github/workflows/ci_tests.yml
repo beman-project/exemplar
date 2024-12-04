@@ -108,8 +108,8 @@ jobs:
       - name: Print installed softwares
         run: |
           echo "Compiler:"
-          ${{ matrix.platform.cpp }} --version
-          ${{ matrix.platform.c }} --version
+          ${{ matrix.platform.cpp }} ${{ matrix.platform.cpp == 'cl' && '' || '--version' }}
+          ${{ matrix.platform.c }}  ${{ matrix.platform.cpp == 'cl' && '' || '--version' }}
 
           echo "Build system:"
           cmake --version
