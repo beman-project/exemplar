@@ -67,8 +67,6 @@ jobs:
             cmake_args:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
-            # MSVC has limited support for sanitizers, so we use include here for MSVC as an exception.
-            # This should be simplified after beman-project/exemplar#76 is merged.
           - platform:
               description: "windows MSVC"
               cpp: cl
