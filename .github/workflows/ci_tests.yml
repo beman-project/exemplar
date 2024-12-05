@@ -174,14 +174,15 @@ jobs:
         run: |
           cmake --build build --config Release --verbose
           cmake --build build --config Release --target all_verify_interface_header_sets
-          cmake --install build --config Release --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          cmake --install build --config Release --prefix ${{ runner.temp }}/beman.exemplar
+          ls -R ${{ runner.temp }}/beman.exemplar
       - name: Build Debug
         run: |
           cmake --build build --config Debug --verbose
           cmake --build build --config Debug --target all_verify_interface_header_sets
           cmake --install build --config Debug --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          cmake --install build --config Release --prefix ${{ runner.temp }}/beman.exemplar
+          ls -R ${{ runner.temp }}/beman.exemplar
 
   create-issue-when-fault:
     runs-on: ubuntu-latest
