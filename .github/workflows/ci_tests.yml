@@ -32,11 +32,11 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - description: "ubuntu gcc"
+          - description: "Ubuntu GCC"
             cpp: g++
             c: gcc
             os: ubuntu-latest
-          - description: "ubuntu clang"
+          - description: "Ubuntu Clang"
             cpp: clang++
             c: clang
             os: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
             args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
           - platform:
-              description: "ubuntu gcc"
+              description: "Ubuntu GCC"
               cpp: g++
               c: gcc
               os: ubuntu-latest
@@ -59,7 +59,7 @@ jobs:
               description: "Werror"
               args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
           - platform:
-              description: "ubuntu gcc"
+              description: "Ubuntu GCC"
               cpp: g++
               c: gcc
               os: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
           - platform:
-              description: "windows MSVC"
+              description: "Windows MSVC"
               cpp: cl
               c: cl
               os: windows-latest
@@ -77,7 +77,7 @@ jobs:
               description: "Default"
               args: ""
           - platform:
-              description: "windows MSVC"
+              description: "Windows MSVC"
               cpp: cl
               c: cl
               os: windows-latest
