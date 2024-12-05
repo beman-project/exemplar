@@ -42,9 +42,9 @@ jobs:
           - description: "Default"
             args: ""
           - description: "TSan"
-            args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
+            args: "-DBEMAN_BUILDSYS_SANITIZER=TSan"
           - description: "ASan"
-            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
+            args: "-DBEMAN_BUILDSYS_SANITIZER=ASan"
         include:
           - platform: ubuntu-latest
             compiler:
