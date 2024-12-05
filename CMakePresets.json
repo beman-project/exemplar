@@ -11,6 +11,13 @@
       }
     },
     {
+      "name": "_debug-base",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
       "name": "_release-base",
       "hidden": true,
       "cacheVariables": {
@@ -21,7 +28,10 @@
     {
       "name": "gcc-debug",
       "displayName": "GCC Debug Build",
-      "inherits": ["_root-config"],
+      "inherits": [
+        "_root-config",
+        "_debug-base"
+      ],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "g++",
         "CMAKE_BUILD_TYPE": "Debug",
@@ -42,7 +52,10 @@
     {
       "name": "xcode-debug",
       "displayName": "xcode Debug Build",
-      "inherits": ["_root-config"],
+      "inherits": [
+        "_root-config",
+        "_debug-base"
+      ],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "g++",
         "CMAKE_BUILD_TYPE": "Debug",
@@ -63,11 +76,14 @@
     {
       "name": "msvc-debug",
       "displayName": "MSVC Debug Build",
-      "inherits": ["_root-config"],
+      "inherits": [
+        "_root-config",
+        "_debug-base"
+      ],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_FLAGS": "/fsanitize=address /Zi"
+        "CMAKE_CXX_FLAGS": "/permissive- /fsanitize=address /Zi"
       }
     },
     {
@@ -77,7 +93,7 @@
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_CXX_FLAGS": "/O2"
+        "CMAKE_CXX_FLAGS": "/permissive- /O2"
       }
     }
   ],
