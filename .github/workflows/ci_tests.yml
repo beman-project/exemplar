@@ -104,10 +104,18 @@ jobs:
         with:
           arch: x64
       - name: Print installed softwares
+        shell: bash
         run: |
           echo "Compiler:"
-          ${{ matrix.platform.cpp }} --version
-          ${{ matrix.platform.c }} --version
+
+          # cl does not have a --version option
+          if [ "${{ matrix.platform.cpp }}" != "cl" ]; then
+            ${{ matrix.platform.cpp }} --version
+            ${{ matrix.platform.c }} --version
+          else
+            ${{ matrix.platform.cpp }}
+            ${{ matrix.platform.c }}
+          fi
 
           echo "Build system:"
           cmake --version
