@@ -57,7 +57,7 @@
         "_debug-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_COMPILER": "clang++",
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined"
       }
@@ -70,7 +70,7 @@
         "_release-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_CXX_COMPILER": "clang++"
       }
     },
     {
