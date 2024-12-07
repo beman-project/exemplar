@@ -83,7 +83,7 @@
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_FLAGS": "/permissive- /fsanitize=address /Zi"
+        "CMAKE_CXX_FLAGS": "/EHsc /permissive- /fsanitize=address /Zi"
       }
     },
     {
@@ -93,7 +93,7 @@
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "cl",
         "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_CXX_FLAGS": "/permissive- /O2"
+        "CMAKE_CXX_FLAGS": "/EHsc /permissive- /O2"
       }
     }
   ],
