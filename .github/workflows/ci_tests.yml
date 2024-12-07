@@ -147,8 +147,6 @@ jobs:
       matrix:
         compilers:
           - class: GNU
-            version: 15
-          - class: GNU
             version: 14
           - class: GNU
             version: 13
@@ -177,12 +175,7 @@ jobs:
             CC=gcc-${{ matrix.compilers.version }}
             CXX=g++-${{ matrix.compilers.version }}
 
-            if [ "${{ matrix.compilers.version}}" = "15" ]; then
-              sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-            else
-              sudo add-apt-repository universe
-            fi
-
+            sudo add-apt-repository universe
             sudo apt-get update
             sudo apt-get install -y $CC
             sudo apt-get install -y $CXX
