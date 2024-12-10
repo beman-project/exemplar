@@ -31,12 +31,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform: [ubuntu-latest]
-        compiler:
-          - cpp: g++
+        platform:
+          - description: "Ubuntu GCC"
+            cpp: g++
             c: gcc
-          - cpp: clang++
+            os: ubuntu-latest
+          - description: "Ubuntu Clang"
+            cpp: clang++
             c: clang
+            os: ubuntu-latest
         cpp_version: [17, 20, 23, 26]
         cmake_args:
           - description: "Default"
@@ -46,25 +49,48 @@ jobs:
           - description: "ASan"
             args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
         include:
-          - platform: ubuntu-latest
-            compiler:
+          - platform:
+              description: "Ubuntu GCC"
               cpp: g++
               c: gcc
+              os: ubuntu-latest
             cpp_version: 17
             cmake_args:
               description: "Werror"
               args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
-          - platform: ubuntu-latest
-            compiler:
+          - platform:
+              description: "Ubuntu GCC"
               cpp: g++
               c: gcc
+              os: ubuntu-latest
             cpp_version: 17
             cmake_args:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
+          - platform:
+              description: "Windows MSVC"
+              cpp: cl
+              c: cl
+              os: windows-latest
+            cpp_version: 17
+            cmake_args:
+              description: "Default"
+              args: ""
+          - platform:
+              description: "Windows MSVC"
+              cpp: cl
+              c: cl
+              os: windows-latest
+            cpp_version: 17
+            cmake_args:
+              description: "ASan"
+              # Debug infomation needed to avoid cl: C5072
+              # https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-c5072?view=msvc-170
+              args: "-DCMAKE_CXX_FLAGS='/fsanitize=address /Zi'"
 
-    name: "Unit: ${{ matrix.compiler.c }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
-    runs-on: ${{ matrix.platform }}
+
+    name: "Unit: ${{ matrix.platform.description }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
+    runs-on: ${{ matrix.platform.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Ninja
@@ -72,33 +98,51 @@ jobs:
         with:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
+      - name: Setup MSVC
+        if: startsWith(matrix.platform.os, 'windows')
+        uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
       - name: Print installed softwares
+        shell: bash
         run: |
-          clang++ --version
-          g++ --version
+          echo "Compiler:"
+
+          # cl does not have a --version option
+          if [ "${{ matrix.platform.cpp }}" != "cl" ]; then
+            ${{ matrix.platform.cpp }} --version
+            ${{ matrix.platform.c }} --version
+          else
+            ${{ matrix.platform.cpp }}
+            ${{ matrix.platform.c }}
+          fi
+
+          echo "Build system:"
           cmake --version
           ninja --version
       - name: Configure CMake
         run: |
           cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
         env:
-          CC: ${{ matrix.compiler.c }}
-          CXX: ${{ matrix.compiler.cpp }}
+          CC: ${{ matrix.platform.c }}
+          CXX: ${{ matrix.platform.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
         run: |
+          # Portable commands only
           cmake --build build --config Release --verbose
           cmake --build build --config Release --target all_verify_interface_header_sets
           cmake --install build --config Release --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          ls -R /opt/beman.exemplar
       - name: Test Release
         run: ctest --test-dir build --build-config Release
       - name: Build Debug
         run: |
+          # Portable commands only
           cmake --build build --config Debug --verbose
           cmake --build build --config Debug --target all_verify_interface_header_sets
           cmake --install build --config Debug --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          ls -R /opt/beman.exemplar
       - name: Test Debug
         run: ctest --test-dir build --build-config Debug
 
@@ -130,16 +174,18 @@ jobs:
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
         run: |
+          # Portable commands only
           cmake --build build --config Release --verbose
           cmake --build build --config Release --target all_verify_interface_header_sets
           cmake --install build --config Release --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          ls -R /opt/beman.exemplar
       - name: Build Debug
         run: |
+          # Portable commands only
           cmake --build build --config Debug --verbose
           cmake --build build --config Debug --target all_verify_interface_header_sets
           cmake --install build --config Debug --prefix /opt/beman.exemplar
-          find /opt/beman.exemplar -type f
+          ls -R /opt/beman.exemplar
 
   create-issue-when-fault:
     runs-on: ubuntu-latest
