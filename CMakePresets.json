@@ -49,7 +49,7 @@
       }
     },
     {
-      "name": "xcode-debug",
+      "name": "appleclang-debug",
       "displayName": "xcode Debug Build",
       "inherits": [
         "_root-config",
@@ -61,7 +61,7 @@
       }
     },
     {
-      "name": "xcode-release",
+      "name": "appleclang-release",
       "displayName": "xcode Release Build",
       "inherits": [
         "_root-config",
@@ -108,12 +108,12 @@
       "configurePreset": "gcc-release"
     },
     {
-      "name": "xcode-debug",
-      "configurePreset": "xcode-debug"
+      "name": "appleclang-debug",
+      "configurePreset": "appleclang-debug"
     },
     {
-      "name": "xcode-release",
-      "configurePreset": "xcode-release"
+      "name": "appleclang-release",
+      "configurePreset": "appleclang-release"
     },
     {
       "name": "msvc-debug",
@@ -147,14 +147,14 @@
       "configurePreset": "gcc-release"
     },
     {
-      "name": "xcode-debug",
+      "name": "appleclang-debug",
       "inherits": "_test_base",
-      "configurePreset": "xcode-debug"
+      "configurePreset": "appleclang-debug"
     },
     {
-      "name": "xcode-release",
+      "name": "appleclang-release",
       "inherits": "_test_base",
-      "configurePreset": "xcode-release"
+      "configurePreset": "appleclang-release"
     },
     {
       "name": "msvc-debug",
@@ -203,36 +203,36 @@
       ]
     },
     {
-      "name": "xcode-debug",
+      "name": "appleclang-debug",
       "steps": [
         {
           "type": "configure",
-          "name": "xcode-debug"
+          "name": "appleclang-debug"
         },
         {
           "type": "build",
-          "name": "xcode-debug"
+          "name": "appleclang-debug"
         },
         {
           "type": "test",
-          "name": "xcode-debug"
+          "name": "appleclang-debug"
         }
       ]
     },
     {
-      "name": "xcode-release",
+      "name": "appleclang-release",
       "steps": [
         {
           "type": "configure",
-          "name": "xcode-release"
+          "name": "appleclang-release"
         },
         {
           "type": "build",
-          "name": "xcode-release"
+          "name": "appleclang-release"
         },
         {
           "type": "test",
-          "name": "xcode-release"
+          "name": "appleclang-release"
         }
       ]
     },
