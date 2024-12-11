@@ -110,6 +110,8 @@ jobs:
           cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} \
             -DCMAKE_TOOLCHAIN_FILE=${{ matrix.platform.toolchain }} \
             ${{ matrix.cmake_args.args }}
+        env:
+          CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
         run: |
           # Portable commands only
