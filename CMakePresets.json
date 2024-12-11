@@ -7,8 +7,7 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/${presetName}",
       "cacheVariables": {
-        "CMAKE_CXX_STANDARD": "20",
-        "CMAKE_GENERATOR": "Ninja Multi-Config"
+        "CMAKE_CXX_STANDARD": "20"
       }
     },
     {
