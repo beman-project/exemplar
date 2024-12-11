@@ -54,7 +54,6 @@ if(BEMAN_EXEMPLAR_BUILD_TESTS)
     )
     block()
         set(INSTALL_GTEST OFF) # Disable GoogleTest installation
-        set(BUILD_TESTING OFF) # Disable GoogleTest tests
         FetchContent_MakeAvailable(googletest)
     endblock()
 endif()
