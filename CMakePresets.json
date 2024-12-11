@@ -49,7 +49,7 @@
       }
     },
     {
-      "name": "appleclang-debug",
+      "name": "AppleClang-debug",
       "displayName": "xcode Debug Build",
       "inherits": [
         "_root-config",
@@ -61,7 +61,7 @@
       }
     },
     {
-      "name": "appleclang-release",
+      "name": "AppleClang-release",
       "displayName": "xcode Release Build",
       "inherits": [
         "_root-config",
@@ -108,12 +108,12 @@
       "configurePreset": "gcc-release"
     },
     {
-      "name": "appleclang-debug",
-      "configurePreset": "appleclang-debug"
+      "name": "AppleClang-debug",
+      "configurePreset": "AppleClang-debug"
     },
     {
-      "name": "appleclang-release",
-      "configurePreset": "appleclang-release"
+      "name": "AppleClang-release",
+      "configurePreset": "AppleClang-release"
     },
     {
       "name": "msvc-debug",
@@ -147,14 +147,14 @@
       "configurePreset": "gcc-release"
     },
     {
-      "name": "appleclang-debug",
+      "name": "AppleClang-debug",
       "inherits": "_test_base",
-      "configurePreset": "appleclang-debug"
+      "configurePreset": "AppleClang-debug"
     },
     {
-      "name": "appleclang-release",
+      "name": "AppleClang-release",
       "inherits": "_test_base",
-      "configurePreset": "appleclang-release"
+      "configurePreset": "AppleClang-release"
     },
     {
       "name": "msvc-debug",
@@ -203,36 +203,36 @@
       ]
     },
     {
-      "name": "appleclang-debug",
+      "name": "AppleClang-debug",
       "steps": [
         {
           "type": "configure",
-          "name": "appleclang-debug"
+          "name": "AppleClang-debug"
         },
         {
           "type": "build",
-          "name": "appleclang-debug"
+          "name": "AppleClang-debug"
         },
         {
           "type": "test",
-          "name": "appleclang-debug"
+          "name": "AppleClang-debug"
         }
       ]
     },
     {
-      "name": "appleclang-release",
+      "name": "AppleClang-release",
       "steps": [
         {
           "type": "configure",
-          "name": "appleclang-release"
+          "name": "AppleClang-release"
         },
         {
           "type": "build",
-          "name": "appleclang-release"
+          "name": "AppleClang-release"
         },
         {
           "type": "test",
-          "name": "appleclang-release"
+          "name": "AppleClang-release"
         }
       ]
     },
