@@ -21,8 +21,7 @@
       "name": "_release-base",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_CXX_FLAGS": "-O3"
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
     },
     {
@@ -34,7 +33,6 @@
       ],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "g++",
-        "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=leak -fsanitize=undefined"
       }
     },
@@ -46,7 +44,8 @@
         "_release-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_FLAGS": "-O3"
       }
     },
     {
@@ -58,7 +57,6 @@
       ],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "clang++",
-        "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined"
       }
     },
@@ -70,7 +68,8 @@
         "_release-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "clang++"
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_CXX_FLAGS": "-O3"
       }
     },
     {
@@ -89,10 +88,12 @@
     {
       "name": "msvc-release",
       "displayName": "MSVC Release Build",
-      "inherits": ["_root-config"],
+      "inherits": [
+        "_root-config",
+        "_release-base"
+      ],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "cl",
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
         "CMAKE_CXX_FLAGS": "/EHsc /permissive- /O2"
       }
     }
