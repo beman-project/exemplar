@@ -81,7 +81,6 @@
       ],
       "cacheVariables": {
         "CMAKE_CXX_COMPILER": "cl",
-        "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_CXX_FLAGS": "/EHsc /permissive- /fsanitize=address /Zi"
       }
     },
