@@ -14,16 +14,14 @@
       "name": "_debug-base",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=leak -fsanitize=undefined"
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
       "name": "_release-base",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_CXX_FLAGS": "-O3"
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
     },
     {
@@ -34,7 +32,8 @@
         "_debug-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=leak -fsanitize=undefined"
       }
     },
     {
@@ -45,7 +44,56 @@
         "_release-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_CXX_COMPILER": "g++",
+        "CMAKE_CXX_FLAGS": "-O3"
+      }
+    },
+    {
+      "name": "AppleClang-debug",
+      "displayName": "xcode Debug Build",
+      "inherits": [
+        "_root-config",
+        "_debug-base"
+      ],
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=undefined"
+      }
+    },
+    {
+      "name": "AppleClang-release",
+      "displayName": "xcode Release Build",
+      "inherits": [
+        "_root-config",
+        "_release-base"
+      ],
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "clang++",
+        "CMAKE_CXX_FLAGS": "-O3"
+      }
+    },
+    {
+      "name": "msvc-debug",
+      "displayName": "MSVC Debug Build",
+      "inherits": [
+        "_root-config",
+        "_debug-base"
+      ],
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_CXX_FLAGS": "/EHsc /permissive- /fsanitize=address /Zi"
+      }
+    },
+    {
+      "name": "msvc-release",
+      "displayName": "MSVC Release Build",
+      "inherits": [
+        "_root-config",
+        "_release-base"
+      ],
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_CXX_FLAGS": "/EHsc /permissive- /O2"
       }
     }
   ],
@@ -57,6 +105,22 @@
     {
       "name": "gcc-release",
       "configurePreset": "gcc-release"
+    },
+    {
+      "name": "AppleClang-debug",
+      "configurePreset": "AppleClang-debug"
+    },
+    {
+      "name": "AppleClang-release",
+      "configurePreset": "AppleClang-release"
+    },
+    {
+      "name": "msvc-debug",
+      "configurePreset": "msvc-debug"
+    },
+    {
+      "name": "msvc-release",
+      "configurePreset": "msvc-release"
     }
   ],
   "testPresets": [
@@ -80,6 +144,26 @@
       "name": "gcc-release",
       "inherits": "_test_base",
       "configurePreset": "gcc-release"
+    },
+    {
+      "name": "AppleClang-debug",
+      "inherits": "_test_base",
+      "configurePreset": "AppleClang-debug"
+    },
+    {
+      "name": "AppleClang-release",
+      "inherits": "_test_base",
+      "configurePreset": "AppleClang-release"
+    },
+    {
+      "name": "msvc-debug",
+      "inherits": "_test_base",
+      "configurePreset": "msvc-debug"
+    },
+    {
+      "name": "msvc-release",
+      "inherits": "_test_base",
+      "configurePreset": "msvc-release"
     }
   ],
   "workflowPresets": [
@@ -114,6 +198,74 @@
         {
           "type": "test",
           "name": "gcc-release"
+        }
+      ]
+    },
+    {
+      "name": "AppleClang-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "AppleClang-debug"
+        },
+        {
+          "type": "build",
+          "name": "AppleClang-debug"
+        },
+        {
+          "type": "test",
+          "name": "AppleClang-debug"
+        }
+      ]
+    },
+    {
+      "name": "AppleClang-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "AppleClang-release"
+        },
+        {
+          "type": "build",
+          "name": "AppleClang-release"
+        },
+        {
+          "type": "test",
+          "name": "AppleClang-release"
+        }
+      ]
+    },
+    {
+      "name": "msvc-debug",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "test",
+          "name": "msvc-debug"
+        }
+      ]
+    },
+    {
+      "name": "msvc-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-release"
+        },
+        {
+          "type": "test",
+          "name": "msvc-release"
         }
       ]
     }

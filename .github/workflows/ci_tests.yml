@@ -12,11 +12,23 @@ on:
 
 jobs:
   preset-test:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        preset: ["gcc-debug", "gcc-release"]
-    name: "Preset: ${{ matrix.preset }}"
+        presets:
+          - preset: "gcc-debug"
+            platform: "ubuntu-latest"
+          - preset: "gcc-release"
+            platform: "ubuntu-latest"
+          - preset: "AppleClang-debug"
+            platform: "macos-latest"
+          - preset: "AppleClang-release"
+            platform: "macos-latest"
+          - preset: "msvc-debug"
+            platform: "windows-latest"
+          - preset: "msvc-release"
+            platform: "windows-latest"
+    name: "Preset: ${{ matrix.presets.preset }} on ${{ matrix.presets.platform }}"
+    runs-on: ${{ matrix.presets.platform }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup build environment
@@ -24,8 +36,13 @@ jobs:
         with:
           cmakeVersion: "~3.25.0"
           ninjaVersion: "^1.11.1"
+      - name: Setup MSVC
+        if: startsWith(matrix.presets.platform, 'windows')
+        uses: TheMrMilchmann/setup-msvc-dev@v3
+        with:
+          arch: x64
       - name: Run preset
-        run: cmake --workflow --preset ${{ matrix.preset }}
+        run: cmake --workflow --preset ${{ matrix.presets.preset }}
 
   gtest-test:
     strategy:
