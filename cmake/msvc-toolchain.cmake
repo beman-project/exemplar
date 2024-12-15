@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
+
 set(CMAKE_C_COMPILER cl)
 set(CMAKE_CXX_COMPILER cl)
 
