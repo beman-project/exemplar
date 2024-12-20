@@ -5,7 +5,7 @@ include_guard(GLOBAL)
 set(CMAKE_C_COMPILER cl)
 set(CMAKE_CXX_COMPILER cl)
 
-if(BEMAN_BUILDSYS_SANITIZER STREQUAL "ASan")
+if(BEMAN_BUILDSYS_SANITIZER STREQUAL "MaxSan")
     set(SANITIZER_FLAGS "/fsanitize=address /Zi")
 endif()
 

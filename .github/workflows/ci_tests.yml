@@ -46,8 +46,8 @@ jobs:
           - description: "Default"
           - description: "TSan"
             args: "-DBEMAN_BUILDSYS_SANITIZER=TSan"
-          - description: "ASan"
-            args: "-DBEMAN_BUILDSYS_SANITIZER=ASan"
+          - description: "MaxSan"
+            args: "-DBEMAN_BUILDSYS_SANITIZER=MaxSan"
         include:
           - platform:
               description: "Ubuntu GCC"
