@@ -32,62 +32,45 @@ jobs:
       fail-fast: false
       matrix:
         platform:
-          - description: "Ubuntu GCC"
-            cpp: g++
-            c: gcc
+          - description: "Ubuntu GNU"
             os: ubuntu-latest
-          - description: "Ubuntu Clang"
-            cpp: clang++
-            c: clang
+            toolchain: "cmake/gnu-toolchain.cmake"
+          - description: "Ubuntu LLVM"
             os: ubuntu-latest
+            toolchain: "cmake/llvm-toolchain.cmake"
+          - description: "Windows MSVC"
+            os: windows-latest
+            toolchain: "cmake/msvc-toolchain.cmake"
         cpp_version: [17, 20, 23, 26]
         cmake_args:
           - description: "Default"
-            args: ""
           - description: "TSan"
-            args: "-DCMAKE_CXX_FLAGS=-fsanitize=thread"
-          - description: "ASan"
-            args: "-DCMAKE_CXX_FLAGS='-fsanitize=address -fsanitize=undefined'"
+            args: "-DBEMAN_BUILDSYS_SANITIZER=TSan"
+          - description: "MaxSan"
+            args: "-DBEMAN_BUILDSYS_SANITIZER=MaxSan"
         include:
           - platform:
               description: "Ubuntu GCC"
-              cpp: g++
-              c: gcc
               os: ubuntu-latest
+              toolchain: "cmake/gnu-toolchain.cmake"
             cpp_version: 17
             cmake_args:
               description: "Werror"
               args: "-DCMAKE_CXX_FLAGS='-Werror=all -Werror=extra'"
           - platform:
               description: "Ubuntu GCC"
-              cpp: g++
-              c: gcc
               os: ubuntu-latest
+              toolchain: "cmake/gnu-toolchain.cmake"
             cpp_version: 17
             cmake_args:
               description: "Dynamic"
               args: "-DBUILD_SHARED_LIBS=on"
+        exclude:
+            # MSVC does not support thread sanitizer
           - platform:
               description: "Windows MSVC"
-              cpp: cl
-              c: cl
-              os: windows-latest
-            cpp_version: 17
             cmake_args:
-              description: "Default"
-              args: ""
-          - platform:
-              description: "Windows MSVC"
-              cpp: cl
-              c: cl
-              os: windows-latest
-            cpp_version: 17
-            cmake_args:
-              description: "ASan"
-              # Debug infomation needed to avoid cl: C5072
-              # https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-c5072?view=msvc-170
-              args: "-DCMAKE_CXX_FLAGS='/fsanitize=address /Zi'"
-
+              description: "TSan"
 
     name: "Unit: ${{ matrix.platform.description }} ${{ matrix.cpp_version }} ${{ matrix.cmake_args.description }}"
     runs-on: ${{ matrix.platform.os }}
@@ -106,26 +89,13 @@ jobs:
       - name: Print installed softwares
         shell: bash
         run: |
-          echo "Compiler:"
-
-          # cl does not have a --version option
-          if [ "${{ matrix.platform.cpp }}" != "cl" ]; then
-            ${{ matrix.platform.cpp }} --version
-            ${{ matrix.platform.c }} --version
-          else
-            ${{ matrix.platform.cpp }}
-            ${{ matrix.platform.c }}
-          fi
-
           echo "Build system:"
           cmake --version
           ninja --version
       - name: Configure CMake
         run: |
-          cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} ${{ matrix.cmake_args.args }}
+          cmake -B build -S . -DCMAKE_CXX_STANDARD=${{ matrix.cpp_version }} -DCMAKE_TOOLCHAIN_FILE="${{ matrix.platform.toolchain }}" ${{ matrix.cmake_args.args }}
         env:
-          CC: ${{ matrix.platform.c }}
-          CXX: ${{ matrix.platform.cpp }}
           CMAKE_GENERATOR: "Ninja Multi-Config"
       - name: Build Release
         run: |

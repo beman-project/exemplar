@@ -15,15 +15,14 @@
       "hidden": true,
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_FLAGS": "-fsanitize=address -fsanitize=pointer-compare -fsanitize=pointer-subtract -fsanitize=leak -fsanitize=undefined"
+        "BEMAN_BUILDSYS_SANITIZER": "MaxSan"
       }
     },
     {
       "name": "_release-base",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "CMAKE_CXX_FLAGS": "-O3"
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
     },
     {
@@ -34,7 +33,7 @@
         "_debug-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_TOOLCHAIN_FILE": "cmake/gnu-toolchain.cmake"
       }
     },
     {
@@ -45,7 +44,7 @@
         "_release-base"
       ],
       "cacheVariables": {
-        "CMAKE_CXX_COMPILER": "g++"
+        "CMAKE_TOOLCHAIN_FILE": "cmake/gnu-toolchain.cmake"
       }
     }
   ],
